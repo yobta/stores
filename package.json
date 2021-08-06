@@ -130,11 +130,18 @@
   ],
   "size-limit": [
     {
+      "name": "Projection factory",
+      "import": {
+        "./index.js": "{ createProjection }"
+      },
+      "limit": "180 B"
+    },
+    {
       "name": "Store factory",
       "import": {
         "./index.js": "{ createStore }"
       },
-      "limit": "96 B"
+      "limit": "80 B"
     },
     {
       "name": "Transition factory",
@@ -146,7 +153,7 @@
     {
       "name": "All",
       "import": {
-        "./index.js": "{ createStore }"
+        "./index.js": "{ createProjection, createStore, createTransition }"
       },
       "limit": "527 B"
     }

@@ -1,3 +1,5 @@
+export { createProjection } from './createProjection/index.js'
+
 export {
   Observer,
   ObservableStore,

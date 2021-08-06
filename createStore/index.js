@@ -1,11 +1,6 @@
 export function createStore(initialState) {
   let observers = []
   let state = initialState
-  function unsubscribe(observer) {
-    observers = observers.filter(
-      currentObserver => currentObserver !== observer
-    )
-  }
   return {
     last() {
       return state
@@ -16,11 +11,11 @@ export function createStore(initialState) {
     },
     observe(observer) {
       observers.push(observer)
-      return () => unsubscribe(observer)
-    },
-    reset() {
-      observers.forEach(unsubscribe)
-      state = initialState
+      return () => {
+        observers = observers.filter(
+          currentObserver => currentObserver !== observer
+        )
+      }
     }
   }
 }
