@@ -1,6 +1,9 @@
 export {
-  Unsubscribe,
   Observer,
   ObservableStore,
+  StoreState,
+  Unsubscribe,
   createStore
-} from './create-store/index.js'
+} from './createStore/index.js'
+
+export { TransitionHandler, Transition } from './createTransition/index.js'

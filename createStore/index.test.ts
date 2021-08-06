@@ -2,8 +2,6 @@ import { jest } from '@jest/globals'
 
 import { createStore } from '../index.js'
 
-jest.useFakeTimers()
-
 it('has initial state', () => {
   let store = createStore(1)
   expect(store.getState()).toBe(1)

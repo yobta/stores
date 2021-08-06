@@ -130,11 +130,18 @@
   ],
   "size-limit": [
     {
-      "name": "Store",
+      "name": "Store factory",
       "import": {
         "./index.js": "{ createStore }"
       },
       "limit": "90 B"
+    },
+    {
+      "name": "Transition factory",
+      "import": {
+        "./index.js": "{ createTransition }"
+      },
+      "limit": "26 B"
     },
     {
       "name": "All",
