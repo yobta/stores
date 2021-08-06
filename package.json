@@ -134,14 +134,14 @@
       "import": {
         "./index.js": "{ createStore }"
       },
-      "limit": "90 B"
+      "limit": "96 B"
     },
     {
       "name": "Transition factory",
       "import": {
         "./index.js": "{ createTransition }"
       },
-      "limit": "26 B"
+      "limit": "32 B"
     },
     {
       "name": "All",

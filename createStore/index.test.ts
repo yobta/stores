@@ -2,34 +2,36 @@ import { jest } from '@jest/globals'
 
 import { createStore } from '../index.js'
 
-it('has initial state', () => {
+it('creates', () => {
   let store = createStore(1)
-  expect(store.getState()).toBe(1)
+  let state = store.last()
+  expect(state).toBe(1)
 })
 
-it('can set state', () => {
+it('updates', () => {
   let store = createStore(1)
-  store.setState(2)
-  expect(store.getState()).toBe(2)
+  store.next(2)
+  let state = store.last()
+  expect(state).toBe(2)
 })
 
-it('is observable', () => {
+it('notifies', () => {
   let observer = jest.fn()
   let store = createStore(1)
-  let unsubscribe = store.add(observer)
-  store.setState(2)
+  let unsubscribe = store.observe(observer)
+  store.next(1, 2)
   unsubscribe()
-  store.setState(3)
-  expect(observer).toHaveBeenCalledTimes(1)
+  store.next(3, 4, 5)
+  expect(observer.mock.calls[0]).toEqual([1, 2])
 })
 
-it('is resetable', () => {
+it('resets', () => {
   let observer = jest.fn()
   let store = createStore(1)
-  store.add(observer)
-  store.setState(2)
+  store.observe(observer)
+  store.next(1)
   store.reset()
-  expect(store.getState()).toBe(1)
-  store.setState(3)
+  expect(observer).toHaveBeenCalledTimes(1)
+  store.next(2)
   expect(observer).toHaveBeenCalledTimes(1)
 })

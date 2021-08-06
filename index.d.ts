@@ -6,4 +6,4 @@ export {
   createStore
 } from './createStore/index.js'
 
-export { TransitionHandler, Transition } from './createTransition/index.js'
+export { Transition, TransitionTrigger } from './createTransition/index.js'

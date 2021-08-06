@@ -1,6 +1,6 @@
 export function createTransition(store, transition) {
-  return action => {
-    let nextState = transition(store.getState(), action)
-    store.setState(nextState)
+  return (...args) => {
+    let state = transition(store.last(), ...args)
+    store.next(state, ...args)
   }
 }

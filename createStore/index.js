@@ -1,22 +1,22 @@
 export function createStore(initialState) {
-  let state = initialState
   let observers = []
+  let state = initialState
   function unsubscribe(observer) {
     observers = observers.filter(
       currentObserver => currentObserver !== observer
     )
   }
   return {
-    add(observer) {
-      observers.push(observer)
-      return () => unsubscribe(observer)
-    },
-    getState() {
+    last() {
       return state
     },
-    setState(nextState) {
-      state = nextState
-      observers.forEach(o => o(state))
+    next(...args) {
+      state = args[0]
+      observers.forEach(observe => observe(...args))
+    },
+    observe(observer) {
+      observers.push(observer)
+      return () => unsubscribe(observer)
     },
     reset() {
       observers.forEach(unsubscribe)
