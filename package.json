@@ -23,37 +23,10 @@
   "type": "module",
   "types": "./index.d.ts",
   "exports": {
-    ".": "./index.js",
-    "./vue": "./vue/index.js",
-    "./react": "./react/index.js",
-    "./preact": "./preact/index.js",
-    "./package.json": "./package.json"
-  },
-  "react-native": {
-    "./react/batch/index.js": "./react/batch/index.native.js"
+    ".": "./index.js"
   },
   "engines": {
     "node": "^12.0.0 || ^14.0.0 || >=16.0.0"
-  },
-  "peerDependencies": {
-    "preact": ">=10.0.0",
-    "react": ">=16.8.0",
-    "react-dom": ">=16.8.0",
-    "vue": ">=3.1.1"
-  },
-  "peerDependenciesMeta": {
-    "preact": {
-      "optional": true
-    },
-    "react": {
-      "optional": true
-    },
-    "react-dom": {
-      "optional": true
-    },
-    "vue": {
-      "optional": true
-    }
   },
   "devDependencies": {
     "@babel/core": "^7.14.8",
@@ -161,37 +134,14 @@
       "import": {
         "./index.js": "{ createStore }"
       },
-      "limit": "172 B"
-    },
-    {
-      "name": "Map",
-      "import": {
-        "./index.js": "{ defineMap }"
-      },
-      "limit": "326 B"
+      "limit": "90 B"
     },
     {
       "name": "All",
       "import": {
-        "./index.js": "{ createStore, defineMap, createDerived, getValue, effect }"
+        "./index.js": "{ createStore }"
       },
       "limit": "527 B"
-    },
-    {
-      "name": "React",
-      "import": {
-        "./react/index.js": "{ useStore }",
-        "./index.js": "{ createStore, defineMap, createDerived, getValue }"
-      },
-      "limit": "575 B"
-    },
-    {
-      "name": "Vue",
-      "import": {
-        "./vue/index.js": "{ useStore }",
-        "./index.js": "{ createStore, defineMap, createDerived, getValue }"
-      },
-      "limit": "570 B"
     }
   ],
   "yaspeller": {
