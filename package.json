@@ -1,29 +1,27 @@
 {
-  "name": "nanostores",
-  "version": "0.4.1",
-  "description": "A tiny (172 bytes) state manager for React/Preact/Vue/Svelte with many atomic tree-shakable stores",
+  "name": "@yobta/stores",
+  "version": "0.0.1",
+  "description": "An experimental module creatd for an education purpose",
   "keywords": [
-    "nano",
-    "state",
-    "state manager",
-    "react",
-    "react native",
-    "preact",
-    "vue",
-    "svelte",
-    "store"
+    "experiment"
   ],
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/.bin/jest --coverage && eslint . && check-dts && size-limit && yaspeller *.md"
+    "build": "tsc --build tsconfig.build.json",
+    "lint": "eslint src",
+    "yaspeller": "yaspeller *.md",
+    "size-limit": "size-limit",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest src --coverage",
+    "typecheck": "tsc --noEmit"
   },
-  "author": "Andrey Sitnik <andrey@sitnik.ru>",
+  "author": "Sergei Droganov <sergei@droganov.ru>",
   "license": "MIT",
-  "repository": "nanostores/nanostores",
+  "repository": "yobta/stores",
   "sideEffects": false,
   "type": "module",
   "types": "./index.d.ts",
   "exports": {
-    ".": "./index.js"
+    ".": "./lib/index.js",
+    "./react": "./lib/adapters/react/index.js"
   },
   "engines": {
     "node": "^12.0.0 || ^14.0.0 || >=16.0.0"
@@ -82,7 +80,7 @@
     "quoteProps": "consistent",
     "semi": false,
     "singleQuote": true,
-    "trailingComma": "none"
+    "trailingComma": "all"
   },
   "lint-staged": {
     "*.md": "yaspeller",
@@ -108,6 +106,8 @@
         "statements": 100
       }
     },
+    "resetMocks": true,
+    "restoreMocks": true,
     "setupFiles": [
       "jest-localstorage-mock"
     ]
@@ -119,6 +119,7 @@
       "@typescript-eslint/no-explicit-any": "off",
       "symbol-description": "off",
       "consistent-return": "off",
+      "import/extensions": "off",
       "camelcase": "off"
     },
     "globals": {
@@ -130,32 +131,33 @@
   ],
   "size-limit": [
     {
-      "name": "Projection factory",
+      "name": "singletonYobta",
       "import": {
-        "./index.js": "{ createProjection }"
+        "./lib/index.js": "{ singletonYobta }"
       },
-      "limit": "180 B"
+      "limit": "102 B"
     },
     {
-      "name": "Store factory",
+      "name": "lazyYobta",
       "import": {
-        "./index.js": "{ createStore }"
+        "./lib/index.js": "{ lazyYobta }"
       },
-      "limit": "80 B"
+      "limit": "189 B"
     },
     {
-      "name": "Transition factory",
+      "name": "ReactStoreHook",
       "import": {
-        "./index.js": "{ createTransition }"
+        "./lib/adapters/react/index.js": "{ useStore }"
       },
-      "limit": "32 B"
+      "limit": "2.85 kB"
     },
     {
       "name": "All",
       "import": {
-        "./index.js": "{ createProjection, createStore, createTransition }"
+        "./lib/singletonYobta/index.js": "{ singletonYobta }",
+        "./lib/lazyYobta/index.js": "{ lazyYobta }"
       },
-      "limit": "527 B"
+      "limit": "4.97 kB"
     }
   ],
   "yaspeller": {
@@ -166,24 +168,11 @@
       "\\d+\\.\\d+ “[^”]+”"
     ],
     "dictionary": [
-      "Versioning",
-      "Logux",
-      "CRDT",
-      "Vue",
-      "gzipped",
-      "Shakable",
-      "Preact",
-      "WebSocket",
-      "UI",
-      "unsubscribing",
-      "unsubscribe",
-      "JS",
-      "composable",
-      "ESM",
-      "js",
-      "async",
-      "ES",
-      "CommonJS"
+      "Yobta",
+      "Istallation",
+      "nanostores",
+      "React's",
+      "Versioning"
     ]
   },
   "sharec": {
