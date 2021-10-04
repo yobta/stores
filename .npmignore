@@ -9,3 +9,8 @@ tsconfig.json
 test/
 
 img/
+makefile
+src
+tsconfig.build.json
+.editorconfig
+.tool-versions   
