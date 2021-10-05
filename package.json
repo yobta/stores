@@ -129,6 +129,9 @@
   "eslintIgnore": [
     "**/errors.ts"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "size-limit": [
     {
       "name": "singletonYobta",
