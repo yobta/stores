@@ -18,7 +18,16 @@
   "repository": "yobta/stores",
   "sideEffects": false,
   "type": "module",
-  "types": "./lib/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./lib/index.d.ts"
+      ],
+      "react": [
+        "./lib/adapters/react/index.d.ts"
+      ]
+    }
+  },
   "exports": {
     ".": "./lib/index.js",
     "./react": "./lib/adapters/react/index.js",
