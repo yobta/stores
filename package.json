@@ -1,0 +1,193 @@
+{
+  "name": "@yobta/stores",
+  "version": "0.0.7",
+  "description": "An experimental module creatd for an education purpose",
+  "keywords": [
+    "experiment"
+  ],
+  "scripts": {
+    "build": "tsc --build tsconfig.build.json",
+    "lint": "eslint src",
+    "yaspeller": "yaspeller *.md",
+    "size-limit": "size-limit",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest src --coverage",
+    "typecheck": "tsc --noEmit"
+  },
+  "author": "Sergei Droganov <sergei@droganov.ru>",
+  "license": "MIT",
+  "repository": "yobta/stores",
+  "sideEffects": false,
+  "type": "module",
+  "types": "./lib/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "react": [
+        "./lib/adapters/react/index.d.ts"
+      ]
+    }
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./react": "./lib/adapters/react/index.js",
+    "./package.json": "./package.json"
+  },
+  "engines": {
+    "node": "^12.0.0 || ^14.0.0 || >=16.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.8",
+    "@logux/eslint-config": "^45.4.6",
+    "@logux/sharec-config": "^0.10.2",
+    "@size-limit/preset-small-lib": "^5.0.1",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/preact": "^2.0.1",
+    "@testing-library/react": "^12.0.0",
+    "@testing-library/vue": "^6.4.0",
+    "@types/jest": "^26.0.24",
+    "@types/jsdom": "^16.2.13",
+    "@types/node": "^16.4.2",
+    "@types/react": "^17.0.15",
+    "@types/react-dom": "^17.0.9",
+    "@types/ws": "^7.4.7",
+    "@typescript-eslint/eslint-plugin": "^4.28.4",
+    "@typescript-eslint/parser": "^4.28.4",
+    "@vue/compiler-sfc": "^3.1.5",
+    "check-dts": "^0.5.4",
+    "clean-publish": "^2.2.0",
+    "eslint": "^7.31.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-es5": "^1.5.0",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-jest": "^24.4.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prefer-let": "^1.1.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-security": "^1.4.0",
+    "eslint-plugin-unicorn": "^34.0.1",
+    "jest": "^27.0.6",
+    "jest-localstorage-mock": "^2.4.14",
+    "lint-staged": "^11.1.1",
+    "nanodelay": "^2.0.0",
+    "preact": "^10.5.14",
+    "prettier": "^2.3.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "simple-git-hooks": "^2.5.1",
+    "size-limit": "^5.0.1",
+    "ts-jest": "^27.0.4",
+    "typescript": "^4.3.5",
+    "vue": "^3.1.1",
+    "yaspeller": "^7.0.0"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
+  },
+  "prettier": {
+    "arrowParens": "avoid",
+    "jsxSingleQuote": false,
+    "quoteProps": "consistent",
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "all"
+  },
+  "lint-staged": {
+    "*.md": "yaspeller",
+    "*.js": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.ts": [
+      "prettier --write",
+      "eslint --fix"
+    ]
+  },
+  "jest": {
+    "preset": "ts-jest/presets/default-esm",
+    "globals": {
+      "ts-jest": {
+        "useESM": true
+      }
+    },
+    "testEnvironment": "jsdom",
+    "coverageThreshold": {
+      "global": {
+        "statements": 100
+      }
+    },
+    "resetMocks": true,
+    "restoreMocks": true,
+    "setupFiles": [
+      "jest-localstorage-mock"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "@logux/eslint-config/esm",
+    "rules": {
+      "@typescript-eslint/unified-signatures": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "symbol-description": "off",
+      "consistent-return": "off",
+      "import/extensions": "off",
+      "camelcase": "off"
+    },
+    "globals": {
+      "jsdom": false
+    }
+  },
+  "eslintIgnore": [
+    "**/errors.ts"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "size-limit": [
+    {
+      "name": "singletonYobta",
+      "import": {
+        "./lib/index.js": "{ singletonYobta }"
+      },
+      "limit": "102 B"
+    },
+    {
+      "name": "lazyYobta",
+      "import": {
+        "./lib/index.js": "{ lazyYobta }"
+      },
+      "limit": "189 B"
+    },
+    {
+      "name": "ReactStoreHook",
+      "import": {
+        "./lib/adapters/react/index.js": "{ useStore }"
+      },
+      "limit": "2.85 kB"
+    },
+    {
+      "name": "All",
+      "import": {
+        "./lib/singletonYobta/index.js": "{ singletonYobta }",
+        "./lib/lazyYobta/index.js": "{ lazyYobta }"
+      },
+      "limit": "4.97 kB"
+    }
+  ],
+  "yaspeller": {
+    "lang": "en",
+    "ignoreCapitalization": true,
+    "ignoreText": [
+      " \\(by [^)]+\\).",
+      "\\d+\\.\\d+ “[^”]+”"
+    ],
+    "dictionary": [
+      "Yobta",
+      "Istallation",
+      "nanostores",
+      "React's",
+      "Versioning"
+    ]
+  },
+  "sharec": {
+    "config": "@logux/sharec-config",
+    "version": "0.10.2"
+  }
+}
