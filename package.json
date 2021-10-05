@@ -1,6 +1,6 @@
 {
   "name": "@yobta/stores",
-  "version": "0.0.5",
+  "version": "0.0.4",
   "description": "An experimental module creatd for an education purpose",
   "keywords": [
     "experiment"
@@ -18,6 +18,7 @@
   "repository": "yobta/stores",
   "sideEffects": false,
   "type": "module",
+  "types": "./lib/index.d.ts",
   "exports": {
     ".": "./lib/index.js",
     "./react": "./lib/adapters/react/index.js",
