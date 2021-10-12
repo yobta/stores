@@ -1,2 +1,1 @@
-export * from './lazyYobta'
-export * from './singletonYobta'
+export * from './observableYobta'
