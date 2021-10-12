@@ -142,18 +142,11 @@
   },
   "size-limit": [
     {
-      "name": "singletonYobta",
+      "name": "observableYobta",
       "import": {
-        "./lib/index.js": "{ singletonYobta }"
+        "./lib/index.js": "{ observableYobta }"
       },
-      "limit": "102 B"
-    },
-    {
-      "name": "lazyYobta",
-      "import": {
-        "./lib/index.js": "{ lazyYobta }"
-      },
-      "limit": "189 B"
+      "limit": "144 B"
     },
     {
       "name": "ReactStoreHook",
@@ -165,8 +158,7 @@
     {
       "name": "All",
       "import": {
-        "./lib/singletonYobta/index.js": "{ singletonYobta }",
-        "./lib/lazyYobta/index.js": "{ lazyYobta }"
+        "./lib/observableYobta/index.js": "{ observableYobta }"
       },
       "limit": "4.97 kB"
     }
