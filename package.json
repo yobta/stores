@@ -146,7 +146,7 @@
       "import": {
         "./lib/index.js": "{ observableYobta }"
       },
-      "limit": "144 B"
+      "limit": "137 B"
     },
     {
       "name": "ReactStoreHook",

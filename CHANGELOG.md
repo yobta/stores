@@ -1,6 +1,8 @@
 # Change Log
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.0.10
+* onStart and onStop store options
 ## 0.0.9
 * Implement lazyness as an option of observable store
 ## 0.0.8
