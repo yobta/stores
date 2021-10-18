@@ -3,34 +3,83 @@ A collection of observable stores that I use in personal projects. Normally you 
 
 ## Istallation
 `npm i @yobta/stores`
-## Singleton store
-A basic store that persists in a `window`
 
+## Observable Store
+This will create a singleton store that can be used between multiple views
 ```ts
-import { singletonYobta } from '@yobta/stores'
-import { useStore } from '@yobta/stores/react'
+import { observableYobta } from '@yobta/stores'
 
-const numberStore = singletonYobta(0)
+const numberStore = observableYobta(123)
 
-numberStore.observe(console.info)
+export const increment = numberStore.next(last => last + 1)
 
-export const incrementNumber = () => numberStore.next(last => last + 1)
-export const useNumber = () => useStore(numberStore)
+numberStore.subscribe(console.log)
+
+increment() // => 124
 ```
-## Lazy store
-A store that maintains it's state only while it has at least one observer.
-Normally you use it in when you don't need a persistency. The concept is very similar
-to React's [`useState`] hook. 
+
+## Lazy Observable Store
+This will create a lazy singleton store that will reset it's state as last obser leaves
+```ts
+import { observableYobta, lazyYobta } from '@yobta/stores'
+
+const numberStore = observableYobta(123, lazyYobta)
+const unobserve = numberStore.observe(console.log)
+
+export const increment = numberStore.next(last => last + 1)
+
+increment() // => 124
+unobserve()
+
+console.log(numberStore.last()) // => 123
+```
+
+## Replicated Lazy Observable Store
+This will create a lazy singleton store that will be replicated via the browser's local storage
+```ts
+import { observableYobta, lazyYobta, replicatedYobta } from '@yobta/stores'
+
+const numberStore = observableYobta(
+  123,
+  lazyYobta,
+  replicatedYobta({ channel: 'yobta' })
+)
+
+localStorage.set('yobta', 456)
+const unobserve = numberStore.subscribe(console.log) // => 456
+
+unobserve() 
+console.log(numberStore.last()) // => 123
+```
+
+## Replicate to a Different Backend
+```ts
+import { observableYobta, lazyYobta, replicatedYobta } from '@yobta/stores'
+
+const backend = {
+  publish(channel, message) {}
+  subscribe(channel) {
+    return unsubscribe
+  }
+}
+
+const numberStore = observableYobta(
+  123,
+  lazyYobta,
+  replicatedYobta({ channel: 'yobta', backend })
+)
+```
+
+
+## React Hook
 
 ```ts
-import { singletonYobta } from '@yobta/stores'
-import { useStore } from '@yobta/stores/react'
+import { observableYobta } from '@yobta/stores'
+import { useObservable } from '@yobta/stores/react'
 
 const myTab = lazyYobta('info')
 
-export const setTab = numberStore.next
-
-export const useTabs = () => useStore(myTab)
+export const useTabs = () => useObservable(myTab)
 ```
 
 
