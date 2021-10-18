@@ -64,8 +64,7 @@
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-unicorn": "^34.0.1",
-    "jest": "^27.0.6",
-    "jest-localstorage-mock": "^2.4.14",
+    "jest": "^27.3.0",
     "lint-staged": "^11.1.1",
     "nanodelay": "^2.0.0",
     "preact": "^10.5.14",
@@ -116,9 +115,7 @@
     },
     "resetMocks": true,
     "restoreMocks": true,
-    "setupFiles": [
-      "jest-localstorage-mock"
-    ]
+    "setupFiles": []
   },
   "eslintConfig": {
     "extends": "@logux/eslint-config/esm",
@@ -142,23 +139,47 @@
   },
   "size-limit": [
     {
+      "name": "lazyYobta",
+      "import": {
+        "./lib/index.js": "{ lazyYobta }"
+      },
+      "limit": "33 B"
+    },
+    {
       "name": "observableYobta",
       "import": {
         "./lib/index.js": "{ observableYobta }"
       },
-      "limit": "137 B"
+      "limit": "169 B"
     },
     {
-      "name": "ReactStoreHook",
+      "name": "replicatedYobta",
       "import": {
-        "./lib/adapters/react/index.js": "{ useStore }"
+        "./lib/index.js": "{ replicatedYobta }"
+      },
+      "limit": "120 B"
+    },
+    {
+      "name": "storageYobta",
+      "import": {
+        "./lib/index.js": "{ storageYobta }"
+      },
+      "limit": "242 B"
+    },
+    {
+      "name": "useObservable",
+      "import": {
+        "./lib/adapters/react/index.js": "{ useObservable }"
       },
       "limit": "2.85 kB"
     },
     {
       "name": "All",
       "import": {
-        "./lib/observableYobta/index.js": "{ observableYobta }"
+        "./lib/lazyYobta/index.js": "{ lazyYobta }",
+        "./lib/observableYobta/index.js": "{ observableYobta }",
+        "./lib/replicatedYobta/index.js": "{ replicatedYobta }",
+        "./lib/storageYobta/index.js": "{ storageYobta }"
       },
       "limit": "4.97 kB"
     }

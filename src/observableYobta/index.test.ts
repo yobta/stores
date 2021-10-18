@@ -3,31 +3,67 @@ import { jest } from '@jest/globals'
 import { observableYobta } from '.'
 
 describe('observableYobta', () => {
+  let listener = jest.fn()
+  let observer = jest.fn()
+
   it('has default state', () => {
-    let store = observableYobta(1)
+    let store = observableYobta(1, listener)
     expect(store.last()).toBe(1)
+    expect(listener).toHaveBeenCalledTimes(0)
+    expect(observer).toHaveBeenCalledTimes(0)
   })
 
-  it('updates state on next', () => {
-    let store = observableYobta(1)
+  it('sets next state and notifies listeners and observers', () => {
+    let store = observableYobta(1, listener)
+    expect(store.last()).toBe(1)
+
     store.next(2)
-    let state = store.last()
-    expect(state).toBe(2)
-  })
+    expect(store.last()).toBe(2)
+    expect(observer).toHaveBeenCalledTimes(0)
+    expect(listener).toHaveBeenCalledTimes(1)
+    expect(listener).toHaveBeenCalledWith({
+      initialState: 1,
+      type: 'NEXT',
+      last: expect.any(Function),
+      next: expect.any(Function),
+    })
 
-  it('notifies observer on next', () => {
-    let observer = jest.fn()
-    let store = observableYobta(1)
-    let unsubscribe = store.observe(observer)
-    store.next(() => 1)
-    unsubscribe()
+    let unobserve = store.observe(observer)
+    expect(store.last()).toBe(2)
+    expect(observer).toHaveBeenCalledTimes(0)
+    expect(listener).toHaveBeenCalledTimes(2)
+    expect(listener).toHaveBeenLastCalledWith({
+      initialState: 1,
+      type: 'START',
+      last: expect.any(Function),
+      next: expect.any(Function),
+    })
+
     store.next(() => 3)
+    expect(store.last()).toBe(3)
     expect(observer).toHaveBeenCalledTimes(1)
-    expect(observer.mock.calls[0]).toEqual([1])
+    expect(observer).toHaveBeenCalledWith(3)
+    expect(listener).toHaveBeenCalledTimes(3)
+    expect(listener).toHaveBeenLastCalledWith({
+      initialState: 1,
+      type: 'NEXT',
+      last: expect.any(Function),
+      next: expect.any(Function),
+    })
+
+    unobserve()
+    expect(store.last()).toBe(3)
+    expect(observer).toHaveBeenCalledTimes(1)
+    expect(listener).toHaveBeenCalledTimes(4)
+    expect(listener).toHaveBeenLastCalledWith({
+      initialState: 1,
+      type: 'STOP',
+      last: expect.any(Function),
+      next: expect.any(Function),
+    })
   })
 
-  it('has an everload', () => {
-    let observer = jest.fn()
+  it('has overload', () => {
     let store = observableYobta(1)
     let unsubscribe = store.observe(observer)
     let overload = Array.from('overload')
@@ -37,7 +73,6 @@ describe('observableYobta', () => {
   })
 
   it('keeps state after termination', () => {
-    let observer = jest.fn()
     let store = observableYobta(1)
     let unsubscribe = store.observe(observer)
     store.next(() => 1)
@@ -46,8 +81,7 @@ describe('observableYobta', () => {
     expect(store.last()).toBe(2)
   })
 
-  it('does not squash listeners', () => {
-    let observer = jest.fn()
+  it('does not squash observers', () => {
     let store = observableYobta(1)
     let terminate1 = store.observe(observer)
     let terminate2 = store.observe(observer)
@@ -59,91 +93,5 @@ describe('observableYobta', () => {
     terminate2()
     store.next(() => 3)
     expect(observer).toHaveBeenCalledTimes(3)
-  })
-
-  it('calls onStart option when first observer is added', () => {
-    let observer = jest.fn()
-    let onStart = jest.fn()
-    let store = observableYobta(0, { onStart })
-
-    expect(store.last()).toBe(0)
-    expect(observer).toHaveBeenCalledTimes(0)
-    expect(onStart).toHaveBeenCalledTimes(0)
-
-    store.next(1)
-    expect(store.last()).toBe(1)
-    expect(observer).toHaveBeenCalledTimes(0)
-    expect(onStart).toHaveBeenCalledTimes(0)
-
-    let unObserve1 = store.observe(observer)
-    expect(observer).toHaveBeenCalledTimes(0)
-    expect(onStart).toHaveBeenCalledTimes(1)
-
-    store.next(2)
-    expect(store.last()).toBe(2)
-    expect(observer).toHaveBeenCalledTimes(1)
-    expect(onStart).toHaveBeenCalledTimes(1)
-
-    let unObserve2 = store.observe(observer)
-    expect(store.last()).toBe(2)
-    expect(observer).toHaveBeenCalledTimes(1)
-    expect(onStart).toHaveBeenCalledTimes(1)
-
-    unObserve1()
-    expect(store.last()).toBe(2)
-    expect(observer).toHaveBeenCalledTimes(1)
-    expect(onStart).toHaveBeenCalledTimes(1)
-
-    unObserve2()
-    expect(store.last()).toBe(2)
-    expect(observer).toHaveBeenCalledTimes(1)
-    expect(onStart).toHaveBeenCalledTimes(1)
-
-    store.observe(observer)
-    expect(observer).toHaveBeenCalledTimes(1)
-    expect(onStart).toHaveBeenCalledTimes(2)
-  })
-
-  it('calls onStop option when last observer is removed', () => {
-    let observer = jest.fn()
-    let onStop = jest.fn()
-    let store = observableYobta(0, { onStop })
-
-    expect(store.last()).toBe(0)
-    expect(observer).toHaveBeenCalledTimes(0)
-    expect(onStop).toHaveBeenCalledTimes(0)
-
-    store.next(1)
-    expect(store.last()).toBe(1)
-    expect(observer).toHaveBeenCalledTimes(0)
-    expect(onStop).toHaveBeenCalledTimes(0)
-
-    let unObserve1 = store.observe(observer)
-    expect(observer).toHaveBeenCalledTimes(0)
-    expect(onStop).toHaveBeenCalledTimes(0)
-
-    store.next(2)
-    expect(store.last()).toBe(2)
-    expect(observer).toHaveBeenCalledTimes(1)
-    expect(onStop).toHaveBeenCalledTimes(0)
-
-    let unObserve2 = store.observe(observer)
-    expect(store.last()).toBe(2)
-    expect(observer).toHaveBeenCalledTimes(1)
-    expect(onStop).toHaveBeenCalledTimes(0)
-
-    unObserve1()
-    expect(store.last()).toBe(2)
-    expect(observer).toHaveBeenCalledTimes(1)
-    expect(onStop).toHaveBeenCalledTimes(0)
-
-    unObserve2()
-    expect(store.last()).toBe(2)
-    expect(observer).toHaveBeenCalledTimes(1)
-    expect(onStop).toHaveBeenCalledTimes(1)
-
-    store.observe(observer)
-    expect(observer).toHaveBeenCalledTimes(1)
-    expect(onStop).toHaveBeenCalledTimes(1)
   })
 })
