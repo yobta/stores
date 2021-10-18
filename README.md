@@ -19,7 +19,7 @@ increment() // => 124
 ```
 
 ## Lazy Observable Store
-This will create a lazy singleton store that will reset it's state as last obser leaves
+This will create a lazy singleton store that will reset it's state as last observer leaves
 ```ts
 import { observableYobta, lazyYobta } from '@yobta/stores'
 
