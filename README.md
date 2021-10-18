@@ -37,12 +37,17 @@ console.log(numberStore.last()) // => 123
 ## Replicated Lazy Observable Store
 This will create a lazy singleton store that will be replicated via the browser's local storage
 ```ts
-import { observableYobta, lazyYobta, replicatedYobta } from '@yobta/stores'
+import {
+  observableYobta,
+  lazyYobta,
+  replicatedYobta,
+  storageYobta
+} from '@yobta/stores'
 
 const numberStore = observableYobta(
   123,
   lazyYobta,
-  replicatedYobta({ channel: 'yobta' })
+  replicatedYobta({ channel: 'yobta', backend: storageYobta })
 )
 
 localStorage.set('yobta', 456)
