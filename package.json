@@ -146,6 +146,13 @@
       "limit": "33 B"
     },
     {
+      "name": "mapYobta",
+      "import": {
+        "./lib/index.js": "{ mapYobta }"
+      },
+      "limit": "254 B"
+    },
+    {
       "name": "observableYobta",
       "import": {
         "./lib/index.js": "{ observableYobta }"
@@ -177,6 +184,7 @@
       "name": "All",
       "import": {
         "./lib/lazyYobta/index.js": "{ lazyYobta }",
+        "./lib/mapYobta/index.js": "{ mapYobta }",
         "./lib/observableYobta/index.js": "{ observableYobta }",
         "./lib/replicatedYobta/index.js": "{ replicatedYobta }",
         "./lib/storageYobta/index.js": "{ storageYobta }"

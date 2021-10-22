@@ -1,4 +1,4 @@
-import { StoreFactoryListener } from '..'
+import { StoreListener } from '..'
 import { PubSubYobta } from '../storageYobta'
 
 interface BackendConfig<S> {
@@ -8,7 +8,7 @@ interface BackendConfig<S> {
 }
 
 interface ReplicatedYobta {
-  <S>(config: BackendConfig<S>): StoreFactoryListener<any>
+  <S>(config: BackendConfig<S>): StoreListener<any>
 }
 
 export const replicatedYobta: ReplicatedYobta = ({
