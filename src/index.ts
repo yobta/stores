@@ -1,4 +1,5 @@
 export * from './lazyYobta'
+export * from './mapYobta'
 export * from './observableYobta'
 export * from './replicatedYobta'
 export * from './storageYobta'

@@ -1,7 +1,7 @@
-import { StoreFactoryEvent } from '../observableYobta'
+import { StoreEvent } from '../observableYobta'
 
 interface LazyYobta {
-  <S>(event: StoreFactoryEvent<S>): void
+  <S>(event: StoreEvent<S>): void
 }
 
 export const lazyYobta: LazyYobta = ({ type, initialState, next }) => {

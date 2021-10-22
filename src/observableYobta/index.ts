@@ -27,27 +27,24 @@ interface StateSetter<S> {
 
 type EventType = 'START' | 'STOP' | 'NEXT'
 
-export interface StoreFactoryEvent<S> {
+export interface StoreEvent<S> {
   initialState: S
   last: StateGetter<S>
   next: StateSetter<S>
   type: EventType
 }
-export interface StoreFactoryListener<S> {
-  (event: StoreFactoryEvent<S>): void
+export interface StoreListener<S> {
+  (event: StoreEvent<S>): void
 }
 
-interface StoreFactory {
-  <S>(
-    initialState: S,
-    ...listeners: StoreFactoryListener<S>[]
-  ): ObservableStore<S>
+interface ObservableFactory {
+  <S>(initialState: S, ...listeners: StoreListener<S>[]): ObservableStore<S>
 }
 // #endregion
 
-export const observableYobta: StoreFactory = <S>(
+export const observableYobta: ObservableFactory = <S>(
   initialState: S,
-  ...listeners: StoreFactoryListener<S>[]
+  ...listeners: StoreListener<S>[]
 ) => {
   let observers: Observer<any>[] = []
   let state = initialState
