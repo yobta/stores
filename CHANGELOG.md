@@ -1,7 +1,7 @@
 # Change Log
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## 0.0.13
+## 0.0.12
 * Map store
 ## 0.0.11
 * Replace observable config with listeners
