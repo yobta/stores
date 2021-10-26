@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react'
 
-import { ObservableStore } from '../..'
+import { StateGetter, Observer } from '../..'
 
+interface AnyObservable<S> {
+  last: StateGetter<S>
+  observe(observer: Observer<any>): VoidFunction
+}
 export interface ReactObservableHook {
-  <S>(store: ObservableStore<S>): S
+  <S>(store: AnyObservable<S>): S
 }
 
 export const useObservable: ReactObservableHook = store => {

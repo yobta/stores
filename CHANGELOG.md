@@ -1,6 +1,8 @@
 # Change Log
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.0.14
+* Simplyfy typings for react observable hook
 ## 0.0.13
 * Improve types export
 ## 0.0.12
