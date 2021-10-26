@@ -2,10 +2,9 @@ import { isEmptyArray } from '../_internal/isEmptyArray'
 import { isFunction } from '../_internal/isFunction'
 
 // #region Types
-interface VoidFunction {
+export interface VoidFunction {
   (): void
 }
-
 export interface Observer<S> {
   (state: S, ...args: any[]): void
 }
@@ -16,13 +15,13 @@ export interface ObservableStore<S> {
   observe(observer: Observer<S>): VoidFunction
 }
 
-type Action<S> = S | ((last: S) => S)
+export type ObservableEvent<S> = S | ((last: S) => S)
 
-interface StateGetter<S> {
+export interface StateGetter<S> {
   (): S
 }
-interface StateSetter<S> {
-  (action: Action<S>, ...args: any[]): void
+export interface StateSetter<S> {
+  (action: ObservableEvent<S>, ...args: any[]): void
 }
 
 type EventType = 'START' | 'STOP' | 'NEXT'
