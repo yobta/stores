@@ -41,13 +41,13 @@ import {
   observableYobta,
   lazyYobta,
   replicatedYobta,
-  storageYobta
+  localStorageYobta
 } from '@yobta/stores'
 
 const numberStore = observableYobta(
   123,
   lazyYobta,
-  replicatedYobta({ channel: 'yobta', backend: storageYobta })
+  replicatedYobta({ channel: 'yobta', backend: localStorageYobta })
 )
 
 localStorage.set('yobta', 456)

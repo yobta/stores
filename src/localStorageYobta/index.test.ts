@@ -1,17 +1,17 @@
 import { jest } from '@jest/globals'
 
-import { storageYobta } from '.'
+import { localStorageYobta } from '.'
 
 afterEach(() => {
   localStorage.clear()
 })
 
-describe('storageYobta', () => {
+describe('localStorageYobta', () => {
   it('subscribes and unsubscibes', () => {
     jest.spyOn(window, 'addEventListener')
     jest.spyOn(window, 'removeEventListener')
 
-    let unsubscribe = storageYobta.subscribe('test', () => {})
+    let unsubscribe = localStorageYobta.subscribe('test', () => {})
 
     expect(window.addEventListener).toHaveBeenCalledTimes(1)
     expect(window.addEventListener).toHaveBeenCalledWith(
@@ -30,7 +30,7 @@ describe('storageYobta', () => {
   })
 
   it('writes changes in local storage', () => {
-    storageYobta.publish('test', 1)
+    localStorageYobta.publish('test', 1)
 
     let result = localStorage.getItem('test')
 
@@ -41,7 +41,7 @@ describe('storageYobta', () => {
     let subscriber = jest.fn()
     expect(subscriber).toHaveBeenCalledTimes(0)
 
-    storageYobta.subscribe('yobta', subscriber)
+    localStorageYobta.subscribe('yobta', subscriber)
     expect(subscriber).toHaveBeenCalledTimes(1)
     expect(subscriber).toHaveBeenCalledWith(null)
 
