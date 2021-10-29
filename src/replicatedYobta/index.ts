@@ -1,5 +1,5 @@
 import { StoreListener } from '..'
-import { PubSubYobta } from '../storageYobta'
+import { PubSubYobta } from '../_internal/PubSubYobta'
 
 interface BackendConfig<S> {
   channel: string

@@ -1,7 +1,7 @@
 import { jest } from '@jest/globals'
 
 import { replicatedYobta } from '.'
-import { storageYobta } from '../storageYobta'
+import { localStorageYobta } from '../localStorageYobta'
 
 let lastSpy = jest.fn()
 let nextSpy = jest.fn()
@@ -12,7 +12,10 @@ afterEach(() => {
 
 describe('replicatedYobta', () => {
   it('calls next when starts', () => {
-    let replica = replicatedYobta({ channel: 'test', backend: storageYobta })
+    let replica = replicatedYobta({
+      channel: 'test',
+      backend: localStorageYobta,
+    })
 
     replica({
       initialState: 'one',
@@ -26,7 +29,10 @@ describe('replicatedYobta', () => {
   })
 
   it('calls last when receives a NEXT event', () => {
-    let replica = replicatedYobta({ channel: 'test', backend: storageYobta })
+    let replica = replicatedYobta({
+      channel: 'test',
+      backend: localStorageYobta,
+    })
 
     replica({
       initialState: 'one',
@@ -45,7 +51,7 @@ describe('replicatedYobta', () => {
     let replica = replicatedYobta({
       channel: 'test',
       validate,
-      backend: storageYobta,
+      backend: localStorageYobta,
     })
 
     replica({

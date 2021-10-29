@@ -1,22 +1,8 @@
+import { decode, encode } from '../_internal/jsonEncoder'
+import { PubSubSubscriber, PubSubYobta } from '../_internal/PubSubYobta'
+
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
-type Subscriber = (message: any) => void
-type Subscriptions = Record<string, Subscriber[]>
-
-export interface PubSubYobta {
-  publish(channel: string, message: any): void
-  subscribe(channel: string, subscriber: Subscriber): VoidFunction
-}
-
-function encode(item: any): string {
-  return JSON.stringify(item)
-}
-
-function decode(item: string | null): unknown {
-  if (item === null) {
-    return null
-  }
-  return JSON.parse(item)
-}
+type Subscriptions = Record<string, PubSubSubscriber[]>
 
 let subscriptions: Subscriptions = {}
 let size = 0
@@ -31,12 +17,12 @@ function handleStorage({ key, newValue }: StorageEvent): void {
   }
 }
 
-export const storageYobta: PubSubYobta = {
+export const localStorageYobta: PubSubYobta = {
   publish(channel: string, message: any) {
     let encodedMessage = encode(message)
     localStorage.setItem(channel, encodedMessage)
   },
-  subscribe(channel: string, next: Subscriber) {
+  subscribe(channel: string, next: PubSubSubscriber) {
     if (!size) {
       window.addEventListener('storage', handleStorage)
     }

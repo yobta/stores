@@ -167,9 +167,9 @@
       "limit": "120 B"
     },
     {
-      "name": "storageYobta",
+      "name": "localStorageYobta",
       "import": {
-        "./lib/index.js": "{ storageYobta }"
+        "./lib/index.js": "{ localStorageYobta }"
       },
       "limit": "242 B"
     },
@@ -187,7 +187,7 @@
         "./lib/mapYobta/index.js": "{ mapYobta }",
         "./lib/observableYobta/index.js": "{ observableYobta }",
         "./lib/replicatedYobta/index.js": "{ replicatedYobta }",
-        "./lib/storageYobta/index.js": "{ storageYobta }"
+        "./lib/localStorageYobta/index.js": "{ localStorageYobta }"
       },
       "limit": "4.97 kB"
     }
