@@ -150,14 +150,14 @@
       "import": {
         "./lib/index.js": "{ mapYobta }"
       },
-      "limit": "254 B"
+      "limit": "246 B"
     },
     {
       "name": "observableYobta",
       "import": {
         "./lib/index.js": "{ observableYobta }"
       },
-      "limit": "169 B"
+      "limit": "162 B"
     },
     {
       "name": "replicatedYobta",
