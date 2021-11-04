@@ -1,4 +1,3 @@
-import { isEmptyArray } from '../_internal/isEmptyArray'
 import { isFunction } from '../_internal/isFunction'
 
 // #region Types
@@ -70,14 +69,14 @@ export const observableYobta: ObservableFactory = <S>(
     last,
     next,
     observe: observer => {
-      if (isEmptyArray(observers)) {
+      observers.push(observer)
+      if (observers.length === 1) {
         emit('START')
       }
-      observers.push(observer)
       return () => {
         let index = observers.indexOf(observer)
         observers.splice(index, 1)
-        if (isEmptyArray(observers)) {
+        if (observers.length === 0) {
           emit('STOP')
         }
       }

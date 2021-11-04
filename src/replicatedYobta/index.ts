@@ -26,7 +26,6 @@ export const replicatedYobta: ReplicatedYobta = ({
         })
         break
       case 'STOP':
-        // @ts-ignore
         unsubscribe()
         break
       case 'NEXT':
