@@ -1,4 +1,4 @@
-import { decode, encode } from '../_internal/jsonEncoder'
+import { decodeYobta, encodeYobta } from '../encoderYobta'
 import { PubSubSubscriber, PubSubYobta } from '../_internal/PubSubYobta'
 
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
@@ -9,7 +9,7 @@ let size = 0
 
 function handleStorage({ key, newValue }: StorageEvent): void {
   if (key !== null) {
-    let decoded = decode(newValue)
+    let decoded = decodeYobta(newValue)
     let subscribers = subscriptions[key] || []
     subscribers.forEach(send => {
       send(decoded)
@@ -19,7 +19,7 @@ function handleStorage({ key, newValue }: StorageEvent): void {
 
 export const localStorageYobta: PubSubYobta = {
   publish(channel: string, message: any) {
-    let encodedMessage = encode(message)
+    let encodedMessage = encodeYobta(message)
     localStorage.setItem(channel, encodedMessage)
   },
   subscribe(channel: string, next: PubSubSubscriber) {
@@ -34,7 +34,7 @@ export const localStorageYobta: PubSubYobta = {
     subscribers.push(next)
 
     let item = localStorage.getItem(channel)
-    let decoded = decode(item)
+    let decoded = decodeYobta(item)
     next(decoded)
 
     size++

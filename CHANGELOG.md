@@ -1,6 +1,8 @@
 # Change Log
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.0.17
+* Export encoder
 ## 0.0.16
 * Fix store start bug
 ## 0.0.15

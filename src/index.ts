@@ -1,3 +1,4 @@
+export * from './encoderYobta'
 export * from './lazyYobta'
 export * from './mapYobta'
 export * from './observableYobta'
