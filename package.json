@@ -139,6 +139,13 @@
   },
   "size-limit": [
     {
+      "name": "encoderYobta",
+      "import": {
+        "./lib/index.js": "{ encodeYobta, decodeYobta }"
+      },
+      "limit": "34 B"
+    },
+    {
       "name": "lazyYobta",
       "import": {
         "./lib/index.js": "{ lazyYobta }"
@@ -190,6 +197,7 @@
     {
       "name": "All",
       "import": {
+        "./lib/encoderYobta/index.js": "{ encodeYobta, decodeYobta }",
         "./lib/lazyYobta/index.js": "{ lazyYobta }",
         "./lib/mapYobta/index.js": "{ mapYobta }",
         "./lib/observableYobta/index.js": "{ observableYobta }",
