@@ -1,6 +1,6 @@
 {
   "name": "@yobta/stores",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "description": "An experimental module creatd for an education purpose",
   "keywords": [
     "experiment"
@@ -143,7 +143,7 @@
       "import": {
         "./lib/index.js": "{ encodeYobta, decodeYobta }"
       },
-      "limit": "34 B"
+      "limit": "36 B"
     },
     {
       "name": "lazyYobta",
@@ -178,14 +178,14 @@
       "import": {
         "./lib/index.js": "{ localStorageYobta }"
       },
-      "limit": "242 B"
+      "limit": "244 B"
     },
     {
       "name": "sessionStorageYobta",
       "import": {
         "./lib/index.js": "{ sessionStorageYobta }"
       },
-      "limit": "99 B"
+      "limit": "100 B"
     },
     {
       "name": "useObservable",

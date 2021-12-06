@@ -2,9 +2,10 @@ export function encodeYobta(item: any): string {
   return JSON.stringify(item)
 }
 
-export function decodeYobta(item: string | null): unknown {
-  if (item === null) {
-    return null
+export function decodeYobta(item: any): unknown {
+  try {
+    return JSON.parse(item)
+  } catch (error) {
+    return error
   }
-  return JSON.parse(item)
 }
