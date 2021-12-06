@@ -9,4 +9,8 @@ describe('jsonEncoder', () => {
     let value = '1'
     expect(decodeYobta(value)).toBe(1)
   })
+  it('catches', () => {
+    let value = decodeYobta(undefined)
+    expect(value).toEqual(expect.any(Error))
+  })
 })
