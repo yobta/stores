@@ -214,6 +214,11 @@
       "\\d+\\.\\d+ “[^”]+”"
     ],
     "dictionary": [
+      "useStore",
+      "useObservable",
+      "onStart",
+      "onStop",
+      "ESM",
       "Yobta",
       "Istallation",
       "nanostores",
