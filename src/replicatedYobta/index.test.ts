@@ -1,10 +1,8 @@
-import { jest } from '@jest/globals'
-
 import { replicatedYobta } from './index.js'
 import { localStorageYobta } from '../localStorageYobta/index.js'
 
-let lastSpy = jest.fn()
-let nextSpy = jest.fn()
+let lastSpy = vi.fn()
+let nextSpy = vi.fn()
 
 afterEach(() => {
   localStorage.clear()
@@ -46,7 +44,7 @@ describe('replicatedYobta', () => {
   })
 
   it('validates remote value', () => {
-    let validate = jest.fn()
+    let validate = vi.fn()
 
     let replica = replicatedYobta({
       channel: 'test',
@@ -67,9 +65,9 @@ describe('replicatedYobta', () => {
   })
 
   it('replicates changes', () => {
-    let publish = jest.fn()
-    let subscribe = jest.fn()
-    let unsubscribe = jest.fn()
+    let publish = vi.fn()
+    let subscribe = vi.fn()
+    let unsubscribe = vi.fn()
 
     let backend = {
       publish,

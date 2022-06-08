@@ -10,7 +10,7 @@
     "lint": "eslint src",
     "yaspeller": "yaspeller *.md",
     "size-limit": "size-limit",
-    "test": "node --experimental-vm-modules node_modules/.bin/jest src --coverage",
+    "test": "vitest run src --coverage",
     "typecheck": "tsc --noEmit"
   },
   "author": "Sergei Droganov <sergei@droganov.ru>",
@@ -39,11 +39,10 @@
     "@logux/eslint-config": "^45.4.6",
     "@logux/sharec-config": "^0.10.2",
     "@size-limit/preset-small-lib": "^5.0.1",
-    "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/preact": "^2.0.1",
     "@testing-library/react": "^12.0.0",
     "@testing-library/vue": "^6.4.0",
-    "@types/jest": "^26.0.24",
+    "@types/jest": "^28.1.1",
     "@types/jsdom": "^16.2.13",
     "@types/node": "^16.4.2",
     "@types/react": "^17.0.15",
@@ -52,19 +51,20 @@
     "@typescript-eslint/eslint-plugin": "^4.28.4",
     "@typescript-eslint/parser": "^4.28.4",
     "@vue/compiler-sfc": "^3.1.5",
+    "c8": "^7.11.3",
     "check-dts": "^0.5.4",
     "clean-publish": "^2.2.0",
     "eslint": "^7.31.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-es5": "^1.5.0",
     "eslint-plugin-import": "^2.23.4",
-    "eslint-plugin-jest": "^24.4.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prefer-let": "^1.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-unicorn": "^34.0.1",
-    "jest": "^27.3.0",
+    "eslint-plugin-vitest-globals": "^1.1.0",
+    "happy-dom": "^5.0.0",
     "lint-staged": "^11.1.1",
     "nanodelay": "^2.0.0",
     "preact": "^10.5.14",
@@ -73,8 +73,8 @@
     "react-dom": "^17.0.2",
     "simple-git-hooks": "^2.5.1",
     "size-limit": "^5.0.1",
-    "ts-jest": "^27.0.4",
     "typescript": "^4.3.5",
+    "vitest": "^0.14.1",
     "vue": "^3.1.1",
     "yaspeller": "^7.0.0"
   },
@@ -100,30 +100,28 @@
       "eslint --fix"
     ]
   },
-  "jest": {
-    "preset": "ts-jest/presets/default-esm",
-    "globals": {
-      "ts-jest": {
-        "useESM": true
-      }
-    },
-    "testEnvironment": "jsdom",
-    "coverageThreshold": {
-      "global": {
-        "statements": 100
-      }
-    },
-    "resetMocks": true,
-    "restoreMocks": true,
-    "setupFiles": []
-  },
   "eslintConfig": {
-    "extends": "@logux/eslint-config/esm",
+    "extends": [
+      "plugin:vitest-globals/recommended",
+      "@logux/eslint-config/esm"
+    ],
+    "overrides": [
+      {
+        "files": [
+          "**/__tests__/*.{j,t}s?(x)",
+          "**/*.spec.{j,t}s?(x)"
+        ],
+        "env": {
+          "vitest-globals/env": true
+        }
+      }
+    ],
     "rules": {
       "@typescript-eslint/unified-signatures": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "symbol-description": "off",
       "consistent-return": "off",
+      "jest/no-deprecated-functions": "off",
       "camelcase": "off"
     },
     "globals": {
@@ -131,7 +129,8 @@
     }
   },
   "eslintIgnore": [
-    "**/errors.ts"
+    "**/errors.ts",
+    "vitest.config.ts"
   ],
   "publishConfig": {
     "access": "public"
