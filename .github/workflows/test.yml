@@ -17,8 +17,8 @@ jobs:
           node-version: 16
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
-      - name: Run tests
-        run: yarn test
+      - name: Run checks
+        run: make check
   short:
     runs-on: ubuntu-latest
     strategy:
@@ -36,5 +36,5 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
-      - name: Run unit tests
-        run: node --experimental-vm-modules node_modules/.bin/jest
+      - name: Run checks
+        run: make typecheck

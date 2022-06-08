@@ -1,4 +1,4 @@
-import { StoreEvent } from '../observableYobta'
+import { StoreEvent } from '../observableYobta/index.js'
 
 interface LazyYobta {
   <S>(event: StoreEvent<S>): void

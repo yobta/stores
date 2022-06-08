@@ -1,10 +1,10 @@
-import { jest } from '@jest/globals'
+import { describe, expect, vi, it } from 'vitest'
 
-import { observableYobta } from '.'
+import { observableYobta } from './index.js'
 
 describe('observableYobta', () => {
-  let listener = jest.fn()
-  let observer = jest.fn()
+  let listener = vi.fn()
+  let observer = vi.fn()
 
   it('has default state', () => {
     let store = observableYobta(1, listener)

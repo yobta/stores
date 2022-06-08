@@ -1,4 +1,4 @@
-import { isFunction } from '../_internal/isFunction'
+import { isFunction } from '../_internal/isFunction/index.js'
 
 // #region Types
 export interface VoidFunction {

@@ -1,9 +1,7 @@
-import { jest } from '@jest/globals'
-
-import { lazyYobta } from '.'
+import { lazyYobta } from './index.js'
 
 describe('lazyYobta', () => {
-  let next = jest.fn()
+  let next = vi.fn()
 
   it('resets state when event is STOP', () => {
     lazyYobta({

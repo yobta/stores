@@ -1,6 +1,4 @@
-import { jest } from '@jest/globals'
-
-import { sessionStorageYobta } from '.'
+import { sessionStorageYobta } from './index.js'
 
 afterEach(() => {
   sessionStorage.clear()
@@ -8,7 +6,7 @@ afterEach(() => {
 
 describe('sessionStorageYobta', () => {
   it('subscribes and unsubscibes', () => {
-    let spy = jest.fn()
+    let spy = vi.fn()
     let unsubscribe = sessionStorageYobta.subscribe('test', spy)
 
     expect(spy).toHaveBeenCalledTimes(1)

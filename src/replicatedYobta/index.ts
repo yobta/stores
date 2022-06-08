@@ -1,5 +1,5 @@
-import { StoreListener } from '..'
-import { PubSubYobta } from '../_internal/PubSubYobta'
+import { StoreListener } from '../index.js'
+import { PubSubYobta } from '../_internal/PubSubYobta/index.js'
 
 interface BackendConfig<S> {
   channel: string

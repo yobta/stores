@@ -1,6 +1,4 @@
-import { jest } from '@jest/globals'
-
-import { localStorageYobta } from '.'
+import { localStorageYobta } from './index.js'
 
 afterEach(() => {
   localStorage.clear()
@@ -8,8 +6,8 @@ afterEach(() => {
 
 describe('localStorageYobta', () => {
   it('subscribes and unsubscibes', () => {
-    jest.spyOn(window, 'addEventListener')
-    jest.spyOn(window, 'removeEventListener')
+    vi.spyOn(window, 'addEventListener')
+    vi.spyOn(window, 'removeEventListener')
 
     let unsubscribe = localStorageYobta.subscribe('test', () => {})
 
@@ -38,7 +36,7 @@ describe('localStorageYobta', () => {
   })
 
   it('listens to the storage updates', () => {
-    let subscriber = jest.fn()
+    let subscriber = vi.fn()
     expect(subscriber).toHaveBeenCalledTimes(0)
 
     localStorageYobta.subscribe('yobta', subscriber)

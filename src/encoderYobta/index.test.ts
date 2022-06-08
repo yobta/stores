@@ -1,4 +1,4 @@
-import { decodeYobta, encodeYobta } from '.'
+import { decodeYobta, encodeYobta } from './index.js'
 
 describe('jsonEncoder', () => {
   it('encodes', () => {
