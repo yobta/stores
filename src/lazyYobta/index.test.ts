@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals'
 
-import { lazyYobta } from '.'
+import { lazyYobta } from './index.js'
 
 describe('lazyYobta', () => {
   let next = jest.fn()

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-import { StateGetter, Observer } from '../..'
+import { StateGetter, Observer } from '../../index.js'
 
 interface AnyObservable<S> {
   last: StateGetter<S>

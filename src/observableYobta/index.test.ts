@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals'
 
-import { observableYobta } from '.'
+import { observableYobta } from './index.js'
 
 describe('observableYobta', () => {
   let listener = jest.fn()

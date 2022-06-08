@@ -1,4 +1,4 @@
-import { mapYobta } from '.'
+import { mapYobta } from './index.js'
 
 describe('mapYobta', () => {
   it('has default state', () => {

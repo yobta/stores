@@ -1,4 +1,4 @@
-import { isFunction } from '.'
+import { isFunction } from './index.js'
 
 describe('isFunction', () => {
   it('returns true for functions', () => {

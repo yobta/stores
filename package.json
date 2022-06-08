@@ -124,7 +124,6 @@
       "@typescript-eslint/no-explicit-any": "off",
       "symbol-description": "off",
       "consistent-return": "off",
-      "import/extensions": "off",
       "camelcase": "off"
     },
     "globals": {

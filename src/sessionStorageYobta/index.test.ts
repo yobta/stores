@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals'
 
-import { sessionStorageYobta } from '.'
+import { sessionStorageYobta } from './index.js'
 
 afterEach(() => {
   sessionStorage.clear()

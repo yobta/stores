@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals'
 
-import { localStorageYobta } from '.'
+import { localStorageYobta } from './index.js'
 
 afterEach(() => {
   localStorage.clear()

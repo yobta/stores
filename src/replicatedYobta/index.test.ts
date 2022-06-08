@@ -1,7 +1,7 @@
 import { jest } from '@jest/globals'
 
-import { replicatedYobta } from '.'
-import { localStorageYobta } from '../localStorageYobta'
+import { replicatedYobta } from './index.js'
+import { localStorageYobta } from '../localStorageYobta/index.js'
 
 let lastSpy = jest.fn()
 let nextSpy = jest.fn()

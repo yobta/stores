@@ -1,5 +1,8 @@
-import { decodeYobta, encodeYobta } from '../encoderYobta'
-import { PubSubSubscriber, PubSubYobta } from '../_internal/PubSubYobta'
+import { decodeYobta, encodeYobta } from '../encoderYobta/index.js'
+import {
+  PubSubSubscriber,
+  PubSubYobta,
+} from '../_internal/PubSubYobta/index.js'
 
 export const sessionStorageYobta: PubSubYobta = {
   publish(channel: string, message: any) {
