@@ -18,7 +18,7 @@ npm i @yobta/stores
 ### Key Concepts
 
 - [Basic](./docs/basic-tutorial.md) tutorial
-- Using [with React](using-with-react)
+- Using [with React](using-with-react.md)
 - Store plugins
 - Lazyness
 - Replication

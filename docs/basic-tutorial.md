@@ -60,4 +60,4 @@ unsubscribe()
 
 ## Putting it Altogether
 
-Now let's [create](./using-with-react) a React page with the counter.
+Now let's [create](./using-with-react.md) a React page with the counter.
