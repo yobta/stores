@@ -9,7 +9,7 @@ jobs:
     name: Node.js 16 Full
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout the repository
+      - name: Checkout
         uses: actions/checkout@v2
 
       - name: Install Node.js
@@ -32,11 +32,11 @@ jobs:
     strategy:
       matrix:
         node-version:
+          - 15
           - 14
-          - 12
     name: Node.js ${{ matrix.node-version }} Quick
     steps:
-      - name: Checkout the repository
+      - name: Checkout
         uses: actions/checkout@v2
 
       - name: Install Node.js ${{ matrix.node-version }}
