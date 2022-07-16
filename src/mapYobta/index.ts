@@ -1,4 +1,4 @@
-import { ObservableStore, observableYobta, StoreListener } from '../index.js'
+import { ObservableStore, observableYobta, StorePlugin } from '../index.js'
 
 // #region Types
 type AnyMap = Record<string, any>
@@ -17,16 +17,16 @@ interface MapStore<S extends AnyMap> extends ObservableStore<S> {
 }
 
 interface MapFactory {
-  <S extends AnyMap>(
-    initialState: S,
-    ...listeners: StoreListener<S>[]
-  ): MapStore<S>
+  <State extends AnyMap>(
+    initialState: State,
+    ...listeners: StorePlugin<State>[]
+  ): MapStore<State>
 }
 // #endregion
 
 export const mapYobta: MapFactory = <S>(
   initialState: S,
-  ...listeners: StoreListener<S>[]
+  ...listeners: StorePlugin<S>[]
 ) => {
   let store = observableYobta(initialState, ...listeners)
 

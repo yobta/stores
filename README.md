@@ -1,97 +1,42 @@
 # Yobta/stores
-A collection of observable stores that I use in personal projects. Normally you use [`nanostores`] which is better documented and maintained.
+
+A collection of tiny observable stores designed to move logic away from components and help write reactive applications.
+
+- **Small**. 162–674 Bytes, zero dependencies
+- **Tree-shakable**.
+- **ESM-only**.
+- **Typescript**.
 
 ## Istallation
-`npm i @yobta/stores`
 
-## Observable Store
-This will create a singleton store that can be used between multiple views
-```ts
-import { observableYobta } from '@yobta/stores'
-
-const numberStore = observableYobta(123)
-
-export const increment = numberStore.next(last => last + 1)
-
-numberStore.subscribe(console.log)
-
-increment() // => 124
+```
+npm i @yobta/stores
 ```
 
-## Lazy Observable Store
-This will create a lazy singleton store that will reset it's state as last observer leaves
-```ts
-import { observableYobta, lazyYobta } from '@yobta/stores'
+## Documentation
 
-const numberStore = observableYobta(123, lazyYobta)
-const unobserve = numberStore.observe(console.log)
+### Key Concepts
 
-export const increment = numberStore.next(last => last + 1)
+- [Basic tutorial](./docs/key-concepts/basic-tutorial.md)
+- [Using with React](./docs/key-concepts/using-with-react.md)
+- Overloads
+- [Store plugins](./docs/key-concepts/store-pligins.md)
+- Lazyness
+- Replication
 
-increment() // => 124
-unobserve()
+### Stores
 
-console.log(numberStore.last()) // => 123
-```
+- Observable Store
+- Map Store
+- Machine Store
 
-## Replicated Lazy Observable Store
-This will create a lazy singleton store that will be replicated via the browser's local storage
-```ts
-import {
-  observableYobta,
-  lazyYobta,
-  replicatedYobta,
-  localStorageYobta
-} from '@yobta/stores'
+### Recipes
 
-const numberStore = observableYobta(
-  123,
-  lazyYobta,
-  replicatedYobta({ channel: 'yobta', backend: localStorageYobta })
-)
-
-localStorage.set('yobta', 456)
-const unobserve = numberStore.subscribe(console.log) // => 456
-
-unobserve() 
-console.log(numberStore.last()) // => 123
-```
-
-## Replicate to a Different Backend
-```ts
-import { observableYobta, lazyYobta, replicatedYobta } from '@yobta/stores'
-
-const backend = {
-  publish(channel, message) {}
-  subscribe(channel) {
-    return unsubscribe
-  }
-}
-
-const numberStore = observableYobta(
-  123,
-  lazyYobta,
-  replicatedYobta({ channel: 'yobta', backend })
-)
-```
-
-
-## React Hook
-
-```ts
-import { observableYobta } from '@yobta/stores'
-import { useObservable } from '@yobta/stores/react'
-
-const myTab = lazyYobta('info')
-
-export const useTabs = () => useObservable(myTab)
-```
-
-
+- Lazy Boolean Store
+- Replicating to URL Search Params
 
 Kudos:
+
 - [`Andrey Sitnik`] — nanostores and the boilerplate
 
-[`Andrey Sitnik`]: https://sitnik.ru
-[`nanostores`]: https://github.com/nanostores/nanostores
-[`useState`]: https://reactjs.org/docs/hooks-reference.html#usestate
+[`andrey sitnik`]: https://sitnik.ru
