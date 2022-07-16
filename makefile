@@ -29,3 +29,6 @@ bump:
 
 publish: check bump
 	npm publish
+
+up:
+	pnpm up
