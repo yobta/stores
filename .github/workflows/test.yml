@@ -25,11 +25,12 @@ jobs:
             - recursive: true
               args: [--frozen-lockfile, --strict-peer-dependencies]
 
+      - name: Build
+        run: make build
+
       - name: Run checks
         run: make check
 
-      - name: Build
-        run: make build
   short:
     runs-on: ubuntu-latest
     strategy:
@@ -55,5 +56,5 @@ jobs:
             - recursive: true
               args: [--frozen-lockfile, --strict-peer-dependencies]
 
-      - name: Run checks
+      - name: Run Typecheck
         run: make typecheck
