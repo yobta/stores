@@ -1,6 +1,6 @@
 import {
   observableYobta,
-  StoreListener,
+  StorePlugin,
   StateSetter,
   Observer,
 } from '../index.js'
@@ -13,7 +13,7 @@ type Transitions<T> = {
 interface MachineFactory {
   <T extends Transitions<T>>(transitions: T): (
     initialState: keyof T,
-    ...listeners: StoreListener<keyof T>[]
+    ...listeners: StorePlugin<keyof T>[]
   ) => {
     last(): keyof T
     next: StateSetter<keyof T>

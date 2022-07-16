@@ -1,4 +1,4 @@
-import { StoreListener } from '../index.js'
+import { StorePlugin } from '../index.js'
 import { PubSubYobta } from '../_internal/PubSubYobta/index.js'
 
 interface BackendConfig<S> {
@@ -8,7 +8,7 @@ interface BackendConfig<S> {
 }
 
 interface ReplicatedYobta {
-  <S>(config: BackendConfig<S>): StoreListener<any>
+  <S>(config: BackendConfig<S>): StorePlugin<any>
 }
 
 export const replicatedYobta: ReplicatedYobta = ({
