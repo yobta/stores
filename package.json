@@ -46,6 +46,7 @@
     "@types/react-dom": "^17.0.9",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.28.4",
+    "c8": "^7.11.3",
     "check-dts": "^0.5.4",
     "clean-publish": "^2.2.0",
     "eslint": "^7.31.0",
@@ -57,6 +58,7 @@
     "eslint-plugin-prefer-let": "^1.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-security": "^1.4.0",
+    "eslint-plugin-unicorn": "36.0.0",
     "eslint-plugin-vitest-globals": "^1.1.0",
     "happy-dom": "^5.0.0",
     "prettier": "^2.3.2",
@@ -188,9 +190,5 @@
       },
       "limit": "674 B"
     }
-  ],
-  "dependencies": {
-    "c8": "^7.11.3",
-    "eslint-plugin-unicorn": "36.0.0"
-  }
+  ]
 }
