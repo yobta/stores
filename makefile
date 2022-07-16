@@ -13,9 +13,6 @@ typecheck:
 test:
 	npm run test:watch
 
-yaspeller:
-	npm run yaspeller
-
 check:
 	npm run typecheck
 	npm run test
