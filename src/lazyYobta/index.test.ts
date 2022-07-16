@@ -7,7 +7,7 @@ describe('lazyYobta', () => {
     lazyYobta({
       initialState: 0,
       next,
-      type: 'STOP',
+      type: 'IDLE',
       last: () => 1,
     })
 
@@ -19,7 +19,7 @@ describe('lazyYobta', () => {
     lazyYobta({
       initialState: 0,
       next,
-      type: 'START',
+      type: 'READY',
       last: () => 1,
     })
 

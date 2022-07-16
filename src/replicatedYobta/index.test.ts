@@ -19,7 +19,7 @@ describe('replicatedYobta', () => {
       initialState: 'one',
       last: lastSpy,
       next: nextSpy,
-      type: 'START',
+      type: 'READY',
     })
 
     expect(nextSpy).toHaveBeenCalledTimes(1)
@@ -56,7 +56,7 @@ describe('replicatedYobta', () => {
       initialState: 'one',
       last: lastSpy,
       next: nextSpy,
-      type: 'START',
+      type: 'READY',
     })
 
     expect(nextSpy).toHaveBeenCalledTimes(1)
@@ -83,7 +83,7 @@ describe('replicatedYobta', () => {
       initialState: 'one',
       last: lastSpy,
       next: nextSpy,
-      type: 'START',
+      type: 'READY',
     })
 
     expect(subscribe).toHaveBeenCalledTimes(1)
@@ -104,7 +104,7 @@ describe('replicatedYobta', () => {
       initialState: 'one',
       last: lastSpy,
       next: nextSpy,
-      type: 'STOP',
+      type: 'IDLE',
     })
 
     expect(subscribe).toHaveBeenCalledTimes(1)
