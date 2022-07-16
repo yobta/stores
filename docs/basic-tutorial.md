@@ -8,7 +8,7 @@ In this tutorial, we will create a counter store with observableYobta factory, a
 
 First, we import a store factory and create a store instance.
 
-```js
+```ts
 import { observableYobta } from '@yobta/stores'
 
 const counterStore = observableYobta(0)
@@ -18,12 +18,12 @@ const counterStore = observableYobta(0)
 
 Now we can create actions that change the store value. A store `next` method requires a new store value or a value-creator function that is useful in cases when our next value depends on the last one.
 
-```js
-export const reset = () => {
+```ts
+const reset: VoidFunction = () => {
   counterStore.next(0)
 }
 
-export const increment = () => {
+const increment: VoidFunction = () => {
   counterStore.next(last => last + 1)
 }
 ```
@@ -32,8 +32,8 @@ export const increment = () => {
 
 We can read store value by calling the store's `last()` method. Stores do not have a history.
 
-```js
-export const getCounterValue = () => counterStore.last()
+```ts
+export const getCounterValue = (): number => counterStore.last()
 ```
 
 If we called the `getCounterValue()` now, the return value would be `0` because we haven't changed the store value yet.
@@ -42,7 +42,7 @@ If we called the `getCounterValue()` now, the return value would be `0` because 
 
 To receive the updates pass a subscriber function to the store `subscribe` method. The subscriber will receive every next store value unless we unsubscribe.
 
-```js
+```ts
 const counterElement = document.getElementById('my-counter')
 
 const unsubscribe = counterStore.subscribe(counterValue => {
@@ -54,6 +54,47 @@ const unsubscribe = counterStore.subscribe(counterValue => {
 
 The result of calling the `subscribe` method is always a function that unsubscribes from future store updates.
 
-```js
+```ts
 unsubscribe()
+```
+
+## Putting it Altogether
+
+Now let's create a React page with the counter.
+
+###### counterStore.ts
+
+```ts
+import { observableYobta } from '@yobta/stores'
+import { useObservable } from '@yobta/stores/react'
+
+const counterStore = observableYobta(0)
+
+const reset: VoidFunction = () => {
+  counterStore.next(0)
+}
+
+const increment: VoidFunction = () => {
+  counterStore.next(last => last + 1)
+}
+
+export const useCounter = (): number => useObservable(counterStore)
+```
+
+###### counterPage.tsx
+
+```tsx
+import { useCounter, reset, increment } from './counterStore'
+
+export const Page = (): JSX.Element => {
+  const counter = useCounter()
+  return (
+    <>
+      Counter: {counter}
+      <hr />
+      <button onClick={increment}>Next</button>|
+      <button onClick={reset}>Reset</button>
+    </>
+  )
+}
 ```
