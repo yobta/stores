@@ -59,7 +59,6 @@
     "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-vitest-globals": "^1.1.0",
     "happy-dom": "^5.0.0",
-    "lint-staged": "^11.1.1",
     "prettier": "^2.3.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -69,9 +68,7 @@
     "vite": "^3.0.0",
     "vitest": "^0.14.1"
   },
-  "simple-git-hooks": {
-    "pre-commit": "npx lint-staged"
-  },
+  "simple-git-hooks": {},
   "prettier": {
     "arrowParens": "avoid",
     "jsxSingleQuote": false,
@@ -79,16 +76,6 @@
     "semi": false,
     "singleQuote": true,
     "trailingComma": "all"
-  },
-  "lint-staged": {
-    "*.js": [
-      "prettier --write",
-      "eslint --fix"
-    ],
-    "*.ts": [
-      "prettier --write",
-      "eslint --fix"
-    ]
   },
   "eslintConfig": {
     "extends": [
