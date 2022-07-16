@@ -18,7 +18,7 @@ npm i @yobta/stores
 ### Key Concepts
 
 - [Basic](./docs/basic-tutorial.md) tutorial
-- Using with React
+- Using [with React](using-with-react)
 - Store plugins
 - Lazyness
 - Replication
@@ -28,6 +28,11 @@ npm i @yobta/stores
 - Observable Store
 - Map Store
 - Machine Store
+
+### Recipes
+
+- Lazy Boolean Store
+- Replicating to URL Search Params
 
 Kudos:
 
