@@ -11,12 +11,20 @@ jobs:
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v2
+
       - name: Install Node.js
         uses: actions/setup-node@v2
         with:
           node-version: 16
+
       - name: Install dependencies
-        run: npm ci
+      - uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 7.5.1
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile, --strict-peer-dependencies]
+
       - name: Run checks
         run: make check
   short:
@@ -30,11 +38,19 @@ jobs:
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v2
+
       - name: Install Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
+
       - name: Install dependencies
-        run: npm ci
+      - uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 7.5.1
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile, --strict-peer-dependencies]
+
       - name: Run checks
         run: make typecheck
