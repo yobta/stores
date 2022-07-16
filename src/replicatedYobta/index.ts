@@ -19,13 +19,13 @@ export const replicatedYobta: ReplicatedYobta = ({
   let unsubscribe: VoidFunction
   return ({ type, next, last }) => {
     switch (type) {
-      case 'START':
+      case 'READY':
         unsubscribe = backend.subscribe(channel, message => {
           let state = validate ? validate(message) : message
           next(state)
         })
         break
-      case 'STOP':
+      case 'IDLE':
         unsubscribe()
         break
       case 'NEXT':

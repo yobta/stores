@@ -2,7 +2,7 @@
 
 A collection of tiny observable stores designed to move logic away from components and help write reactive applications.
 
-- **Small**. 162–674 Bytes, zero dependencies
+- **Small**. 189–700 Bytes, zero dependencies
 - **Tree-shakable**.
 - **ESM-only**.
 - **Typescript**.

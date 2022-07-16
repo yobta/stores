@@ -6,9 +6,10 @@ Plugins are the functions that can listen store lifesycle events, read and modif
 
 A store emits following types of events to the plugins:
 
-- **START** — when a store adds first observer
+- **INIT** — before a store adds first observer
+- **READY** — after a store adds first observer
 - **NEXT** — on every store update
-- **STOP** — when a store removes last observer
+- **IDLE** — when a store removes last observer
 
 Each type of the store events has `initialState` reference and `next()` and `last()` methods.
 
@@ -20,7 +21,7 @@ interface StorePlugin<State> {
     initialState: State
     last(): State
     next(action: State | ((last: State) => State), ...args: any[]): void
-    type: 'START' | 'STOP' | 'NEXT'
+    type: 'INIT' | 'READY' | 'IDLE' | 'NEXT'
   }): void
 }
 ```

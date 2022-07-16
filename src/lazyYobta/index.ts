@@ -5,7 +5,7 @@ interface LazyYobta {
 }
 
 export const lazyYobta: LazyYobta = ({ type, initialState, next }) => {
-  if (type === 'STOP') {
+  if (type === 'IDLE') {
     next(initialState)
   }
 }

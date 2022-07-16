@@ -16,7 +16,7 @@ export interface StorePlugin<State> {
       initialState: State
       last(): State
       next(action: State | ((last: State) => State), ...overloads: any[]): void
-      type: 'START' | 'STOP' | 'NEXT'
+      type: 'INIT' | 'READY' | 'IDLE' | 'NEXT'
     },
     ...overloads: any[]
   ): void
@@ -51,34 +51,46 @@ export const observableYobta: ObservableFactory = <State>(
   let observers: Observer<any>[] = []
   let state = initialState
 
+  let shouldEmitNext: boolean = true
+
   let last: StateGetter<State> = () => state
   let next: StateSetter<State> = (action: any, ...overloads): void => {
     state = isFunction(action) ? action(state) : action
     observers.forEach(observe => {
       observe(state, ...overloads)
     })
-    emit('NEXT')
+    if (shouldEmitNext) {
+      emit('NEXT', ...overloads)
+    }
   }
 
-  let emit = (type: StoreEventType): void => {
+  let emit = (type: StoreEventType, ...overloads: any[]): void => {
+    shouldEmitNext = false
     listeners.forEach(send => {
-      send({ initialState, type, last, next })
+      send({ initialState, type, last, next }, ...overloads)
     })
+    shouldEmitNext = true
   }
 
   return {
     last,
     next,
     observe: observer => {
-      observers.push(observer)
-      if (observers.length === 1) {
-        emit('START')
+      if (observers.length === 0) {
+        emit('INIT')
       }
+
+      observers.push(observer)
+
+      if (observers.length === 1) {
+        emit('READY')
+      }
+
       return () => {
         let index = observers.indexOf(observer)
         observers.splice(index, 1)
         if (observers.length === 0) {
-          emit('STOP')
+          emit('IDLE')
         }
       }
     },

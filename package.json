@@ -125,35 +125,35 @@
       "import": {
         "./lib/index.js": "{ lazyYobta }"
       },
-      "limit": "33 B"
+      "limit": "36 B"
     },
     {
       "name": "mapYobta",
       "import": {
         "./lib/index.js": "{ mapYobta }"
       },
-      "limit": "246 B"
+      "limit": "275 B"
     },
     {
       "name": "machineYobta",
       "import": {
         "./lib/index.js": "{ machineYobta }"
       },
-      "limit": "213 B"
+      "limit": "241 B"
     },
     {
       "name": "observableYobta",
       "import": {
         "./lib/index.js": "{ observableYobta }"
       },
-      "limit": "162 B"
+      "limit": "189 B"
     },
     {
       "name": "replicatedYobta",
       "import": {
         "./lib/index.js": "{ replicatedYobta }"
       },
-      "limit": "120 B"
+      "limit": "125 B"
     },
     {
       "name": "localStorageYobta",
@@ -188,7 +188,7 @@
         "./lib/localStorageYobta/index.js": "{ localStorageYobta }",
         "./lib/sessionStorageYobta/index.js": "{ sessionStorageYobta }"
       },
-      "limit": "674 B"
+      "limit": "700 B"
     }
   ]
 }
