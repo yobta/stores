@@ -38,7 +38,7 @@ export const getCounterValue = () => counterStore.last()
 
 If we called the `getCounterValue()` now, the return value would be `0` because we haven't changed the store value yet.
 
-## Subscribing to Updates:
+## Subscribing to Updates
 
 To receive the updates pass a subscriber function to the store `subscribe` method. The subscriber will receive every next store value unless we unsubscribe.
 
@@ -50,7 +50,7 @@ const unsubscribe = counterStore.subscribe(counterValue => {
 })
 ```
 
-## Unsubscribing:
+## Unsubscribing
 
 The result of calling the `subscribe` method is always a function that unsubscribes from future store updates.
 
