@@ -1,6 +1,7 @@
 export * from './encoderYobta/index.js'
 export * from './lazyYobta/index.js'
 export * from './mapYobta/index.js'
+export * from './machineYobta/index.js'
 export * from './observableYobta/index.js'
 export * from './replicatedYobta/index.js'
 export * from './localStorageYobta/index.js'
