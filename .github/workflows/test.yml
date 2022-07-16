@@ -9,32 +9,52 @@ jobs:
     name: Node.js 16 Full
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout the repository
+      - name: Checkout
         uses: actions/checkout@v2
+
       - name: Install Node.js
         uses: actions/setup-node@v2
         with:
           node-version: 16
-      - name: Install dependencies
-        uses: bahmutov/npm-install@v1
+
+      - uses: pnpm/action-setup@v2.2.2
+        name: Install dependencies
+        with:
+          version: 7.5.1
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile, --strict-peer-dependencies]
+
+      - name: Build
+        run: make build
+
       - name: Run checks
         run: make check
+
   short:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version:
+          - 15
           - 14
-          - 12
     name: Node.js ${{ matrix.node-version }} Quick
     steps:
-      - name: Checkout the repository
+      - name: Checkout
         uses: actions/checkout@v2
+
       - name: Install Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Install dependencies
-        uses: bahmutov/npm-install@v1
-      - name: Run checks
+
+      - uses: pnpm/action-setup@v2.2.2
+        name: Install dependencies
+        with:
+          version: 7.5.1
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile, --strict-peer-dependencies]
+
+      - name: Run Typecheck
         run: make typecheck

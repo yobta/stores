@@ -11,14 +11,13 @@ typecheck:
 	npm run typecheck
 
 test:
+	npm run test:watch
+
+check:
+	npm run typecheck
 	npm run test
-	npm run build
+	npm run lint
 	npm run size-limit
-
-yaspeller:
-	npm run yaspeller
-
-check: test lint typecheck
 
 bump:
 	npm version patch
@@ -27,3 +26,6 @@ bump:
 
 publish: check bump
 	npm publish
+
+up:
+	pnpm up
