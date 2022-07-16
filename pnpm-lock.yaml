@@ -34,6 +34,7 @@ specifiers:
   simple-git-hooks: ^2.5.1
   size-limit: ^5.0.1
   typescript: ^4.3.5
+  vite: ^3.0.0
   vitest: ^0.14.1
   yaspeller: ^7.0.0
 
@@ -73,6 +74,7 @@ devDependencies:
   simple-git-hooks: 2.8.0
   size-limit: 5.0.5
   typescript: 4.7.4
+  vite: 3.0.0
   vitest: 0.14.2_c8@7.11.3+happy-dom@5.4.0
   yaspeller: 7.2.1
 
@@ -6073,6 +6075,33 @@ packages:
       sass:
         optional: true
       stylus:
+        optional: true
+    dependencies:
+      esbuild: 0.14.49
+      postcss: 8.4.14
+      resolve: 1.22.1
+      rollup: 2.77.0
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: true
+
+  /vite/3.0.0:
+    resolution: {integrity: sha512-M7phQhY3+fRZa0H+1WzI6N+/onruwPTBTMvaj7TzgZ0v2TE+N2sdLKxJOfOv9CckDWt5C4HmyQP81xB4dwRKzA==}
+    engines: {node: '>=14.18.0'}
+    hasBin: true
+    peerDependencies:
+      less: '*'
+      sass: '*'
+      stylus: '*'
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      less:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      terser:
         optional: true
     dependencies:
       esbuild: 0.14.49
