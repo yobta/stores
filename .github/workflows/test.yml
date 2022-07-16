@@ -17,8 +17,8 @@ jobs:
         with:
           node-version: 16
 
-      - name: Install dependencies
       - uses: pnpm/action-setup@v2.2.2
+        name: Install dependencies
         with:
           version: 7.5.1
           run_install: |
@@ -44,8 +44,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Install dependencies
       - uses: pnpm/action-setup@v2.2.2
+        name: Install dependencies
         with:
           version: 7.5.1
           run_install: |
