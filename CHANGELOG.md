@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.0.20
+
+- Improve store lifecycle
+
 ## 0.0.19
 
 - State machine store
