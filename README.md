@@ -1,11 +1,28 @@
 # Yobta/stores
-A collection of observable stores that I use in personal projects. Normally you use [`nanostores`] which is better documented and maintained.
+
+A collection of tiny observable stores designed to move logic away from components and help write reactive applications.
+
+- **Small**. 162–674 Bytes
+- **Tree-shakable**.
+- **ESM-only**.
+- **Typescript**.
 
 ## Istallation
-`npm i @yobta/stores`
 
-## Observable Store
-This will create a singleton store that can be used between multiple views
+```
+npm i @yobta/stores
+```
+
+## Documentation
+
+### Key Concepts
+
+- [Basic store](./docs/observable.md) tutorial
+- Using with React
+- Store plugins
+
+### Stores
+
 ```ts
 import { observableYobta } from '@yobta/stores'
 
@@ -19,7 +36,9 @@ increment() // => 124
 ```
 
 ## Lazy Observable Store
+
 This will create a lazy singleton store that will reset it's state as last observer leaves
+
 ```ts
 import { observableYobta, lazyYobta } from '@yobta/stores'
 
@@ -35,29 +54,32 @@ console.log(numberStore.last()) // => 123
 ```
 
 ## Replicated Lazy Observable Store
+
 This will create a lazy singleton store that will be replicated via the browser's local storage
+
 ```ts
 import {
   observableYobta,
   lazyYobta,
   replicatedYobta,
-  localStorageYobta
+  localStorageYobta,
 } from '@yobta/stores'
 
 const numberStore = observableYobta(
   123,
   lazyYobta,
-  replicatedYobta({ channel: 'yobta', backend: localStorageYobta })
+  replicatedYobta({ channel: 'yobta', backend: localStorageYobta }),
 )
 
 localStorage.set('yobta', 456)
 const unobserve = numberStore.subscribe(console.log) // => 456
 
-unobserve() 
+unobserve()
 console.log(numberStore.last()) // => 123
 ```
 
 ## Replicate to a Different Backend
+
 ```ts
 import { observableYobta, lazyYobta, replicatedYobta } from '@yobta/stores'
 
@@ -75,7 +97,6 @@ const numberStore = observableYobta(
 )
 ```
 
-
 ## React Hook
 
 ```ts
@@ -87,11 +108,14 @@ const myTab = lazyYobta('info')
 export const useTabs = () => useObservable(myTab)
 ```
 
-
-
 Kudos:
+
 - [`Andrey Sitnik`] — nanostores and the boilerplate
 
-[`Andrey Sitnik`]: https://sitnik.ru
+[`andrey sitnik`]: https://sitnik.ru
 [`nanostores`]: https://github.com/nanostores/nanostores
-[`useState`]: https://reactjs.org/docs/hooks-reference.html#usestate
+[`usestate`]: https://reactjs.org/docs/hooks-reference.html#usestate
+
+```
+
+```
