@@ -52,13 +52,15 @@ export const useCounter = (): number => useObservable(counterStore)
 ###### CounterPage.tsx
 
 ```tsx
+import { useCounter, increment } from './counterStore'
+
 export const Page = (): JSX.Element => {
   const counter = useCounter()
   return (
     <>
       state: {counter}
       <hr />
-      <button onClick={increment}>Next</button>
+      <button onClick={increment}>Increment</button>
     </>
   )
 }
