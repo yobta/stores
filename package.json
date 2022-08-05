@@ -170,6 +170,13 @@
       "limit": "100 B"
     },
     {
+      "name": "stackYobta",
+      "import": {
+        "./lib/index.js": "{ stackYobta }"
+      },
+      "limit": "283 B"
+    },
+    {
       "name": "useObservable",
       "import": {
         "./lib/adapters/react/index.js": "{ useObservable }"
@@ -186,9 +193,10 @@
         "./lib/observableYobta/index.js": "{ observableYobta }",
         "./lib/replicatedYobta/index.js": "{ replicatedYobta }",
         "./lib/localStorageYobta/index.js": "{ localStorageYobta }",
-        "./lib/sessionStorageYobta/index.js": "{ sessionStorageYobta }"
+        "./lib/sessionStorageYobta/index.js": "{ sessionStorageYobta }",
+        "./lib/stackYobta/index.js": "{ stackYobta }"
       },
-      "limit": "700 B"
+      "limit": "781 B"
     }
   ]
 }
