@@ -10,23 +10,27 @@ export interface Observer<S> {
 
 // NOTE:
 // https://github.com/microsoft/TypeScript/issues/32164#issuecomment-1146737709
+
+const INIT = 'init'
+const READY = 'ready'
+const IDLE = 'idle'
+const NEXT = 'next'
+
+type YobtaEvent = typeof INIT | typeof READY | typeof IDLE | typeof NEXT
+
+type MiddleWare<State> = (...args: any[]) => State
+
 export interface StorePlugin<State> {
   (
-    event: {
-      initialState: State
-      last(): State
-      next(action: State | ((last: State) => State), ...overloads: any[]): void
-      type: 'INIT' | 'READY' | 'IDLE' | 'NEXT'
-    },
-    ...overloads: any[]
+    addMiddleware: (type: YobtaEvent, middleware: MiddleWare<State>) => void,
   ): void
 }
 
-export type StoreEvent<State> = Parameters<StorePlugin<State>>[0]
-
-export type StateGetter<State> = StoreEvent<State>['last']
-export type StateSetter<State> = StoreEvent<State>['next']
-export type StoreEventType = StoreEvent<unknown>['type']
+export type StateGetter<State> = () => State
+export type StateSetter<State> = (
+  action: State | ((last: State) => State),
+  ...overloads: any[]
+) => void
 export type StoreAction<State> = Parameters<StateSetter<State>>[0]
 
 interface ObservableFactory {
@@ -46,51 +50,70 @@ export interface ObservableStore<State> {
 
 export const observableYobta: ObservableFactory = <State>(
   initialState: State,
-  ...listeners: StorePlugin<State>[]
+  ...plugins: StorePlugin<State>[]
 ) => {
+  let middlewares: Record<YobtaEvent, MiddleWare<State>[]> = {
+    init: [],
+    ready: [],
+    idle: [],
+    next: [],
+  }
+  let addMiddleware = (
+    type: YobtaEvent,
+    middleware: MiddleWare<State>,
+  ): void => {
+    middlewares[type].push(middleware)
+  }
   let observers: Observer<any>[] = []
-  let state = initialState
 
-  let shouldEmitNext: boolean = true
+  plugins.forEach(plugin => {
+    plugin(addMiddleware)
+  })
+
+  let transition = (
+    type: YobtaEvent,
+    nextState: any,
+    ...overloads: any[]
+  ): State => {
+    let eventMiddlewares = middlewares[type]
+
+    let result: State = eventMiddlewares.reduce(
+      (acc, middleware) => middleware(acc, ...overloads),
+      nextState,
+    )
+
+    return result
+  }
+
+  let state = transition(INIT, initialState)
 
   let last: StateGetter<State> = () => state
   let next: StateSetter<State> = (action: any, ...overloads): void => {
-    state = isFunction(action) ? action(state) : action
+    state = transition(
+      NEXT,
+      isFunction(action) ? action(state) : action,
+      ...overloads,
+    )
     observers.forEach(observe => {
       observe(state, ...overloads)
     })
-    if (shouldEmitNext) {
-      emit('NEXT', ...overloads)
-    }
-  }
-
-  let emit = (type: StoreEventType, ...overloads: any[]): void => {
-    shouldEmitNext = false
-    listeners.forEach(send => {
-      send({ initialState, type, last, next }, ...overloads)
-    })
-    shouldEmitNext = true
   }
 
   return {
     last,
     next,
     observe: observer => {
-      if (observers.length === 0) {
-        emit('INIT')
-      }
-
       observers.push(observer)
 
       if (observers.length === 1) {
-        emit('READY')
+        state = transition(READY, state)
       }
 
       return () => {
         let index = observers.indexOf(observer)
         observers.splice(index, 1)
         if (observers.length === 0) {
-          emit('IDLE')
+          state = transition(IDLE, state)
         }
       }
     },
