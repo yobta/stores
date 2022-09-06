@@ -8,18 +8,21 @@ export interface Observer<S> {
   (state: S, ...args: any[]): void
 }
 
-const INIT = 'init'
-const READY = 'ready'
-const IDLE = 'idle'
-const NEXT = 'next'
+export const INIT = 'init'
+export const READY = 'ready'
+export const IDLE = 'idle'
+export const NEXT = 'next'
 
-type YobtaEvent = typeof INIT | typeof READY | typeof IDLE | typeof NEXT
+export type StoreEvent = typeof INIT | typeof READY | typeof IDLE | typeof NEXT
 
-type MiddleWare<State> = (...args: any[]) => State
+export type StoreMiddleware<State> = (...args: any[]) => State
 
 export interface StorePlugin<State> {
   (
-    addMiddleware: (type: YobtaEvent, middleware: MiddleWare<State>) => void,
+    addMiddleware: (
+      type: StoreEvent,
+      middleware: StoreMiddleware<State>,
+    ) => void,
   ): void
 }
 
@@ -49,15 +52,15 @@ export const observableYobta: ObservableFactory = <State>(
   initialState: State,
   ...plugins: StorePlugin<State>[]
 ) => {
-  let middlewares: Record<YobtaEvent, MiddleWare<State>[]> = {
+  let middlewares: Record<StoreEvent, StoreMiddleware<State>[]> = {
     init: [],
     ready: [],
     idle: [],
     next: [],
   }
   let addMiddleware = (
-    type: YobtaEvent,
-    middleware: MiddleWare<State>,
+    type: StoreEvent,
+    middleware: StoreMiddleware<State>,
   ): void => {
     middlewares[type].push(middleware)
   }
@@ -68,7 +71,7 @@ export const observableYobta: ObservableFactory = <State>(
   })
 
   let transition = (
-    type: YobtaEvent,
+    type: StoreEvent,
     nextState: any,
     ...overloads: any[]
   ): State => {
