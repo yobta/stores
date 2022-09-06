@@ -8,9 +8,6 @@ export interface Observer<S> {
   (state: S, ...args: any[]): void
 }
 
-// NOTE:
-// https://github.com/microsoft/TypeScript/issues/32164#issuecomment-1146737709
-
 const INIT = 'init'
 const READY = 'ready'
 const IDLE = 'idle'
