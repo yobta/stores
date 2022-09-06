@@ -85,6 +85,7 @@ export const observableYobta: ObservableFactory = <State>(
   let state = transition(INIT, initialState)
 
   let last: StateGetter<State> = () => state
+
   let next: StateSetter<State> = (action: any, ...overloads): void => {
     state = transition(
       NEXT,
@@ -100,11 +101,11 @@ export const observableYobta: ObservableFactory = <State>(
     last,
     next,
     observe: observer => {
-      observers.push(observer)
-
-      if (observers.length === 1) {
+      if (observers.length === 0) {
         state = transition(READY, state)
       }
+
+      observers.push(observer)
 
       return () => {
         let index = observers.indexOf(observer)
