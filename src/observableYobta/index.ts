@@ -20,6 +20,7 @@ export type StoreMiddleware<State> = (...args: any[]) => State
 export type StorePlugin<State> = (props: {
   addMiddleware(type: StoreEvent, middleware: StoreMiddleware<State>): void
   initialState: State
+  next: StateSetter<State>
 }) => void
 
 export type StateGetter<State> = () => State
@@ -61,9 +62,21 @@ export const observableYobta: ObservableFactory = <State>(
     middlewares[type].push(middleware)
   }
   let observers: Observer<any>[] = []
+  let state: State
+
+  let next: StateSetter<State> = (action: any, ...overloads): void => {
+    state = transition(
+      NEXT,
+      isFunction(action) ? action(state) : action,
+      ...overloads,
+    )
+    observers.forEach(observe => {
+      observe(state, ...overloads)
+    })
+  }
 
   plugins.forEach(plugin => {
-    plugin({ addMiddleware, initialState })
+    plugin({ addMiddleware, initialState, next })
   })
 
   let transition = (
@@ -81,20 +94,9 @@ export const observableYobta: ObservableFactory = <State>(
     return result
   }
 
-  let state = transition(INIT, initialState)
+  state = transition(INIT, initialState)
 
   let last: StateGetter<State> = () => state
-
-  let next: StateSetter<State> = (action: any, ...overloads): void => {
-    state = transition(
-      NEXT,
-      isFunction(action) ? action(state) : action,
-      ...overloads,
-    )
-    observers.forEach(observe => {
-      observe(state, ...overloads)
-    })
-  }
 
   return {
     last,
