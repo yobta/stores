@@ -11,13 +11,10 @@ interface ReplicatedYobta {
   <S>(config: BackendConfig<S>): StorePlugin<S>
 }
 
-export const replicatedYobta: ReplicatedYobta = ({
-  backend,
-  channel,
-  validate,
-}) => {
-  let unsubscribe: VoidFunction
-  return ({ addMiddleware }) => {
+export const replicatedYobta: ReplicatedYobta =
+  ({ backend, channel, validate }) =>
+  ({ addMiddleware }) => {
+    let unsubscribe: VoidFunction
     addMiddleware(READY, state => {
       unsubscribe = backend.subscribe(channel, message => {
         let validatedState = validate ? validate(message) : message
@@ -34,4 +31,3 @@ export const replicatedYobta: ReplicatedYobta = ({
       return state
     })
   }
-}
