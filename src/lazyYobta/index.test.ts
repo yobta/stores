@@ -1,27 +1,18 @@
 import { lazyYobta } from './index.js'
 
-const spy = vi.fn()
+const addMiddleware = vi.fn()
+const initialState = 1
 
 it('adds middleware', () => {
-  lazyYobta(spy)
+  lazyYobta({ addMiddleware, initialState })
 
-  expect(spy).toHaveBeenCalledWith('init', expect.any(Function))
-  expect(spy).toHaveBeenCalledWith('idle', expect.any(Function))
-})
-
-it('returns same state for init', () => {
-  lazyYobta(spy)
-
-  let init = spy.mock.calls[0][1]
-  expect(init('test')).toEqual('test')
+  expect(addMiddleware).toHaveBeenCalledWith('idle', expect.any(Function))
 })
 
 it('resets to initial state when idle', () => {
-  lazyYobta(spy)
+  lazyYobta({ addMiddleware, initialState })
 
-  let init = spy.mock.calls[0][1]
-  let idle = spy.mock.calls[1][1]
+  let idle = addMiddleware.mock.calls[0][1]
 
-  init(1)
   expect(idle(2)).toEqual(1)
 })

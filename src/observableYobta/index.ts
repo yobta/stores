@@ -17,14 +17,10 @@ export type StoreEvent = typeof INIT | typeof READY | typeof IDLE | typeof NEXT
 
 export type StoreMiddleware<State> = (...args: any[]) => State
 
-export interface StorePlugin<State> {
-  (
-    addMiddleware: (
-      type: StoreEvent,
-      middleware: StoreMiddleware<State>,
-    ) => void,
-  ): void
-}
+export type StorePlugin<State> = (props: {
+  addMiddleware(type: StoreEvent, middleware: StoreMiddleware<State>): void
+  initialState: State
+}) => void
 
 export type StateGetter<State> = () => State
 export type StateSetter<State> = (
@@ -34,7 +30,7 @@ export type StateSetter<State> = (
 export type StoreAction<State> = Parameters<StateSetter<State>>[0]
 
 interface ObservableFactory {
-  <State>(initialState: State, ...listeners: StorePlugin<State>[]): {
+  <State>(initialState: State, ...plugins: StorePlugin<State>[]): {
     last: StateGetter<State>
     next: StateSetter<State>
     observe(observer: Observer<State>): VoidFunction
@@ -67,7 +63,7 @@ export const observableYobta: ObservableFactory = <State>(
   let observers: Observer<any>[] = []
 
   plugins.forEach(plugin => {
-    plugin(addMiddleware)
+    plugin({ addMiddleware, initialState })
   })
 
   let transition = (
