@@ -32,7 +32,7 @@ describe('replicatedYobta', () => {
     replicatedYobta({
       channel: 'test',
       backend: localStorageYobta,
-    })({ addMiddleware: addMiddlewareSpy, initialState })
+    })({ addMiddleware: addMiddlewareSpy, initialState, next: () => {} })
     expect(addMiddlewareSpy).toHaveBeenCalledTimes(3)
     expect(addMiddlewareSpy).toHaveBeenNthCalledWith(
       1,
@@ -58,7 +58,7 @@ describe('replicatedYobta', () => {
     replicatedYobta({
       channel: 'test',
       backend: localStorageMock,
-    })({ addMiddleware: addMiddlewareSpy, initialState })
+    })({ addMiddleware: addMiddlewareSpy, initialState, next: () => {} })
 
     handlersSpy[READY]('one')
 
@@ -77,7 +77,7 @@ describe('replicatedYobta', () => {
     replicatedYobta({
       channel: 'test',
       backend: localStorageMock,
-    })({ addMiddleware: addMiddlewareSpy, initialState })
+    })({ addMiddleware: addMiddlewareSpy, initialState, next: () => {} })
 
     handlersSpy[NEXT]('two')
 
@@ -99,7 +99,7 @@ describe('replicatedYobta', () => {
     replicatedYobta({
       channel: 'test',
       backend: localStorageMock,
-    })({ addMiddleware: addMiddlewareSpy, initialState })
+    })({ addMiddleware: addMiddlewareSpy, initialState, next: () => {} })
 
     handlersSpy[READY]('one')
     handlersSpy[IDLE]('one')
@@ -123,7 +123,7 @@ describe('replicatedYobta', () => {
       channel: 'test',
       backend: localStorageMock,
       validate: validateSpy,
-    })({ addMiddleware: addMiddlewareSpy, initialState })
+    })({ addMiddleware: addMiddlewareSpy, initialState, next: () => {} })
 
     handlersSpy[READY]('one')
 
