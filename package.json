@@ -196,7 +196,7 @@
         "./lib/sessionStorageYobta/index.js": "{ sessionStorageYobta }",
         "./lib/stackYobta/index.js": "{ stackYobta }"
       },
-      "limit": "792 B"
+      "limit": "793 B"
     }
   ]
 }
