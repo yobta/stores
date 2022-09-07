@@ -1,114 +1,132 @@
 import { replicatedYobta } from './index.js'
 import { localStorageYobta } from '../localStorageYobta/index.js'
+import {
+  IDLE,
+  INIT,
+  NEXT,
+  READY,
+  StoreEvent,
+  StoreMiddleware,
+} from '../observableYobta/index.js'
 
-let lastSpy = vi.fn()
-let nextSpy = vi.fn()
+let handlersSpy = {
+  [INIT]: vi.fn(),
+  [IDLE]: vi.fn(),
+  [READY]: vi.fn(),
+  [NEXT]: vi.fn(),
+}
+let addMiddlewareSpy = vi.fn<[StoreEvent, StoreMiddleware<string>], void>()
 
-afterEach(() => {
+beforeEach(() => {
+  vi.clearAllMocks()
   localStorage.clear()
+  addMiddlewareSpy.mockImplementation((type, handler) => {
+    handlersSpy[type].mockImplementation(handler)
+  })
 })
 
+const initialState = 'one'
+
 describe('replicatedYobta', () => {
-  it('calls next when starts', () => {
-    let replica = replicatedYobta({
+  it('adds tree middlewares', () => {
+    replicatedYobta({
       channel: 'test',
       backend: localStorageYobta,
-    })
-
-    replica({
-      initialState: 'one',
-      last: lastSpy,
-      next: nextSpy,
-      type: 'READY',
-    })
-
-    expect(nextSpy).toHaveBeenCalledTimes(1)
-    expect(nextSpy).toHaveBeenCalledWith(null)
+    })({ addMiddleware: addMiddlewareSpy, initialState })
+    expect(addMiddlewareSpy).toHaveBeenCalledTimes(3)
+    expect(addMiddlewareSpy).toHaveBeenNthCalledWith(
+      1,
+      READY,
+      expect.any(Function),
+    )
+    expect(addMiddlewareSpy).toHaveBeenNthCalledWith(
+      2,
+      IDLE,
+      expect.any(Function),
+    )
+    expect(addMiddlewareSpy).toHaveBeenNthCalledWith(
+      3,
+      NEXT,
+      expect.any(Function),
+    )
   })
 
-  it('calls last when receives a NEXT event', () => {
-    let replica = replicatedYobta({
+  it('subscribe backend when READY', () => {
+    let subscribeSpy = vi.fn().mockImplementation(localStorageYobta.subscribe)
+    let localStorageMock = { ...localStorageYobta, subscribe: subscribeSpy }
+
+    replicatedYobta({
       channel: 'test',
-      backend: localStorageYobta,
-    })
+      backend: localStorageMock,
+    })({ addMiddleware: addMiddlewareSpy, initialState })
 
-    replica({
-      initialState: 'one',
-      last: lastSpy,
-      next: nextSpy,
-      type: 'NEXT',
-    })
+    handlersSpy[READY]('one')
 
-    expect(lastSpy).toHaveBeenCalledTimes(1)
-    expect(lastSpy).toHaveBeenCalledWith()
+    expect(subscribeSpy).toHaveBeenCalledTimes(1)
+    expect(subscribeSpy).toHaveBeenNthCalledWith(
+      1,
+      'test',
+      expect.any(Function),
+    )
+  })
+
+  it('publishes on backend when NEXT', () => {
+    let publishSpy = vi.fn().mockImplementation(localStorageYobta.publish)
+    let localStorageMock = { ...localStorageYobta, publish: publishSpy }
+
+    replicatedYobta({
+      channel: 'test',
+      backend: localStorageMock,
+    })({ addMiddleware: addMiddlewareSpy, initialState })
+
+    handlersSpy[NEXT]('two')
+
+    expect(publishSpy).toHaveBeenCalledTimes(1)
+    expect(publishSpy).toHaveBeenNthCalledWith(1, 'test', 'two')
+  })
+
+  it('unsubscribes backend when IDLE', () => {
+    let unsubscribeSpy = vi.fn()
+    let subscribeSpy = vi
+      .fn()
+      .mockImplementation((type, msg) =>
+        unsubscribeSpy.mockImplementation(
+          localStorageYobta.subscribe(type, msg),
+        ),
+      )
+    let localStorageMock = { ...localStorageYobta, subscribe: subscribeSpy }
+
+    replicatedYobta({
+      channel: 'test',
+      backend: localStorageMock,
+    })({ addMiddleware: addMiddlewareSpy, initialState })
+
+    handlersSpy[READY]('one')
+    handlersSpy[IDLE]('one')
+
+    expect(unsubscribeSpy).toHaveBeenCalledTimes(1)
   })
 
   it('validates remote value', () => {
-    let validate = vi.fn()
+    let unsubscribeSpy = vi.fn()
+    let validateSpy = vi.fn()
+    let subscribeSpy = vi
+      .fn()
+      .mockImplementation((type, msg) =>
+        unsubscribeSpy.mockImplementation(
+          localStorageYobta.subscribe(type, msg),
+        ),
+      )
+    let localStorageMock = { ...localStorageYobta, subscribe: subscribeSpy }
 
-    let replica = replicatedYobta({
+    replicatedYobta({
       channel: 'test',
-      validate,
-      backend: localStorageYobta,
-    })
+      backend: localStorageMock,
+      validate: validateSpy,
+    })({ addMiddleware: addMiddlewareSpy, initialState })
 
-    replica({
-      initialState: 'one',
-      last: lastSpy,
-      next: nextSpy,
-      type: 'READY',
-    })
+    handlersSpy[READY]('one')
 
-    expect(nextSpy).toHaveBeenCalledTimes(1)
-    expect(validate).toHaveBeenCalledTimes(1)
-    expect(validate).toHaveBeenCalledWith(null)
-  })
-
-  it('replicates changes', () => {
-    let publish = vi.fn()
-    let subscribe = vi.fn()
-    let unsubscribe = vi.fn()
-
-    let backend = {
-      publish,
-      subscribe(...args: any[]) {
-        subscribe(...args)
-        return unsubscribe
-      },
-    }
-
-    let replica = replicatedYobta({ channel: 'test', backend })
-
-    replica({
-      initialState: 'one',
-      last: lastSpy,
-      next: nextSpy,
-      type: 'READY',
-    })
-
-    expect(subscribe).toHaveBeenCalledTimes(1)
-    expect(subscribe).toHaveBeenCalledWith('test', expect.any(Function))
-
-    replica({
-      initialState: 'one',
-      last: () => 'two',
-      next: nextSpy,
-      type: 'NEXT',
-    })
-
-    expect(subscribe).toHaveBeenCalledTimes(1)
-    expect(publish).toHaveBeenCalledTimes(1)
-    expect(publish).toHaveBeenCalledWith('test', 'two')
-
-    replica({
-      initialState: 'one',
-      last: lastSpy,
-      next: nextSpy,
-      type: 'IDLE',
-    })
-
-    expect(subscribe).toHaveBeenCalledTimes(1)
-    expect(publish).toHaveBeenCalledTimes(1)
-    expect(unsubscribe).toHaveBeenCalledTimes(1)
+    expect(validateSpy).toHaveBeenCalledTimes(1)
   })
 })
