@@ -60,7 +60,8 @@ describe('replicatedYobta', () => {
       backend: localStorageMock,
     })({ addMiddleware: addMiddlewareSpy, initialState, next: () => {} })
 
-    handlersSpy[READY]('one')
+    let state1 = handlersSpy[READY]('one')
+    expect(state1).toBe('one')
 
     expect(subscribeSpy).toHaveBeenCalledTimes(1)
     expect(subscribeSpy).toHaveBeenNthCalledWith(
@@ -79,7 +80,8 @@ describe('replicatedYobta', () => {
       backend: localStorageMock,
     })({ addMiddleware: addMiddlewareSpy, initialState, next: () => {} })
 
-    handlersSpy[NEXT]('two')
+    let state1 = handlersSpy[NEXT]('two')
+    expect(state1).toBe('two')
 
     expect(publishSpy).toHaveBeenCalledTimes(1)
     expect(publishSpy).toHaveBeenNthCalledWith(1, 'test', 'two')
@@ -101,9 +103,11 @@ describe('replicatedYobta', () => {
       backend: localStorageMock,
     })({ addMiddleware: addMiddlewareSpy, initialState, next: () => {} })
 
-    handlersSpy[READY]('one')
-    handlersSpy[IDLE]('one')
+    let state1 = handlersSpy[READY]('one')
+    expect(state1).toBe('one')
 
+    let state2 = handlersSpy[IDLE]('two')
+    expect(state2).toBe('two')
     expect(unsubscribeSpy).toHaveBeenCalledTimes(1)
   })
 
@@ -125,7 +129,8 @@ describe('replicatedYobta', () => {
       validate: validateSpy,
     })({ addMiddleware: addMiddlewareSpy, initialState, next: () => {} })
 
-    handlersSpy[READY]('one')
+    let state1 = handlersSpy[READY]('one')
+    expect(state1).toBe('one')
 
     expect(validateSpy).toHaveBeenCalledTimes(1)
   })

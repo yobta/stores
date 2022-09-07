@@ -8,7 +8,7 @@ interface BackendConfig<S> {
 }
 
 interface ReplicatedYobta {
-  <S>(config: BackendConfig<S>): StorePlugin<any>
+  <S>(config: BackendConfig<S>): StorePlugin<S>
 }
 
 export const replicatedYobta: ReplicatedYobta = ({
@@ -25,8 +25,9 @@ export const replicatedYobta: ReplicatedYobta = ({
       })
       return state
     })
-    addMiddleware(IDLE, () => {
+    addMiddleware(IDLE, state => {
       unsubscribe()
+      return state
     })
     addMiddleware(NEXT, state => {
       backend.publish(channel, state)
