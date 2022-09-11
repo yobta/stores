@@ -1,4 +1,4 @@
-import { StorePlugin } from '../index.js'
+import { YOBTA_READY, YOBTA_IDLE, YOBTA_NEXT, StorePlugin } from '../index.js'
 import { PubSubYobta } from '../_internal/PubSubYobta/index.js'
 
 interface BackendConfig<S> {
@@ -8,29 +8,26 @@ interface BackendConfig<S> {
 }
 
 interface ReplicatedYobta {
-  <S>(config: BackendConfig<S>): StorePlugin<any>
+  <S>(config: BackendConfig<S>): StorePlugin<S>
 }
 
-export const replicatedYobta: ReplicatedYobta = ({
-  backend,
-  channel,
-  validate,
-}) => {
-  let unsubscribe: VoidFunction
-  return ({ type, next, last }) => {
-    switch (type) {
-      case 'READY':
-        unsubscribe = backend.subscribe(channel, message => {
-          let state = validate ? validate(message) : message
-          next(state)
-        })
-        break
-      case 'IDLE':
-        unsubscribe()
-        break
-      case 'NEXT':
-        backend.publish(channel, last())
-        break
-    }
+export const replicatedYobta: ReplicatedYobta =
+  ({ backend, channel, validate }) =>
+  ({ addMiddleware }) => {
+    let unsubscribe: VoidFunction
+    addMiddleware(YOBTA_READY, state => {
+      unsubscribe = backend.subscribe(channel, message => {
+        let validatedState = validate ? validate(message) : message
+        return validatedState
+      })
+      return state
+    })
+    addMiddleware(YOBTA_IDLE, state => {
+      unsubscribe()
+      return state
+    })
+    addMiddleware(YOBTA_NEXT, state => {
+      backend.publish(channel, state)
+      return state
+    })
   }
-}

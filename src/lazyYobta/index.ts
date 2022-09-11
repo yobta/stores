@@ -1,11 +1,8 @@
-import { StoreEvent } from '../observableYobta/index.js'
+import { YOBTA_IDLE, StorePlugin } from '../observableYobta/index.js'
 
-interface LazyYobta {
-  <State>(event: StoreEvent<State>): void
-}
-
-export const lazyYobta: LazyYobta = ({ type, initialState, next }) => {
-  if (type === 'IDLE') {
-    next(initialState)
-  }
+export const lazyYobta: StorePlugin<any> = ({
+  addMiddleware,
+  initialState,
+}) => {
+  addMiddleware(YOBTA_IDLE, () => initialState)
 }

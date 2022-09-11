@@ -1,9 +1,51 @@
 import { expect, vi, it } from 'vitest'
 
-import { observableYobta } from './index.js'
+import {
+  YOBTA_IDLE,
+  YOBTA_INIT,
+  YOBTA_NEXT,
+  observableYobta,
+  YOBTA_READY,
+  StoreEvent,
+  StoreMiddleware,
+} from './index.js'
 
 const pluginMock = vi.fn()
 const observerMock = vi.fn()
+
+let addMiddlewareSpy = vi.fn<[StoreEvent, StoreMiddleware<number>], void>()
+
+let handlersSpy = {
+  [YOBTA_INIT]: vi.fn(),
+  [YOBTA_IDLE]: vi.fn(),
+  [YOBTA_READY]: vi.fn(),
+  [YOBTA_NEXT]: vi.fn(),
+}
+
+beforeEach(() => {
+  vi.clearAllMocks()
+  addMiddlewareSpy.mockImplementation((type, handler) => {
+    handlersSpy[type].mockImplementation(handler)
+  })
+  pluginMock.mockImplementation(({ addMiddleware }) => {
+    addMiddleware(
+      YOBTA_INIT,
+      handlersSpy[YOBTA_INIT].mockImplementation(state => state),
+    )
+    addMiddleware(
+      YOBTA_READY,
+      handlersSpy[YOBTA_READY].mockImplementation(state => state),
+    )
+    addMiddleware(
+      YOBTA_NEXT,
+      handlersSpy[YOBTA_NEXT].mockImplementation(state => state),
+    )
+    addMiddleware(
+      YOBTA_IDLE,
+      handlersSpy[YOBTA_IDLE].mockImplementation(state => state),
+    )
+  })
+})
 
 it('has default state', () => {
   let store = observableYobta(1, pluginMock)
@@ -20,12 +62,7 @@ it('sends NEXT event to plugins when not observed', () => {
   let store = observableYobta(1, pluginMock)
   store.next(2)
   expect(pluginMock).toHaveBeenCalledTimes(1)
-  expect(pluginMock).toHaveBeenCalledWith({
-    initialState: 1,
-    type: 'NEXT',
-    last: expect.any(Function),
-    next: expect.any(Function),
-  })
+  expect(handlersSpy[YOBTA_NEXT]).toHaveBeenCalledWith(2)
 })
 
 it('notifies as many plugins as it has', () => {
@@ -53,13 +90,8 @@ it('sends IDLE plugins when last observer is removed', () => {
   let unsubscribe = store.observe(observerMock)
   unsubscribe()
   expect(observerMock).toHaveBeenCalledTimes(0)
-  expect(pluginMock).toHaveBeenCalledTimes(3)
-  expect(pluginMock).toHaveBeenCalledWith({
-    initialState: 1,
-    type: 'IDLE',
-    last: expect.any(Function),
-    next: expect.any(Function),
-  })
+  expect(pluginMock).toHaveBeenCalledTimes(1)
+  expect(handlersSpy[YOBTA_IDLE]).toHaveBeenCalledWith(1)
 })
 
 it('does not sends IDLE plugins when has more observer is removed', () => {
@@ -68,26 +100,16 @@ it('does not sends IDLE plugins when has more observer is removed', () => {
   let unsubscribe2 = store.observe(observerMock)
   unsubscribe()
   expect(observerMock).toHaveBeenCalledTimes(0)
-  expect(pluginMock).toHaveBeenCalledTimes(2)
-  expect(pluginMock).toHaveBeenCalledWith({
-    initialState: 1,
-    type: 'READY',
-    last: expect.any(Function),
-    next: expect.any(Function),
-  })
+  expect(pluginMock).toHaveBeenCalledTimes(1)
+  expect(handlersSpy[YOBTA_IDLE]).toHaveBeenCalledTimes(0)
   unsubscribe2()
 })
 
 it('sends READY event to plugins when observer is added', () => {
   let store = observableYobta(1, pluginMock)
   let unsubscribe = store.observe(observerMock)
-  expect(pluginMock).toHaveBeenCalledTimes(2)
-  expect(pluginMock).toHaveBeenCalledWith({
-    initialState: 1,
-    type: 'READY',
-    last: expect.any(Function),
-    next: expect.any(Function),
-  })
+  expect(pluginMock).toHaveBeenCalledTimes(1)
+  expect(handlersSpy[YOBTA_READY]).toHaveBeenCalledWith(1)
   unsubscribe()
 })
 
@@ -95,13 +117,8 @@ it('sends NEXT event to plugins and observers', () => {
   let store = observableYobta(1, pluginMock)
   let unsubscribe = store.observe(observerMock)
   store.next(2)
-  expect(pluginMock).toHaveBeenCalledTimes(3)
-  expect(pluginMock).toHaveBeenCalledWith({
-    initialState: 1,
-    type: 'NEXT',
-    last: expect.any(Function),
-    next: expect.any(Function),
-  })
+  expect(pluginMock).toHaveBeenCalledTimes(1)
+  expect(handlersSpy[YOBTA_NEXT]).toHaveBeenCalledWith(2)
   expect(observerMock).toHaveBeenCalledTimes(1)
   expect(observerMock).toHaveBeenCalledWith(2)
   unsubscribe()
@@ -113,45 +130,6 @@ it('sends overloads to observers', () => {
   let overload = Array.from('overload')
   store.next(() => 1, ...overload)
   unsubscribe()
-})
-
-it('sends overloads to plugins', () => {
-  let store = observableYobta(1, pluginMock)
-  let overload = Array.from('overload')
-  store.next(() => 1, ...overload)
-  expect(pluginMock).toHaveBeenCalledWith(
-    {
-      initialState: 1,
-      type: 'NEXT',
-      last: expect.any(Function),
-      next: expect.any(Function),
-    },
-    ...overload,
-  )
-})
-
-it('prevents NEXT from bubbling', () => {
-  let store = observableYobta(1, pluginMock, ({ next }) => {
-    next(last => last * last)
-  })
-  store.next(2)
-  expect(store.last()).toBe(4)
-  expect(pluginMock).toHaveBeenCalledTimes(1)
-  expect(pluginMock).toHaveBeenCalledWith({
-    initialState: 1,
-    type: 'NEXT',
-    last: expect.any(Function),
-    next: expect.any(Function),
-  })
-  store.next(4)
-  expect(store.last()).toBe(16)
-  expect(pluginMock).toHaveBeenCalledTimes(2)
-  expect(pluginMock).toHaveBeenCalledWith({
-    initialState: 1,
-    type: 'NEXT',
-    last: expect.any(Function),
-    next: expect.any(Function),
-  })
 })
 
 it('keeps state after termination', () => {
