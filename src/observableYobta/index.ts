@@ -8,12 +8,16 @@ export interface Observer<S> {
   (state: S, ...args: any[]): void
 }
 
-export const INIT = 'init'
-export const READY = 'ready'
-export const IDLE = 'idle'
-export const NEXT = 'next'
+export const YOBTA_INIT = 'init'
+export const YOBTA_READY = 'ready'
+export const YOBTA_IDLE = 'idle'
+export const YOBTA_NEXT = 'next'
 
-export type StoreEvent = typeof INIT | typeof READY | typeof IDLE | typeof NEXT
+export type StoreEvent =
+  | typeof YOBTA_INIT
+  | typeof YOBTA_READY
+  | typeof YOBTA_IDLE
+  | typeof YOBTA_NEXT
 
 export type StoreMiddleware<State> = (...args: any[]) => State
 
@@ -66,7 +70,7 @@ export const observableYobta: ObservableFactory = <State>(
 
   let next: StateSetter<State> = (action: any, ...overloads): void => {
     state = transition(
-      NEXT,
+      YOBTA_NEXT,
       isFunction(action) ? action(state) : action,
       ...overloads,
     )
@@ -94,7 +98,7 @@ export const observableYobta: ObservableFactory = <State>(
     return result
   }
 
-  state = transition(INIT, initialState)
+  state = transition(YOBTA_INIT, initialState)
 
   let last: StateGetter<State> = () => state
 
@@ -103,7 +107,7 @@ export const observableYobta: ObservableFactory = <State>(
     next,
     observe: observer => {
       if (observers.length === 0) {
-        state = transition(READY, state)
+        state = transition(YOBTA_READY, state)
       }
 
       observers.push(observer)
@@ -112,7 +116,7 @@ export const observableYobta: ObservableFactory = <State>(
         let index = observers.indexOf(observer)
         observers.splice(index, 1)
         if (observers.length === 0) {
-          state = transition(IDLE, state)
+          state = transition(YOBTA_IDLE, state)
         }
       }
     },

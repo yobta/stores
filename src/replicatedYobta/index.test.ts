@@ -1,19 +1,19 @@
 import { replicatedYobta } from './index.js'
 import { localStorageYobta } from '../localStorageYobta/index.js'
 import {
-  IDLE,
-  INIT,
-  NEXT,
-  READY,
+  YOBTA_IDLE,
+  YOBTA_INIT,
+  YOBTA_NEXT,
+  YOBTA_READY,
   StoreEvent,
   StoreMiddleware,
 } from '../observableYobta/index.js'
 
 let handlersSpy = {
-  [INIT]: vi.fn(),
-  [IDLE]: vi.fn(),
-  [READY]: vi.fn(),
-  [NEXT]: vi.fn(),
+  [YOBTA_INIT]: vi.fn(),
+  [YOBTA_IDLE]: vi.fn(),
+  [YOBTA_READY]: vi.fn(),
+  [YOBTA_NEXT]: vi.fn(),
 }
 let addMiddlewareSpy = vi.fn<[StoreEvent, StoreMiddleware<string>], void>()
 
@@ -36,17 +36,17 @@ describe('replicatedYobta', () => {
     expect(addMiddlewareSpy).toHaveBeenCalledTimes(3)
     expect(addMiddlewareSpy).toHaveBeenNthCalledWith(
       1,
-      READY,
+      YOBTA_READY,
       expect.any(Function),
     )
     expect(addMiddlewareSpy).toHaveBeenNthCalledWith(
       2,
-      IDLE,
+      YOBTA_IDLE,
       expect.any(Function),
     )
     expect(addMiddlewareSpy).toHaveBeenNthCalledWith(
       3,
-      NEXT,
+      YOBTA_NEXT,
       expect.any(Function),
     )
   })
@@ -60,7 +60,7 @@ describe('replicatedYobta', () => {
       backend: localStorageMock,
     })({ addMiddleware: addMiddlewareSpy, initialState, next: () => {} })
 
-    let state1 = handlersSpy[READY]('one')
+    let state1 = handlersSpy[YOBTA_READY]('one')
     expect(state1).toBe('one')
 
     expect(subscribeSpy).toHaveBeenCalledTimes(1)
@@ -80,7 +80,7 @@ describe('replicatedYobta', () => {
       backend: localStorageMock,
     })({ addMiddleware: addMiddlewareSpy, initialState, next: () => {} })
 
-    let state1 = handlersSpy[NEXT]('two')
+    let state1 = handlersSpy[YOBTA_NEXT]('two')
     expect(state1).toBe('two')
 
     expect(publishSpy).toHaveBeenCalledTimes(1)
@@ -103,10 +103,10 @@ describe('replicatedYobta', () => {
       backend: localStorageMock,
     })({ addMiddleware: addMiddlewareSpy, initialState, next: () => {} })
 
-    let state1 = handlersSpy[READY]('one')
+    let state1 = handlersSpy[YOBTA_READY]('one')
     expect(state1).toBe('one')
 
-    let state2 = handlersSpy[IDLE]('two')
+    let state2 = handlersSpy[YOBTA_IDLE]('two')
     expect(state2).toBe('two')
     expect(unsubscribeSpy).toHaveBeenCalledTimes(1)
   })
@@ -129,7 +129,7 @@ describe('replicatedYobta', () => {
       validate: validateSpy,
     })({ addMiddleware: addMiddlewareSpy, initialState, next: () => {} })
 
-    let state1 = handlersSpy[READY]('one')
+    let state1 = handlersSpy[YOBTA_READY]('one')
     expect(state1).toBe('one')
 
     expect(validateSpy).toHaveBeenCalledTimes(1)

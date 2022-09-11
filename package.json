@@ -132,21 +132,21 @@
       "import": {
         "./lib/index.js": "{ mapYobta }"
       },
-      "limit": "302 B"
+      "limit": "275 B"
     },
     {
       "name": "machineYobta",
       "import": {
         "./lib/index.js": "{ machineYobta }"
       },
-      "limit": "267 B"
+      "limit": "241 B"
     },
     {
       "name": "observableYobta",
       "import": {
         "./lib/index.js": "{ observableYobta }"
       },
-      "limit": "217 B"
+      "limit": "189 B"
     },
     {
       "name": "replicatedYobta",
@@ -174,7 +174,7 @@
       "import": {
         "./lib/index.js": "{ stackYobta }"
       },
-      "limit": "310 B"
+      "limit": "283 B"
     },
     {
       "name": "useObservable",
