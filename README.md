@@ -21,7 +21,7 @@ npm i @yobta/stores
 - [Using with React](docs/using-with-react.md)
 - [Store plugins](docs/store-pligins.md)
 - [Overloads](docs/overloads.md)
-- Lazyness
+- [Laziness](docs/laziness.md)
 - Replication
 
 ### Stores
