@@ -17,7 +17,7 @@ const numberStore = observableYobta(
   0,
   replicatedYobta({
     channel: 'numberStore',
-    backend: localStorageYobta, // you can also sessionStorageYobta or create your own backend
+    backend: localStorageYobta, // you can also use sessionStorageYobta or create your own backend
   }),
 )
 ```
