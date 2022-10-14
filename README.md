@@ -29,6 +29,7 @@ npm i @yobta/stores
 - Observable Store
 - Map Store
 - Machine Store
+- Stack Store
 
 ### Recipes
 
