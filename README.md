@@ -17,10 +17,10 @@ npm i @yobta/stores
 
 ### Key Concepts
 
-- [Basic tutorial](./docs/key-concepts/basic-tutorial.md)
-- [Using with React](./docs/key-concepts/using-with-react.md)
-- [Store plugins](./docs/key-concepts/store-pligins.md)
-- [Overloads](./docs/key-concepts/overloads.md)
+- [Basic tutorial](docs/key-concepts/basic-tutorial.md)
+- [Using with React](docs/key-concepts/using-with-react.md)
+- [Store plugins](docs/key-concepts/store-pligins.md)
+- [Overloads](docs/key-concepts/overloads.md)
 - Lazyness
 - Replication
 
