@@ -22,7 +22,7 @@ npm i @yobta/stores
 - [Store plugins](docs/store-pligins.md)
 - [Overloads](docs/overloads.md)
 - [Laziness](docs/laziness.md)
-- Replication
+- [Replication](docs/replication.md)
 
 ### Stores
 
