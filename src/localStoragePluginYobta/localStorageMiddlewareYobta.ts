@@ -1,14 +1,11 @@
-import { encoderYobta } from '../encoderYobta/index.js'
-import {
-  PubSubSubscriber,
-  BackEndFactory,
-} from '../_internal/BackEndYobta/index.js'
+import { encoderYobta } from '../util/encoderYobta/index.js'
+import { PubSubSubscriber, BackEndFactory } from '../util/BackEndYobta/index.js'
 
 interface StorageListener {
   (event: StorageEvent): void
 }
 
-export const localStorageYobta: BackEndFactory = ({
+export const localStorageMiddlewareYobta: BackEndFactory = ({
   channel,
   encoder = encoderYobta,
 }) => {

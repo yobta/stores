@@ -1,4 +1,4 @@
-import { YobtaEncoder } from '../../encoderYobta/index.js'
+import { YobtaEncoder } from '../encoderYobta/index.js'
 
 export type PubSubSubscriber = (message: any) => void
 
@@ -9,5 +9,7 @@ export interface BackEndFactory {
     observe(subscriber: PubSubSubscriber): VoidFunction
   }
 }
+
+export type BackEndFactoryProps = Parameters<BackEndFactory>[0]
 
 export type BackEndYobta = ReturnType<BackEndFactory>

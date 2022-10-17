@@ -1,5 +1,10 @@
-import { YOBTA_READY, YOBTA_IDLE, YOBTA_NEXT, StorePlugin } from '../index.js'
-import { BackEndYobta } from '../_internal/BackEndYobta/index.js'
+import {
+  YOBTA_READY,
+  YOBTA_IDLE,
+  YOBTA_NEXT,
+  StorePlugin,
+} from '../../index.js'
+import { BackEndYobta } from '../BackEndYobta/index.js'
 
 interface ReplicatedFactory {
   <S>(backend: BackEndYobta): StorePlugin<S>

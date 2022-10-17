@@ -24,9 +24,9 @@ interface MapFactory {
 }
 // #endregion
 
-export const mapYobta: MapFactory = <S>(
-  initialState: S,
-  ...listeners: StorePlugin<S>[]
+export const mapYobta: MapFactory = <State extends AnyMap>(
+  initialState: State,
+  ...listeners: StorePlugin<State>[]
 ) => {
   let store = observableYobta(initialState, ...listeners)
 
@@ -37,14 +37,14 @@ export const mapYobta: MapFactory = <S>(
     },
     omit(...keys) {
       let keysSet = new Set(keys)
-      let result: OptionalKey<S>[] = []
+      let result: OptionalKey<State>[] = []
       store.next(last => {
         let next = { ...last }
         for (let key in last) {
           // @ts-ignore
           if (keysSet.has(key)) {
             delete next[key]
-            result.push(key as unknown as OptionalKey<S>)
+            result.push(key as unknown as OptionalKey<State>)
           }
         }
         return next

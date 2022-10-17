@@ -3,7 +3,7 @@ import {
   YOBTA_IDLE,
   YOBTA_NEXT,
   YOBTA_READY,
-} from '../observableYobta/index.js'
+} from '../../observableYobta/index.js'
 
 const backendSpy = {
   observe: vi.fn(() => vi.fn()),

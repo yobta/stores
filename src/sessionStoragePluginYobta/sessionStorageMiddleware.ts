@@ -1,7 +1,7 @@
-import { encoderYobta } from '../encoderYobta/index.js'
-import { BackEndFactory } from '../_internal/BackEndYobta/index.js'
+import { encoderYobta } from '../util/encoderYobta/index.js'
+import { BackEndFactory } from '../util/BackEndYobta/index.js'
 
-export const sessionStorageYobta: BackEndFactory = ({
+export const sessionStorageMiddleware: BackEndFactory = ({
   channel,
   encoder = encoderYobta,
 }) => {
