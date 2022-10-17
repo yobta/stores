@@ -1,11 +1,17 @@
-export function encodeYobta(item: any): string {
-  return JSON.stringify(item)
+export interface YobtaEncoder {
+  encode(item: any): string
+  decode: <Result>(item: any) => Result
 }
 
-export function decodeYobta(item: any): unknown {
-  try {
-    return JSON.parse(item)
-  } catch (error) {
-    return error
-  }
+export const encoderYobta: YobtaEncoder = {
+  encode(item) {
+    return JSON.stringify(item)
+  },
+  decode(item) {
+    try {
+      return JSON.parse(item)
+    } catch (error) {
+      return error
+    }
+  },
 }

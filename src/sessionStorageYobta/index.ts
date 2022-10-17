@@ -1,19 +1,19 @@
-import { decodeYobta, encodeYobta } from '../encoderYobta/index.js'
-import {
-  PubSubSubscriber,
-  PubSubYobta,
-} from '../_internal/PubSubYobta/index.js'
+import { encoderYobta } from '../encoderYobta/index.js'
+import { BackEndFactory } from '../_internal/BackEndYobta/index.js'
 
-export const sessionStorageYobta: PubSubYobta = {
-  publish(channel: string, message: any) {
-    let encodedMessage = encodeYobta(message)
-    sessionStorage.setItem(channel, encodedMessage)
-  },
-  subscribe(channel: string, next: PubSubSubscriber) {
-    let item = sessionStorage.getItem(channel)
-    let decoded = decodeYobta(item)
-    next(decoded)
-
-    return () => {}
-  },
+export const sessionStorageYobta: BackEndFactory = ({
+  channel,
+  encoder = encoderYobta,
+}) => {
+  return {
+    initial(state) {
+      let item = sessionStorage.getItem(channel)
+      return item === null ? state : encoder.decode(item)
+    },
+    next(message) {
+      let encodedMessage = encoder.encode(message)
+      sessionStorage.setItem(channel, encodedMessage)
+    },
+    observe: () => () => {},
+  }
 }
