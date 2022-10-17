@@ -6,7 +6,7 @@ export const sessionStorageMiddleware: BackEndFactory = ({
   encoder = encoderYobta,
 }) => {
   return {
-    initial(state) {
+    ready(state) {
       let item = sessionStorage.getItem(channel)
       return item === null ? state : encoder.decode(item)
     },

@@ -6,8 +6,8 @@ import {
 } from '../../observableYobta/index.js'
 
 const backendSpy = {
+  ready: vi.fn(),
   observe: vi.fn(() => vi.fn()),
-  initial: vi.fn(),
   next: vi.fn(),
 }
 const addMiddlewareSpy = vi.fn()
@@ -45,7 +45,7 @@ it('handles ready state', () => {
   })
   addMiddlewareSpy.mock.calls[0][1]('yobta')
   expect(backendSpy.observe).toHaveBeenCalledWith(nextSpy)
-  expect(backendSpy.initial).toHaveBeenCalledWith('yobta')
+  expect(backendSpy.ready).toHaveBeenCalledWith('yobta')
   expect(backendSpy.next).not.toHaveBeenCalled()
 })
 
@@ -56,7 +56,7 @@ it('handles idle state', () => {
     initialState: 'yobta',
   })
   addMiddlewareSpy.mock.calls[1][1]('yobta')
-  expect(backendSpy.initial).not.toHaveBeenCalled()
+  expect(backendSpy.ready).not.toHaveBeenCalled()
   expect(backendSpy.observe).not.toHaveBeenCalled()
   expect(backendSpy.next).not.toHaveBeenCalled()
 })
@@ -68,7 +68,7 @@ it('handles next state', () => {
     initialState: 'yobta',
   })
   addMiddlewareSpy.mock.calls[2][1]('yobta')
-  expect(backendSpy.initial).not.toHaveBeenCalled()
+  expect(backendSpy.ready).not.toHaveBeenCalled()
   expect(backendSpy.observe).not.toHaveBeenCalled()
   expect(backendSpy.next).toHaveBeenCalledWith('yobta')
 })

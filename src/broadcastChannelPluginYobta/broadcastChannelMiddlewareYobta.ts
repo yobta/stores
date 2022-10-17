@@ -6,6 +6,7 @@ export const broadcastChannelMiddlewareYobta: BackEndFactory = ({
   encoder = encoderYobta,
 }) => {
   let bc: BroadcastChannel | null = null
+  let shouldMute: boolean = false
 
   let open = (): BroadcastChannel => {
     if (!bc) {
@@ -22,19 +23,24 @@ export const broadcastChannelMiddlewareYobta: BackEndFactory = ({
   }
 
   return {
-    initial: state => state,
-    next(message) {
+    ready: state => state,
+    next(...args) {
       let shouldClose = !bc
-      let encodedMessage = encoder.encode(message)
-      open().postMessage(encodedMessage)
-      if (shouldClose) {
-        close()
+      let encodedMessage = encoder.encode(args)
+      if (shouldMute) {
+        shouldMute = false
+      } else {
+        open().postMessage(encodedMessage)
+        if (shouldClose) {
+          close()
+        }
       }
     },
     observe(next) {
       open().onmessage = ({ data }) => {
-        let message = encoder.decode(data)
-        next(message)
+        let [message, ...overloads] = encoder.decode<any[]>(data)
+        shouldMute = true
+        next(message, ...overloads)
       }
       return close
     },

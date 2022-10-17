@@ -16,7 +16,7 @@ export const replicatedYobta: ReplicatedFactory =
     let unsubscribe: VoidFunction | undefined
     addMiddleware(YOBTA_READY, state => {
       unsubscribe = backend.observe(next)
-      return backend.initial(state)
+      return backend.ready(state)
     })
     addMiddleware(YOBTA_IDLE, state => {
       if (unsubscribe) {
@@ -24,8 +24,8 @@ export const replicatedYobta: ReplicatedFactory =
       }
       return state
     })
-    addMiddleware(YOBTA_NEXT, state => {
-      backend.next(state)
+    addMiddleware(YOBTA_NEXT, (state, ...args) => {
+      backend.next(state, ...args)
       return state
     })
   }

@@ -1,4 +1,5 @@
 /* eslint-disable accessor-pairs */
+import { YobtaEncoder } from '../util/encoderYobta/index.js'
 import { broadcastChannelMiddlewareYobta } from './broadcastChannelMiddlewareYobta.js'
 
 const postMessage = vi.fn()
@@ -17,13 +18,13 @@ vi.stubGlobal('BroadcastChannel', broadcastChannelMock)
 
 describe('init', () => {
   it('returns initial state', () => {
-    let state = broadcastChannelMiddlewareYobta({ channel: 'yobta' }).initial(
+    let state = broadcastChannelMiddlewareYobta({ channel: 'yobta' }).ready(
       'yobta',
     )
     expect(state).toBe('yobta')
   })
   it('does not open the channel without a need', () => {
-    broadcastChannelMiddlewareYobta({ channel: 'yobta' }).initial('yobta')
+    broadcastChannelMiddlewareYobta({ channel: 'yobta' }).ready('yobta')
     expect(broadcastChannelMock).not.toHaveBeenCalled()
   })
 })
@@ -31,10 +32,12 @@ describe('init', () => {
 describe('next', () => {
   it('creates and destroys channel when not observed', () => {
     let channel = broadcastChannelMiddlewareYobta({ channel: 'yobta' })
-    channel.next('yobta')
+    channel.next('yobta', 'overload')
 
     expect(broadcastChannelMock).toHaveBeenCalledTimes(1)
-    expect(postMessage).toHaveBeenCalledWith(JSON.stringify('yobta'))
+    expect(postMessage).toHaveBeenCalledWith(
+      JSON.stringify(['yobta', 'overload']),
+    )
     expect(close).toHaveBeenCalledTimes(1)
   })
 
@@ -64,32 +67,50 @@ describe('observe', () => {
     expect(observer).not.toHaveBeenCalled()
     expect(close).not.toHaveBeenCalled()
 
-    onmessage.mock.calls[0][0]({ data: JSON.stringify('yobta') })
+    onmessage.mock.calls[0][0]({ data: JSON.stringify(['yobta', 'overload']) })
 
-    expect(observer).toHaveBeenCalledWith('yobta')
+    expect(observer).toHaveBeenCalledWith('yobta', 'overload')
 
     unobserve()
 
     expect(close).toHaveBeenCalledTimes(1)
   })
+  it('mutes observed event and unmutes after next is received', () => {
+    let channel = broadcastChannelMiddlewareYobta({ channel: 'yobta' })
+    let unobserve = channel.observe(observer)
+
+    onmessage.mock.calls[0][0]({ data: JSON.stringify(['yobta']) })
+
+    channel.next('yobta')
+    expect(postMessage).not.toHaveBeenCalled()
+
+    channel.next('yobta')
+    expect(postMessage).toHaveBeenCalledOnce()
+
+    unobserve()
+  })
 })
 
 describe('encoder', () => {
-  let encoder = {
+  let decode = vi.fn()
+  let encoder: YobtaEncoder = {
     encode: vi.fn(),
-    decode: vi.fn(),
+    decode: <R>(...args: any[]) => {
+      decode(...args)
+      return [] as R
+    },
   }
   it('does not decode initial', () => {
-    broadcastChannelMiddlewareYobta({ channel: 'yobta', encoder }).initial(
+    broadcastChannelMiddlewareYobta({ channel: 'yobta', encoder }).ready(
       'yobta',
     )
     expect(encoder.encode).not.toHaveBeenCalled()
-    expect(encoder.decode).not.toHaveBeenCalled()
+    expect(decode).not.toHaveBeenCalled()
   })
   it('encodes next', () => {
     broadcastChannelMiddlewareYobta({ channel: 'yobta', encoder }).next('yobta')
     expect(encoder.encode).toHaveBeenCalledTimes(1)
-    expect(encoder.decode).not.toHaveBeenCalled()
+    expect(decode).not.toHaveBeenCalled()
   })
   it('decodes onmesage', () => {
     let unobserve = broadcastChannelMiddlewareYobta({
@@ -97,7 +118,7 @@ describe('encoder', () => {
       encoder,
     }).observe(observer)
 
-    onmessage.mock.calls[0][0]({ data: JSON.stringify('yobta') })
+    onmessage.mock.calls[0][0]({ data: JSON.stringify(['yobta']) })
 
     expect(observer).toHaveBeenCalledTimes(1)
 

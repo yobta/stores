@@ -20,11 +20,11 @@ beforeEach(() => {
 describe('init', () => {
   it('returns initial state when session storage is empty', () => {
     item = null
-    let state = sessionStorageMiddleware({ channel: 'yobta' }).initial('yobta')
+    let state = sessionStorageMiddleware({ channel: 'yobta' }).ready('yobta')
     expect(state).toBe('yobta')
   })
   it('returns stored state when session storage is not empty', () => {
-    let state = sessionStorageMiddleware({ channel: 'yobta' }).initial('yobta')
+    let state = sessionStorageMiddleware({ channel: 'yobta' }).ready('yobta')
     expect(state).toBe('stored yobta')
   })
 })
@@ -42,7 +42,7 @@ describe('next', () => {
 
 describe('encoder', () => {
   it('decodes initial', () => {
-    sessionStorageMiddleware({ channel: 'yobta', encoder }).initial('yobta')
+    sessionStorageMiddleware({ channel: 'yobta', encoder }).ready('yobta')
     expect(encoder.decode).toHaveBeenCalledWith(defaultItem)
     expect(encoder.encode).not.toHaveBeenCalled()
   })
