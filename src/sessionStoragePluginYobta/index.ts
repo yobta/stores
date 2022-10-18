@@ -16,7 +16,7 @@ interface SessionStoragePluginFactory {
 export const sessionStoragePluginYobta: SessionStoragePluginFactory =
   ({ channel, encoder = encoderYobta }) =>
   ({ addMiddleware }) => {
-    let write = (state: any) => {
+    let write = (state: any): any => {
       let encodedMessage = encoder.encode(state)
       sessionStorage.setItem(channel, encodedMessage)
       return state

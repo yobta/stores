@@ -42,9 +42,9 @@ vi.mock('../util/encoderYobta/index.js', () => ({
       encode(args)
       return JSON.stringify(args)
     },
-    decode(item: string) {
-      decode(item)
-      return JSON.parse(item)
+    decode(value: string) {
+      decode(value)
+      return JSON.parse(value)
     },
   },
 }))
