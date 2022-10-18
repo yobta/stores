@@ -118,7 +118,7 @@
     {
       "name": "all",
       "path": "./lib/index.js",
-      "limit": "985 B"
+      "limit": "984 B"
     },
     {
       "name": "mapYobta",
@@ -148,7 +148,7 @@
       "name": "broadcastChannelPluginYobta",
       "path": "./lib/index.js",
       "import": "{ broadcastChannelPluginYobta }",
-      "limit": "322 B"
+      "limit": "293 B"
     },
     {
       "name": "lazyPluginYobta",
@@ -160,13 +160,13 @@
       "name": "localStoragePluginYobta",
       "path": "./lib/index.js",
       "import": "{ localStoragePluginYobta }",
-      "limit": "337 B"
+      "limit": "291 B"
     },
     {
       "name": "sessionStoragePluginYobta",
       "path": "./lib/index.js",
       "import": "{ sessionStoragePluginYobta }",
-      "limit": "266 B"
+      "limit": "198 B"
     }
   ]
 }
