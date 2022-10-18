@@ -1,4 +1,4 @@
-import { ObservableStore, observableYobta, StorePlugin } from '../index.js'
+import { ObservableStore, observableYobta, StorePlugin } from '../../index.js'
 
 // #region Types
 type AnyMap = Record<string, any>

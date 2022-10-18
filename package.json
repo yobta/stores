@@ -118,7 +118,7 @@
     {
       "name": "all",
       "path": "./lib/index.js",
-      "limit": "984 B"
+      "limit": "1.01 kB"
     },
     {
       "name": "mapYobta",
@@ -167,6 +167,12 @@
       "path": "./lib/index.js",
       "import": "{ sessionStoragePluginYobta }",
       "limit": "198 B"
+    },
+    {
+      "name": "validationPluginYobta",
+      "path": "./lib/index.js",
+      "import": "{ validationPluginYobta }",
+      "limit": "79 B"
     }
   ]
 }

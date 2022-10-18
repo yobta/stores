@@ -3,7 +3,7 @@ import {
   YOBTA_IDLE,
   YOBTA_NEXT,
   YOBTA_READY,
-} from '../observableYobta/index.js'
+} from '../../stores/observableYobta/index.js'
 import { broadcastChannelPluginYobta } from './index.js'
 
 const postMessage = vi.fn()
@@ -22,7 +22,7 @@ vi.stubGlobal('BroadcastChannel', broadcastChannelMock)
 let encode = vi.fn()
 let decode = vi.fn()
 
-vi.mock('../util/encoderYobta/index.js', () => ({
+vi.mock('../../util/encoderYobta/index.js', () => ({
   encoderYobta: {
     encode(args: any[]) {
       encode(args)
