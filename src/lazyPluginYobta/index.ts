@@ -1,6 +1,6 @@
 import { YOBTA_IDLE, StorePlugin } from '../observableYobta/index.js'
 
-export const lazyYobta: StorePlugin<any> = ({
+export const lazyPluginYobta: StorePlugin<any> = ({
   addMiddleware,
   initialState,
 }) => {

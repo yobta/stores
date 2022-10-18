@@ -2,7 +2,7 @@
 
 # Overloads
 
-Overloads are usefull for sending metadate to the plugins. Let's improve our [tracing plugin](./store-plugins.md) by adding some metdata.
+Overloads are usefull for sending metadata to the plugins. Let's improve our [tracing plugin](./store-plugins.md) by adding some metdata.
 
 ###### counterStore.ts
 

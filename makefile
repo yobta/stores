@@ -1,6 +1,9 @@
 build:
 	npm run build
 
+dev:
+	cd dev-app && npm run dev
+
 lint:
 	npm run lint
 

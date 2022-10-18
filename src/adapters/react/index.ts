@@ -13,7 +13,10 @@ export interface ReactObservableHook {
 export const useObservable: ReactObservableHook = store => {
   let [, forceUpdate] = useState({})
 
-  useEffect(() => store.observe(forceUpdate), [store])
+  useEffect(() => {
+    forceUpdate({})
+    return store.observe(forceUpdate)
+  }, [store])
 
   return store.last()
 }
