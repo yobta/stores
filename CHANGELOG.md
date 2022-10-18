@@ -2,7 +2,11 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## 0.0.23
+## 0.0.25
+
+- validation plugin
+
+## 0.0.24
 
 - broadcast channel plugin
 - fix bugs
