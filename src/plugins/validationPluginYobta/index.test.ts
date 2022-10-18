@@ -3,7 +3,7 @@ import {
   YOBTA_INIT,
   YOBTA_NEXT,
   YOBTA_READY,
-} from '../observableYobta/index.js'
+} from '../../stores/observableYobta/index.js'
 import { validationPluginYobta } from './index.js'
 
 let mock = vi.fn()

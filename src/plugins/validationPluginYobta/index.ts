@@ -1,11 +1,10 @@
-import { encoderYobta, YobtaEncoder } from '../util/encoderYobta/index.js'
 import {
   StorePlugin,
   YOBTA_IDLE,
   YOBTA_INIT,
   YOBTA_NEXT,
   YOBTA_READY,
-} from '../observableYobta/index.js'
+} from '../../stores/observableYobta/index.js'
 
 interface ValidationPluginFactory {
   <State>(validate: (input: any) => State): StorePlugin<State>

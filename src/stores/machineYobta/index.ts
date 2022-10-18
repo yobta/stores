@@ -3,7 +3,7 @@ import {
   StorePlugin,
   StateSetter,
   Observer,
-} from '../index.js'
+} from '../../index.js'
 
 // #region Types
 type Transitions<T> = {

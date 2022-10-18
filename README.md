@@ -19,14 +19,8 @@ npm i @yobta/stores
 
 - [Basic tutorial](docs/basic-tutorial.md)
 - [Using with React](docs/using-with-react.md)
-
 - [Store Plugins](docs/store-pligins.md)
 - [Overloads](docs/overloads.md)
-
-- [Broadcast Channel Plugin](docs/broadcast-channel-plugin.md)
-- [Lazy Plugin](docs/lazy-plugin.md)
-- [Local Storage Plugin](docs/local-storage-plugin.md)
-- [Session Storage Plugin](docs/Session-storage-plugin.md)
 
 ### Stores
 
@@ -34,6 +28,14 @@ npm i @yobta/stores
 - Map Store
 - Machine Store
 - Stack Store
+
+### Plugins
+
+- [Broadcast Channel Plugin](docs/broadcast-channel-plugin.md)
+- [Lazy Plugin](docs/lazy-plugin.md)
+- [Local Storage Plugin](docs/local-storage-plugin.md)
+- [Session Storage Plugin](docs/session-storage-plugin.md)
+- [Validation Plugin](docs/validation-plugin.md)
 
 ### Recipes
 
