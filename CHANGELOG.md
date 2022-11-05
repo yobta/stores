@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.0.26
+
+- PubSub utility
+
 ## 0.0.25
 
 - validation plugin

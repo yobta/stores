@@ -118,7 +118,7 @@
     {
       "name": "all",
       "path": "./lib/index.js",
-      "limit": "1.01 kB"
+      "limit": "1073 B"
     },
     {
       "name": "mapYobta",
@@ -137,6 +137,12 @@
       "path": "./lib/index.js",
       "import": "{ observableYobta }",
       "limit": "292 B"
+    },
+    {
+      "name": "pubSubYobta",
+      "path": "./lib/index.js",
+      "import": "{ pubSubYobta }",
+      "limit": "109 B"
     },
     {
       "name": "stackYobta",
