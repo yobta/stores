@@ -8,3 +8,5 @@ export * from './plugins/lazyPluginYobta/index.js'
 export * from './plugins/localStoragePluginYobta/index.js'
 export * from './plugins/sessionStoragePluginYobta/index.js'
 export * from './plugins/validationPluginYobta/index.js'
+
+export * from './util/pubSubYobta/index.js'

@@ -37,6 +37,10 @@ npm i @yobta/stores
 - [Session Storage Plugin](docs/session-storage-plugin.md)
 - [Validation Plugin](docs/validation-plugin.md)
 
+### Utilities
+
+- [PubSub Utility](docs/pub-sub-utility.md)
+
 ### Recipes
 
 - Lazy Boolean Store
