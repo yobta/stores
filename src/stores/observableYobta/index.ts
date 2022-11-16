@@ -65,7 +65,7 @@ export const observableYobta: ObservableFactory = <State>(
   ): void => {
     middlewares[type].push(middleware)
   }
-  let observers: Observer<any>[] = []
+  let observers = new Set<Observer<any>>()
   let state: State
 
   let next: StateSetter<State> = (action: any, ...overloads): void => {
@@ -106,16 +106,13 @@ export const observableYobta: ObservableFactory = <State>(
     last,
     next,
     observe: observer => {
-      if (observers.length === 0) {
+      if (observers.size === 0) {
         state = transition(YOBTA_READY, state)
       }
-
-      observers.push(observer)
-
+      observers.add(observer)
       return () => {
-        let index = observers.indexOf(observer)
-        observers.splice(index, 1)
-        if (observers.length === 0) {
+        observers.delete(observer)
+        if (observers.size === 0) {
           state = transition(YOBTA_IDLE, state)
         }
       }

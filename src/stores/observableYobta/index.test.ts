@@ -12,6 +12,7 @@ import {
 
 const pluginMock = vi.fn()
 const observerMock = vi.fn()
+const observerMock1 = vi.fn()
 
 let addMiddlewareSpy = vi.fn<[StoreEvent, StoreMiddleware<number>], void>()
 
@@ -94,10 +95,10 @@ it('sends IDLE plugins when last observer is removed', () => {
   expect(handlersSpy[YOBTA_IDLE]).toHaveBeenCalledWith(1)
 })
 
-it('does not sends IDLE plugins when has more observer is removed', () => {
+it('does not emit IDLE when has observers', () => {
   let store = observableYobta(1, pluginMock)
   let unsubscribe = store.observe(observerMock)
-  let unsubscribe2 = store.observe(observerMock)
+  let unsubscribe2 = store.observe(observerMock1)
   unsubscribe()
   expect(observerMock).toHaveBeenCalledTimes(0)
   expect(pluginMock).toHaveBeenCalledTimes(1)
@@ -141,16 +142,16 @@ it('keeps state after termination', () => {
   expect(store.last()).toBe(2)
 })
 
-it('does not squash observers', () => {
+it('has unique observers', () => {
   let store = observableYobta(1)
   let terminate1 = store.observe(observerMock)
   let terminate2 = store.observe(observerMock)
   store.next(() => 1)
-  expect(observerMock).toHaveBeenCalledTimes(2)
+  expect(observerMock).toHaveBeenCalledTimes(1)
   terminate1()
   store.next(() => 2)
-  expect(observerMock).toHaveBeenCalledTimes(3)
+  expect(observerMock).toHaveBeenCalledTimes(1)
   terminate2()
   store.next(() => 3)
-  expect(observerMock).toHaveBeenCalledTimes(3)
+  expect(observerMock).toHaveBeenCalledTimes(1)
 })
