@@ -139,6 +139,12 @@
       "limit": "280 B"
     },
     {
+      "name": "plainObjectYobta",
+      "path": "./lib/index.js",
+      "import": "{ plainObjectYobta }",
+      "limit": "109 B"
+    },
+    {
       "name": "pubSubYobta",
       "path": "./lib/index.js",
       "import": "{ pubSubYobta }",
