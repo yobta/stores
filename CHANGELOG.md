@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.0.27
+
+- Observable is using set now for storing observers
+
 ## 0.0.26
 
 - PubSub utility
