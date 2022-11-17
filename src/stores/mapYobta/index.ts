@@ -1,9 +1,9 @@
 import { ObservableStore, observableYobta, StorePlugin } from '../../index.js'
 
 // #region Types
-type Key = string | number | symbol
-type AnyPlainObject = Record<Key, any>
-type AnyMap = Map<Key, any>
+export type MapKey = string | number | symbol
+type AnyPlainObject = Record<MapKey, any>
+export type AnyMap = Map<MapKey, any>
 type MapState<PlainState extends AnyPlainObject> = Map<
   keyof PlainState,
   PlainState[keyof PlainState]

@@ -8,7 +8,6 @@ it('decodes', () => {
   let value = '1'
   expect(encoderYobta.decode(value)).toBe(1)
 })
-it('catches', () => {
-  let value = encoderYobta.decode(undefined)
-  expect(value).toEqual(expect.any(Error))
+it('throws', () => {
+  expect(() => encoderYobta.decode(undefined)).toThrow()
 })
