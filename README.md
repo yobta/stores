@@ -24,9 +24,10 @@ npm i @yobta/stores
 
 ### Stores
 
-- Observable Store
-- Map Store
 - Machine Store
+- Map Store
+- Observable Store
+- Plain Object Store
 - Stack Store
 
 ### Plugins
