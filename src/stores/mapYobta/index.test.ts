@@ -3,31 +3,41 @@ import { mapYobta } from './index.js'
 describe('mapYobta', () => {
   it('has default state', () => {
     let store = mapYobta({ key: 'yobta' })
-    expect(store.last()).toEqual({ key: 'yobta' })
+    expect(store.last()).toEqual(new Map([['key', 'yobta']]))
   })
 
   it('sets next state', () => {
     let store = mapYobta({ key: 'yobta' })
-    store.next({ key: 'yobta 1' })
-    expect(store.last()).toEqual({ key: 'yobta 1' })
+    store.assign({ key: 'yobta 1' })
+    expect(store.last()).toEqual(new Map([['key', 'yobta 1']]))
   })
 
   it('assigns', () => {
-    let store = mapYobta({ key1: 'yobta 1', key2: 'yobta 2' })
+    let store = mapYobta({ key1: 'yobta', key2: 'yobta' })
     store.assign({ key2: 'yobta 3' })
-    expect(store.last()).toEqual({ key1: 'yobta 1', key2: 'yobta 3' })
+    expect(store.last()).toEqual(
+      new Map([
+        ['key1', 'yobta'],
+        ['key2', 'yobta 3'],
+      ]),
+    )
   })
 
-  it('omits', () => {
-    type Store = {
-      key1: string
-      key2?: string
-      key3?: string
-    }
-    let store = mapYobta<Store>({ key1: 'yobta 1', key2: 'yobta 2' })
-    let result = store.omit('key2', 'key3')
-
-    expect(store.last()).toEqual({ key1: 'yobta 1' })
-    expect(result).toEqual(['key2'])
+  it('emits diff entries and overloads', () => {
+    let store = mapYobta({ key: 'yobta', key2: 'yobta' })
+    let changes = vi.fn()
+    let unobserve = store.observe(changes)
+    store.assign({ key: 'yobta 1', key2: 'yobta' }, 1, 2, 3)
+    expect(changes).toBeCalledWith(
+      new Map([
+        ['key', 'yobta 1'],
+        ['key2', 'yobta'],
+      ]),
+      [['key', 'yobta 1']],
+      1,
+      2,
+      3,
+    )
+    unobserve()
   })
 })

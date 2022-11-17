@@ -1,7 +1,7 @@
 import { ObservableStore, observableYobta, StorePlugin } from '../../index.js'
 
 // #region Types
-type AnyPlainObject = Record<string, any>
+type AnyPlainObject = Record<string | number | symbol, any>
 // TODO: https://github.com/microsoft/TypeScript/issues/35103
 // type OptionalKey<S extends AnyMap> = keyof? S
 type OptionalKey<T extends AnyPlainObject> = Exclude<
