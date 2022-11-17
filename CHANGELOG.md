@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.0.28
+
+- Rename map store to plain object store
+- Add real map store
+- Add map encoder
+
 ## 0.0.27
 
 - Observable is using set now for storing observers
