@@ -1,5 +1,3 @@
-import { isFunction } from '../../util/isFunction/index.js'
-
 // #region Types
 export interface VoidFunction {
   (): void
@@ -71,7 +69,7 @@ export const observableYobta: ObservableFactory = <State>(
   let next: StateSetter<State> = (action: any, ...overloads): void => {
     state = transition(
       YOBTA_NEXT,
-      isFunction(action) ? action(state) : action,
+      typeof action === 'function' ? action(state) : action,
       ...overloads,
     )
     observers.forEach(observe => {

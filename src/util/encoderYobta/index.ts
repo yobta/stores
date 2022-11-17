@@ -8,10 +8,6 @@ export const encoderYobta: YobtaEncoder = {
     return JSON.stringify(item)
   },
   decode(item) {
-    try {
-      return JSON.parse(item)
-    } catch (error) {
-      return error
-    }
+    return JSON.parse(item)
   },
 }

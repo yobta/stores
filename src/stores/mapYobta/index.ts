@@ -1,55 +1,51 @@
 import { ObservableStore, observableYobta, StorePlugin } from '../../index.js'
 
 // #region Types
-type AnyMap = Record<string, any>
-// TODO: https://github.com/microsoft/TypeScript/issues/35103
-// type OptionalKey<S extends AnyMap> = keyof? S
-type OptionalKey<T extends AnyMap> = Exclude<
-  {
-    [K in keyof T]: T extends Record<K, T[K]> ? never : K
-  }[keyof T],
-  undefined
+export type MapKey = string | number | symbol
+type AnyPlainObject = Record<MapKey, any>
+export type AnyMap = Map<MapKey, any>
+type MapState<PlainState extends AnyPlainObject> = Map<
+  keyof PlainState,
+  PlainState[keyof PlainState]
 >
-
-interface MapStore<S extends AnyMap> extends ObservableStore<S> {
-  assign(patch: Partial<S>): void
-  omit(...keys: OptionalKey<S>[]): OptionalKey<S>[]
+type Entries<PlainObject> = {
+  [K in keyof PlainObject]: [K, PlainObject[K]]
+}[keyof PlainObject][]
+export interface MapObserver<PlainState extends AnyPlainObject> {
+  (
+    state: MapState<PlainState>,
+    changes: Entries<PlainState>,
+    ...overloads: any[]
+  ): void
+}
+interface MapStore<PlainState extends AnyPlainObject>
+  extends Omit<ObservableStore<MapState<PlainState>>, 'next'> {
+  assign(patch: Partial<PlainState>, ...overloads: any[]): void
+  observe(observer: MapObserver<PlainState>): VoidFunction
 }
 
 interface MapFactory {
-  <State extends AnyMap>(
-    initialState: State,
-    ...listeners: StorePlugin<State>[]
-  ): MapStore<State>
+  <PlainState extends AnyPlainObject>(
+    initialState: PlainState,
+    ...listeners: StorePlugin<MapState<PlainState>>[]
+  ): MapStore<PlainState>
 }
 // #endregion
 
-export const mapYobta: MapFactory = <State extends AnyMap>(
-  initialState: State,
-  ...listeners: StorePlugin<State>[]
-) => {
-  let store = observableYobta(initialState, ...listeners)
+export const mapYobta: MapFactory = (plainState, ...listeners) => {
+  let initialState: AnyMap = new Map(Object.entries(plainState))
+  let { next, ...store } = observableYobta(initialState, ...listeners)
 
   return {
     ...store,
-    assign(patch) {
-      store.next(last => ({ ...last, ...patch }))
-    },
-    omit(...keys) {
-      let keysSet = new Set(keys)
-      let result: OptionalKey<State>[] = []
-      store.next(last => {
-        let next = { ...last }
-        for (let key in last) {
-          // @ts-ignore
-          if (keysSet.has(key)) {
-            delete next[key]
-            result.push(key as unknown as OptionalKey<State>)
-          }
-        }
-        return next
-      })
-      return result
+    assign(patch, ...overloads) {
+      let state = store.last()
+      let changes = Object.entries(patch).filter(
+        ([key, value]) => value !== state.get(key),
+      )
+      if (changes.length) {
+        next(new Map([...state, ...changes]), changes, ...overloads)
+      }
     },
   }
 }

@@ -118,43 +118,43 @@
     {
       "name": "all",
       "path": "./lib/index.js",
-      "limit": "1051 B"
-    },
-    {
-      "name": "mapYobta",
-      "path": "./lib/index.js",
-      "import": "{ mapYobta }",
-      "limit": "375 B"
+      "limit": "1174 B"
     },
     {
       "name": "machineYobta",
       "path": "./lib/index.js",
       "import": "{ machineYobta }",
-      "limit": "344 B"
+      "limit": "335 B"
+    },
+    {
+      "name": "mapYobta",
+      "path": "./lib/index.js",
+      "import": "{ mapYobta }",
+      "limit": "379 B"
     },
     {
       "name": "observableYobta",
       "path": "./lib/index.js",
       "import": "{ observableYobta }",
-      "limit": "280 B"
+      "limit": "270 B"
     },
     {
-      "name": "pubSubYobta",
+      "name": "plainObjectYobta",
       "path": "./lib/index.js",
-      "import": "{ pubSubYobta }",
-      "limit": "109 B"
+      "import": "{ plainObjectYobta }",
+      "limit": "367 B"
     },
     {
       "name": "stackYobta",
       "path": "./lib/index.js",
       "import": "{ stackYobta }",
-      "limit": "374 B"
+      "limit": "366 B"
     },
     {
       "name": "broadcastChannelPluginYobta",
       "path": "./lib/index.js",
       "import": "{ broadcastChannelPluginYobta }",
-      "limit": "294 B"
+      "limit": "281 B"
     },
     {
       "name": "lazyPluginYobta",
@@ -166,19 +166,37 @@
       "name": "localStoragePluginYobta",
       "path": "./lib/index.js",
       "import": "{ localStoragePluginYobta }",
-      "limit": "292 B"
+      "limit": "280 B"
     },
     {
       "name": "sessionStoragePluginYobta",
       "path": "./lib/index.js",
       "import": "{ sessionStoragePluginYobta }",
-      "limit": "198 B"
+      "limit": "186 B"
     },
     {
       "name": "validationPluginYobta",
       "path": "./lib/index.js",
       "import": "{ validationPluginYobta }",
       "limit": "79 B"
+    },
+    {
+      "name": "encoderYobta",
+      "path": "./lib/index.js",
+      "import": "{ encoderYobta }",
+      "limit": "56 B"
+    },
+    {
+      "name": "mapEncoderYobta",
+      "path": "./lib/index.js",
+      "import": "{ mapEncoderYobta }",
+      "limit": "108 B"
+    },
+    {
+      "name": "pubSubYobta",
+      "path": "./lib/index.js",
+      "import": "{ pubSubYobta }",
+      "limit": "109 B"
     }
   ]
 }

@@ -24,9 +24,10 @@ npm i @yobta/stores
 
 ### Stores
 
-- Observable Store
-- Map Store
 - Machine Store
+- Map Store
+- Observable Store
+- Plain Object Store
 - Stack Store
 
 ### Plugins
@@ -39,6 +40,8 @@ npm i @yobta/stores
 
 ### Utilities
 
+- Encoder Utility
+- Map Encoder Utility
 - [PubSub Utility](docs/pub-sub-utility.md)
 
 ### Recipes
