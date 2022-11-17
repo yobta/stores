@@ -40,6 +40,7 @@ npm i @yobta/stores
 ### Utilities
 
 - Encoder Utility
+- Map Encoder Utility
 - [PubSub Utility](docs/pub-sub-utility.md)
 
 ### Recipes
