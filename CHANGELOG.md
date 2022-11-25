@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.0.29
+
+Fix store plugin typings
+
 ## 0.0.28
 
 - Rename map store to plain object store
