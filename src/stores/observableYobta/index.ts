@@ -2,8 +2,8 @@
 export interface VoidFunction {
   (): void
 }
-export interface Observer<S> {
-  (state: S, ...args: any[]): void
+export interface Observer<State> {
+  (state: State, ...args: any[]): void
 }
 
 export const YOBTA_INIT = 'init'
@@ -17,7 +17,10 @@ export type StoreEvent =
   | typeof YOBTA_IDLE
   | typeof YOBTA_NEXT
 
-export type StoreMiddleware<State> = (...args: any[]) => State
+export type StoreMiddleware<State> = (
+  state: State,
+  ...overloads: any[]
+) => State
 
 export type StorePlugin<State> = (props: {
   addMiddleware(type: StoreEvent, middleware: StoreMiddleware<State>): void
