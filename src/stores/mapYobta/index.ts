@@ -23,18 +23,16 @@ export interface MapObserver<PlainState extends AnyPlainObject> {
     ...overloads: any[]
   ): void
 }
-interface MapStore<PlainState extends AnyPlainObject>
-  extends Omit<ObservableStore<MapState<PlainState>>, 'next'> {
-  assign(patch: Partial<PlainState>, ...overloads: any[]): void
-  observe(observer: MapObserver<PlainState>): VoidFunction
-  omit(keys: OptionalKey<PlainState>[], ...overloads: any[]): void
-}
 
 interface MapFactory {
   <PlainState extends AnyPlainObject>(
     initialState: PlainState,
     ...listeners: StorePlugin<MapState<PlainState>>[]
-  ): MapStore<PlainState>
+  ): Omit<ObservableStore<MapState<PlainState>>, 'next'> & {
+    assign(patch: Partial<PlainState>, ...overloads: any[]): void
+    observe(observer: MapObserver<PlainState>): VoidFunction
+    omit(keys: OptionalKey<PlainState>[], ...overloads: any[]): void
+  }
 }
 // #endregion
 
