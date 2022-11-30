@@ -2,6 +2,11 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.0.31
+
+Fix encoders incompatibility
+Add fallback to encoders
+
 ## 0.0.30
 
 Add omit method to map store

@@ -15,7 +15,7 @@ interface BroadcastChannelFactory {
 
 export const broadcastChannelPluginYobta: BroadcastChannelFactory =
   ({ channel, encoder = encoderYobta }) =>
-  ({ addMiddleware, next }) => {
+  ({ addMiddleware, next, last }) => {
     let bc: BroadcastChannel | null = null
     let shouldMute: boolean = false
 
@@ -35,7 +35,7 @@ export const broadcastChannelPluginYobta: BroadcastChannelFactory =
 
     addMiddleware(YOBTA_READY, state => {
       open().onmessage = ({ data }) => {
-        let [message, ...overloads] = encoder.decode<any[]>(data)
+        let [message, ...overloads] = encoder.decode(data, last)
         shouldMute = true
         next(message, ...overloads)
       }

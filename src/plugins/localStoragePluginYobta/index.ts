@@ -19,10 +19,10 @@ interface LocalStprageFactory {
 
 export const localStoragePluginYobta: LocalStprageFactory =
   ({ channel, encoder = encoderYobta }) =>
-  ({ addMiddleware, next }) => {
+  ({ addMiddleware, next, last }) => {
     let onMessage: StorageListener = ({ key, newValue }) => {
       if (key === channel) {
-        let [message, ...overloads] = encoder.decode<any[]>(newValue)
+        let [message, ...overloads] = encoder.decode(newValue, last)
         next(message, ...overloads)
       }
     }
@@ -35,7 +35,7 @@ export const localStoragePluginYobta: LocalStprageFactory =
     addMiddleware(YOBTA_READY, state => {
       let item = localStorage.getItem(channel)
       window.addEventListener('storage', onMessage)
-      return item === null ? state : encoder.decode<any[]>(item)[0]
+      return item === null ? state : encoder.decode(item, last)[0]
     })
     addMiddleware(YOBTA_IDLE, state => {
       write(state)

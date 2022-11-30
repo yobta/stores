@@ -16,6 +16,7 @@ let validate = (state: any): any => {
 const params = {
   addMiddleware: vi.fn(),
   next: vi.fn(),
+  last: vi.fn(),
   initialState: 'yobta',
 }
 

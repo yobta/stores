@@ -36,6 +36,7 @@ vi.mock('../../util/encoderYobta/index.js', () => ({
 const params = {
   addMiddleware: vi.fn(),
   next: vi.fn(),
+  last: vi.fn(),
   initialState: 'yobta',
 }
 

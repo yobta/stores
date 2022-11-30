@@ -30,6 +30,7 @@ vi.stubGlobal('window', windowMock)
 const params = {
   addMiddleware: vi.fn(),
   next: vi.fn(),
+  last: vi.fn(),
   initialState: 'yobta',
 }
 

@@ -39,6 +39,7 @@ const params = {
   addMiddleware: vi.fn(),
   next: vi.fn(),
   initialState: 'yobta',
+  last: vi.fn(),
 }
 
 it('adds middleware', () => {
