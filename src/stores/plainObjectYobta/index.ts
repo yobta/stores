@@ -4,10 +4,12 @@ import { ObservableStore, observableYobta, StorePlugin } from '../../index.js'
 type AnyPlainObject = Record<string | number | symbol, any>
 // TODO: https://github.com/microsoft/TypeScript/issues/35103
 // type OptionalKey<S extends AnyMap> = keyof? S
-type OptionalKey<T extends AnyPlainObject> = Exclude<
+export type OptionalKey<PlainObject extends AnyPlainObject> = Exclude<
   {
-    [K in keyof T]: T extends Record<K, T[K]> ? never : K
-  }[keyof T],
+    [K in keyof PlainObject]: PlainObject extends Record<K, PlainObject[K]>
+      ? never
+      : K
+  }[keyof PlainObject],
   undefined
 >
 

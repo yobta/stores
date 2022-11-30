@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.0.30
+
+Add omit method to map store
+Omit and Assign methods mutate state for perfornace reasons
+Update map store spec
+Add readme for the map store
+
 ## 0.0.29
 
 Fix store plugin typings

@@ -118,7 +118,7 @@
     {
       "name": "all",
       "path": "./lib/index.js",
-      "limit": "1174 B"
+      "limit": "1203 B"
     },
     {
       "name": "machineYobta",
@@ -130,7 +130,7 @@
       "name": "mapYobta",
       "path": "./lib/index.js",
       "import": "{ mapYobta }",
-      "limit": "379 B"
+      "limit": "415 B"
     },
     {
       "name": "observableYobta",
