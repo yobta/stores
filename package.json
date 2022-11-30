@@ -118,43 +118,43 @@
     {
       "name": "all",
       "path": "./lib/index.js",
-      "limit": "1203 B"
+      "limit": "1239 B"
     },
     {
       "name": "machineYobta",
       "path": "./lib/index.js",
       "import": "{ machineYobta }",
-      "limit": "335 B"
+      "limit": "343 B"
     },
     {
       "name": "mapYobta",
       "path": "./lib/index.js",
       "import": "{ mapYobta }",
-      "limit": "415 B"
+      "limit": "420 B"
     },
     {
       "name": "observableYobta",
       "path": "./lib/index.js",
       "import": "{ observableYobta }",
-      "limit": "270 B"
+      "limit": "276 B"
     },
     {
       "name": "plainObjectYobta",
       "path": "./lib/index.js",
       "import": "{ plainObjectYobta }",
-      "limit": "367 B"
+      "limit": "370 B"
     },
     {
       "name": "stackYobta",
       "path": "./lib/index.js",
       "import": "{ stackYobta }",
-      "limit": "366 B"
+      "limit": "370 B"
     },
     {
       "name": "broadcastChannelPluginYobta",
       "path": "./lib/index.js",
       "import": "{ broadcastChannelPluginYobta }",
-      "limit": "281 B"
+      "limit": "304 B"
     },
     {
       "name": "lazyPluginYobta",
@@ -166,13 +166,13 @@
       "name": "localStoragePluginYobta",
       "path": "./lib/index.js",
       "import": "{ localStoragePluginYobta }",
-      "limit": "280 B"
+      "limit": "301 B"
     },
     {
       "name": "sessionStoragePluginYobta",
       "path": "./lib/index.js",
       "import": "{ sessionStoragePluginYobta }",
-      "limit": "186 B"
+      "limit": "206 B"
     },
     {
       "name": "validationPluginYobta",
@@ -184,13 +184,13 @@
       "name": "encoderYobta",
       "path": "./lib/index.js",
       "import": "{ encoderYobta }",
-      "limit": "56 B"
+      "limit": "75 B"
     },
     {
       "name": "mapEncoderYobta",
       "path": "./lib/index.js",
       "import": "{ mapEncoderYobta }",
-      "limit": "108 B"
+      "limit": "120 B"
     },
     {
       "name": "pubSubYobta",
