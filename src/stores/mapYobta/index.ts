@@ -1,4 +1,9 @@
-import { ObservableStore, observableYobta, StorePlugin } from '../../index.js'
+import {
+  ObservableStore,
+  observableYobta,
+  StorePlugin,
+  OptionalKey,
+} from '../../index.js'
 
 // #region Types
 export type MapKey = string | number | symbol
@@ -22,6 +27,7 @@ interface MapStore<PlainState extends AnyPlainObject>
   extends Omit<ObservableStore<MapState<PlainState>>, 'next'> {
   assign(patch: Partial<PlainState>, ...overloads: any[]): void
   observe(observer: MapObserver<PlainState>): VoidFunction
+  omit(keys: OptionalKey<PlainState>[], ...overloads: any[]): void
 }
 
 interface MapFactory {
@@ -44,7 +50,19 @@ export const mapYobta: MapFactory = (plainState, ...listeners) => {
         ([key, value]) => value !== state.get(key),
       )
       if (changes.length) {
-        next(new Map([...state, ...changes]), changes, ...overloads)
+        changes.forEach(([key, value]) => state.set(key, value))
+        next(state, changes, ...overloads)
+      }
+    },
+    omit(keys, ...overloads) {
+      let state = store.last()
+      let changes = keys.reduce<MapKey[]>((acc, key) => {
+        let result = state.delete(key)
+        if (result) acc.push(key)
+        return acc
+      }, [])
+      if (changes.length) {
+        next(state, changes, ...overloads)
       }
     },
   }

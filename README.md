@@ -25,7 +25,7 @@ npm i @yobta/stores
 ### Stores
 
 - Machine Store
-- Map Store
+- [Map Store](docs/map-store.md)
 - Observable Store
 - Plain Object Store
 - Stack Store

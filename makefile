@@ -20,7 +20,7 @@ check:
 	npm run typecheck
 	npm run test
 	npm run lint
-	npm run size-limit
+	make size-limit
 
 bump:
 	npm version patch
