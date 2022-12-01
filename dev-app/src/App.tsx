@@ -1,23 +1,44 @@
 import { useState } from 'react'
 import './App.css'
 
-import { localStoragePluginYobta, observableYobta } from '../../src'
+import {
+  localStoragePluginYobta,
+  mapEncoderYobta,
+  mapYobta,
+  observableYobta,
+  sessionStoragePluginYobta,
+} from '../../src'
 import { useObservable } from '../../src/adapters/react'
 
-const store = observableYobta(1, localStoragePluginYobta({ channel: 'test' }))
+const mapStore = mapYobta<{ a?: number }>(
+  {},
+  localStoragePluginYobta({ channel: 'counter', encoder: mapEncoderYobta }),
+)
 
-const up = () => store.next(value => value + 1)
-const down = () => store.next(value => value - 1)
+const stringStore = observableYobta(
+  '',
+  sessionStoragePluginYobta({ channel: 'test' }),
+)
+
+const up = () => {
+  mapStore.assign({ a: (mapStore.last().get('a') || 0) + 1 })
+}
+const down = () => mapStore.omit(['a'])
 
 function App() {
-  const count = useObservable(store)
+  const count = useObservable(mapStore)
+  const str = useObservable(stringStore)
 
   return (
     <div className="App">
-      count: {count}
+      count: {count.get('a') || 0}
       <br />
       <button onClick={down}>Down</button>
       <button onClick={up}>Up</button>
+      <input
+        value={str}
+        onChange={event => stringStore.next(event.target.value)}
+      />
     </div>
   )
 }

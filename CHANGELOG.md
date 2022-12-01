@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.0.33
+
+Fix encoders bugs
+Improve specs
+Add regression tests
+Increase code coverage
+
 ## 0.0.32
 
 Fix map store typings
