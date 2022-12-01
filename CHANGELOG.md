@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.0.32
+
+Fix map store typings
+
 ## 0.0.31
 
 Fix encoders incompatibility
