@@ -11,14 +11,14 @@ export interface YobtaMapEncoder extends YobtaEncoder {
 
 export const mapEncoderYobta: YobtaMapEncoder = {
   encode(item, ...overloads) {
-    let entries = Array.from(item.entries())
+    let entries = item.size ? [...item.entries()] : []
     return JSON.stringify([entries, ...overloads])
   },
   decode<Result extends AnyMap>(item: string, fallback: () => Result) {
     try {
       let [entries, ...overloads] = JSON.parse(item)
       return [new Map(entries) as Result, ...overloads]
-    } catch (e) {
+    } catch (_) {
       return [fallback()]
     }
   },

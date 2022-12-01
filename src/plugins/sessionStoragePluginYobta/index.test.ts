@@ -3,9 +3,10 @@ import {
   YOBTA_NEXT,
   YOBTA_READY,
 } from '../../stores/observableYobta/index.js'
+import { YobtaEncoder } from '../../util/encoderYobta/index.js'
 import { sessionStoragePluginYobta } from './index.js'
 
-let defaultItem = JSON.stringify('stored yobta')
+let defaultItem = JSON.stringify(['stored yobta'])
 let item: string | null = defaultItem
 let getItem = vi.fn()
 let setItem = vi.fn()
@@ -22,15 +23,19 @@ let decode = vi.fn()
 
 vi.mock('../../util/encoderYobta/index.js', () => ({
   encoderYobta: {
-    encode(args: any[]) {
-      encode(args)
-      return JSON.stringify(args)
+    encode(state, ...overloads) {
+      encode(state)
+      return JSON.stringify([state, ...overloads])
     },
-    decode(value: string) {
+    decode(value: string, fallback: () => any) {
       decode(value)
-      return JSON.parse(value)
+      try {
+        return JSON.parse(value || '')
+      } catch (error) {
+        return [fallback()]
+      }
     },
-  },
+  } as YobtaEncoder,
 }))
 
 const params = {
@@ -78,7 +83,8 @@ it('defaults to initial state when no session is stored', () => {
   item = null
   sessionStoragePluginYobta({ channel: 'test' })(params)
   let state = params.addMiddleware.mock.calls[0][1]('ready')
-  expect(state).toEqual('ready')
+  expect(decode).toBeCalledWith(null)
+  expect(state).toBe('ready')
   expect(getItem).toBeCalledWith('test')
   expect(setItem).not.toBeCalled()
 })
@@ -92,7 +98,7 @@ it('handles idle', () => {
   expect(decode).not.toBeCalled()
 
   expect(setItem).toBeCalledTimes(1)
-  expect(setItem).toBeCalledWith('test', JSON.stringify('idle'))
+  expect(setItem).toBeCalledWith('test', JSON.stringify(['idle']))
   expect(getItem).not.toBeCalled()
 
   expect(state).toEqual('idle')
@@ -107,7 +113,7 @@ it('handles next', () => {
   expect(decode).not.toBeCalled()
 
   expect(setItem).toBeCalledTimes(1)
-  expect(setItem).toBeCalledWith('test', JSON.stringify('next'))
+  expect(setItem).toBeCalledWith('test', JSON.stringify(['next']))
   expect(getItem).not.toBeCalled()
 
   expect(state).toEqual('next')

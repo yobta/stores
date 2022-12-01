@@ -4,14 +4,27 @@ const last = vi.fn()
 
 it('encodes', () => {
   let value = { a: 'b' }
-  expect(encoderYobta.encode(value)).toBe(JSON.stringify(value))
+  expect(encoderYobta.encode(value)).toBe(JSON.stringify([value]))
 })
 it('decodes', () => {
-  let value = '1'
-  expect(encoderYobta.decode(value, last)).toBe(1)
+  let value = encoderYobta.decode('1', last)
+
+  expect(value).toBe(1)
   expect(last).not.toBeCalled()
 })
 it('falls back', () => {
-  encoderYobta.decode(undefined, last)
+  let value = encoderYobta.decode(undefined, () => {
+    last()
+    return 'yobta'
+  })
   expect(last).toBeCalledTimes(1)
+  expect(value).toEqual(['yobta'])
+})
+it('falls back when null', () => {
+  let value = encoderYobta.decode(null, () => {
+    last()
+    return 'yobta'
+  })
+  expect(last).toBeCalledTimes(1)
+  expect(value).toEqual(['yobta'])
 })

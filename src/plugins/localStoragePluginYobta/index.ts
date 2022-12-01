@@ -27,15 +27,15 @@ export const localStoragePluginYobta: LocalStprageFactory =
       }
     }
 
-    let write = (...args: any[]): void => {
-      let encodedMessage = encoder.encode(args)
+    let write = (item: any, ...overloads: any[]): void => {
+      let encodedMessage = encoder.encode(item, ...overloads)
       localStorage.setItem(channel, encodedMessage)
     }
 
     addMiddleware(YOBTA_READY, state => {
       let item = localStorage.getItem(channel)
       window.addEventListener('storage', onMessage)
-      return item === null ? state : encoder.decode(item, last)[0]
+      return encoder.decode(item, () => state)[0]
     })
     addMiddleware(YOBTA_IDLE, state => {
       write(state)

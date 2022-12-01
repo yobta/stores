@@ -15,7 +15,9 @@ export const useObservable: ReactObservableHook = store => {
 
   useEffect(() => {
     forceUpdate({})
-    return store.observe(forceUpdate)
+    return store.observe(() => {
+      forceUpdate({})
+    })
   }, [store])
 
   return store.last()

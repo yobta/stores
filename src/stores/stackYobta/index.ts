@@ -16,9 +16,7 @@ interface StackFactory {
 export const stackYobta: StackFactory = <Item>(
   initialState?: Set<Item> | Item[],
 ) => {
-  let store = observableYobta<Set<Item>>(
-    new Set(Array.from(initialState || [])),
-  )
+  let store = observableYobta<Set<Item>>(new Set([...(initialState || [])]))
   return {
     ...store,
     add(member: Item) {
