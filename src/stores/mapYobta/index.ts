@@ -6,38 +6,39 @@ import {
 } from '../../index.js'
 
 // #region Types
-export type MapKey = string | number | symbol
-type AnyPlainObject = Record<MapKey, any>
-export type AnyMap = Map<MapKey, any>
-type MapState<PlainState extends AnyPlainObject> = Map<
+export type YobtaAnyPlainObject = Record<YobtaMapKey, any>
+export type YobtaEntries<PlainObject> = {
+  [K in keyof PlainObject]: [K, PlainObject[K]]
+}[keyof PlainObject][]
+
+export type YobtaMapKey = string | number | symbol
+export type YobtaAnyMap = Map<YobtaMapKey, any>
+export type YobtaMapState<PlainState extends YobtaAnyPlainObject> = Map<
   keyof PlainState,
   PlainState[keyof PlainState]
 >
-type Entries<PlainObject> = {
-  [K in keyof PlainObject]: [K, PlainObject[K]]
-}[keyof PlainObject][]
-export interface MapObserver<PlainState extends AnyPlainObject> {
+export interface YobtaMapObserver<PlainState extends YobtaAnyPlainObject> {
   (
-    state: MapState<PlainState>,
-    changes: Entries<PlainState>,
+    state: YobtaMapState<PlainState>,
+    changes: YobtaEntries<PlainState>,
     ...overloads: any[]
   ): void
 }
 
 interface MapFactory {
-  <PlainState extends AnyPlainObject>(
+  <PlainState extends YobtaAnyPlainObject>(
     initialState: PlainState,
-    ...listeners: StorePlugin<MapState<PlainState>>[]
-  ): Omit<ObservableStore<MapState<PlainState>>, 'next'> & {
+    ...listeners: StorePlugin<YobtaMapState<PlainState>>[]
+  ): Omit<ObservableStore<YobtaMapState<PlainState>>, 'next'> & {
     assign(patch: Partial<PlainState>, ...overloads: any[]): void
-    observe(observer: MapObserver<PlainState>): VoidFunction
+    observe(observer: YobtaMapObserver<PlainState>): VoidFunction
     omit(keys: OptionalKey<PlainState>[], ...overloads: any[]): void
   }
 }
 // #endregion
 
 export const mapYobta: MapFactory = (plainState, ...listeners) => {
-  let initialState: AnyMap = new Map(Object.entries(plainState))
+  let initialState: YobtaAnyMap = new Map(Object.entries(plainState))
   let { next, ...store } = observableYobta(initialState, ...listeners)
 
   return {
@@ -54,7 +55,7 @@ export const mapYobta: MapFactory = (plainState, ...listeners) => {
     },
     omit(keys, ...overloads) {
       let state = store.last()
-      let changes = keys.reduce<MapKey[]>((acc, key) => {
+      let changes = keys.reduce<YobtaMapKey[]>((acc, key) => {
         let result = state.delete(key)
         if (result) acc.push(key)
         return acc

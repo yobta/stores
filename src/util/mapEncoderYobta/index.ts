@@ -1,9 +1,9 @@
-import { AnyMap } from '../../stores/mapYobta/index.js'
+import { YobtaAnyMap } from '../../stores/mapYobta/index.js'
 import { YobtaEncoder } from '../encoderYobta/index.js'
 
 export interface YobtaMapEncoder extends YobtaEncoder {
-  encode(item: AnyMap, ...overloads: any[]): string
-  decode: <Result extends AnyMap>(
+  encode(item: YobtaAnyMap, ...overloads: any[]): string
+  decode: <Result extends YobtaAnyMap>(
     item: string,
     fallback: () => Result,
   ) => [Result, ...any[]]
@@ -14,7 +14,7 @@ export const mapEncoderYobta: YobtaMapEncoder = {
     let entries = item.size ? [...item.entries()] : []
     return JSON.stringify([entries, ...overloads])
   },
-  decode<Result extends AnyMap>(item: string, fallback: () => Result) {
+  decode<Result extends YobtaAnyMap>(item: string, fallback: () => Result) {
     try {
       let [entries, ...overloads] = JSON.parse(item)
       return [new Map(entries) as Result, ...overloads]
