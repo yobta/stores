@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.0.36
+
+Fix build command
+
 ## 0.0.35
 
 Fix broadcast channel serialization bug
