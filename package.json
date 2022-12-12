@@ -32,7 +32,7 @@
     "./package.json": "./package.json"
   },
   "engines": {
-    "node": "^12.0.0 || ^14.0.0 || >=16.0.0"
+    "node": "^14.0.0 || >=16.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",
@@ -118,7 +118,7 @@
     {
       "name": "all",
       "path": "./lib/index.js",
-      "limit": "1227 B"
+      "limit": "1222 B"
     },
     {
       "name": "machineYobta",
@@ -154,7 +154,7 @@
       "name": "broadcastChannelPluginYobta",
       "path": "./lib/index.js",
       "import": "{ broadcastChannelPluginYobta }",
-      "limit": "312 B"
+      "limit": "307 B"
     },
     {
       "name": "lazyPluginYobta",

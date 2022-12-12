@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './App.css'
 
 import {
+  broadcastChannelPluginYobta,
   localStoragePluginYobta,
   mapEncoderYobta,
   mapYobta,
@@ -20,6 +21,11 @@ const stringStore = observableYobta(
   sessionStoragePluginYobta({ channel: 'test' }),
 )
 
+const plainStore = observableYobta(
+  {},
+  broadcastChannelPluginYobta({ channel: 'plain' }),
+)
+
 const up = () => {
   mapStore.assign({ a: (mapStore.last().get('a') || 0) + 1 })
 }
@@ -27,6 +33,8 @@ const down = () => mapStore.omit(['a'])
 
 function App() {
   const count = useObservable(mapStore)
+  const plain = useObservable(plainStore)
+  console.log('plain: ', plain)
   const str = useObservable(stringStore)
 
   return (
@@ -39,6 +47,14 @@ function App() {
         value={str}
         onChange={event => stringStore.next(event.target.value)}
       />
+      <hr />
+      <button
+        onClick={() => {
+          plainStore.next({ a: Date.now() })
+        }}
+      >
+        piu
+      </button>
     </div>
   )
 }

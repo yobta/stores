@@ -24,9 +24,9 @@ let decode = vi.fn()
 
 vi.mock('../../util/encoderYobta/index.js', () => ({
   encoderYobta: {
-    encode(args: any[]) {
-      encode(args)
-      return JSON.stringify(args)
+    encode(state: any, ...overloads: any[]) {
+      encode(state, ...overloads)
+      return JSON.stringify([state, ...overloads])
     },
     decode(item: string) {
       decode(item)
@@ -70,7 +70,7 @@ it('handles next', () => {
   params.addMiddleware.mock.calls[2][1]('next', 'overload yobta')
 
   expect(encode).toBeCalledTimes(1)
-  expect(encode).toBeCalledWith(['next', 'overload yobta'])
+  expect(encode).toBeCalledWith('next', 'overload yobta')
 
   expect(postMessage).toBeCalledTimes(1)
   expect(postMessage).toBeCalledWith(JSON.stringify(['next', 'overload yobta']))

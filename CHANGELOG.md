@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.0.35
+
+Fix broadcast channel serialization bug
+
 ## 0.0.34
 
 Fix map store types and types exports
