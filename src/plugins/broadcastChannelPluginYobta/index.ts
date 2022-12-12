@@ -16,13 +16,11 @@ interface BroadcastChannelFactory {
 export const broadcastChannelPluginYobta: BroadcastChannelFactory =
   ({ channel, encoder = encoderYobta }) =>
   ({ addMiddleware, next, last }) => {
-    let bc: BroadcastChannel | null = null
-    let shouldMute: boolean = false
+    let bc: BroadcastChannel | null
+    let shouldMute: boolean
 
     let open = (): BroadcastChannel => {
-      if (!bc) {
-        bc = new BroadcastChannel(channel)
-      }
+      if (!bc) bc = new BroadcastChannel(channel)
       return bc
     }
 
@@ -52,11 +50,9 @@ export const broadcastChannelPluginYobta: BroadcastChannelFactory =
       if (shouldMute) {
         shouldMute = false
       } else {
-        let encodedMessage = encoder.encode([state, ...overloads])
+        let encodedMessage = encoder.encode(state, ...overloads)
         open().postMessage(encodedMessage)
-        if (shouldClose) {
-          close()
-        }
+        if (shouldClose) close()
       }
       return state
     })

@@ -69,7 +69,6 @@ export const observableYobta: ObservableFactory = <State>(
   }
   let observers = new Set<Observer<any>>()
   let state: State
-
   let next: StateSetter<State> = (action: any, ...overloads): void => {
     state = transition(
       YOBTA_NEXT,
@@ -80,30 +79,23 @@ export const observableYobta: ObservableFactory = <State>(
       observe(state, ...overloads)
     })
   }
-
   let last: StateGetter<State> = () => state
-
   plugins.forEach(plugin => {
     plugin({ addMiddleware, initialState, next, last })
   })
-
   let transition = (
     type: StoreEvent,
     nextState: any,
     ...overloads: any[]
   ): State => {
     let eventMiddlewares = middlewares[type]
-
     let result: State = eventMiddlewares.reduce(
       (acc, middleware) => middleware(acc, ...overloads),
       nextState,
     )
-
     return result
   }
-
   state = transition(YOBTA_INIT, initialState)
-
   return {
     last,
     next,
