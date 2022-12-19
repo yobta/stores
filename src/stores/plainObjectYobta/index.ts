@@ -1,4 +1,4 @@
-import { ObservableStore, observableYobta, StorePlugin } from '../../index.js'
+import { Store, storeYobta, StorePlugin } from '../../index.js'
 
 // #region Types
 type AnyPlainObject = Record<string | number | symbol, any>
@@ -13,8 +13,7 @@ export type OptionalKey<PlainObject extends AnyPlainObject> = Exclude<
   undefined
 >
 
-interface PlainObjectStore<State extends AnyPlainObject>
-  extends ObservableStore<State> {
+interface PlainObjectStore<State extends AnyPlainObject> extends Store<State> {
   assign(patch: Partial<State>): void
   omit(...keys: OptionalKey<State>[]): OptionalKey<State>[]
 }
@@ -33,7 +32,7 @@ export const plainObjectYobta: PlainObjectFactory = <
   initialState: State,
   ...listeners: StorePlugin<State>[]
 ) => {
-  let store = observableYobta(initialState, ...listeners)
+  let store = storeYobta(initialState, ...listeners)
 
   return {
     ...store,

@@ -4,7 +4,7 @@ import {
   YOBTA_INIT,
   YOBTA_NEXT,
   YOBTA_READY,
-} from '../../stores/observableYobta/index.js'
+} from '../../stores/storeYobta/index.js'
 
 interface ValidationPluginFactory {
   <State>(validate: (input: any) => State): StorePlugin<State>

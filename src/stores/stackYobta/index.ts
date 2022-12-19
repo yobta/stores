@@ -1,8 +1,8 @@
-import { ObservableStore, observableYobta } from '../observableYobta/index.js'
+import { Store, storeYobta } from '../storeYobta/index.js'
 
 interface StackFactory {
   <Item>(initialState?: Set<Item> | Item[]): Omit<
-    ObservableStore<Set<Item>>,
+    Store<Set<Item>>,
     'last' | 'next'
   > & {
     add(member: Item): void
@@ -16,7 +16,7 @@ interface StackFactory {
 export const stackYobta: StackFactory = <Item>(
   initialState?: Set<Item> | Item[],
 ) => {
-  let store = observableYobta<Set<Item>>(new Set([...(initialState || [])]))
+  let store = storeYobta<Set<Item>>(new Set([...(initialState || [])]))
   return {
     ...store,
     add(member: Item) {

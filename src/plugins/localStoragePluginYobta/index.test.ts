@@ -2,7 +2,7 @@ import {
   YOBTA_IDLE,
   YOBTA_NEXT,
   YOBTA_READY,
-} from '../../stores/observableYobta/index.js'
+} from '../../stores/storeYobta/index.js'
 import { YobtaEncoder } from '../../util/encoderYobta/index.js'
 import { localStoragePluginYobta } from './index.js'
 

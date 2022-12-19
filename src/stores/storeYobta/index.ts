@@ -36,7 +36,7 @@ export type StateSetter<State> = (
 ) => void
 export type StoreAction<State> = Parameters<StateSetter<State>>[0]
 
-interface ObservableFactory {
+interface StoreFactory {
   <State>(initialState: State, ...plugins: StorePlugin<State>[]): {
     last: StateGetter<State>
     next: StateSetter<State>
@@ -44,14 +44,14 @@ interface ObservableFactory {
   }
 }
 
-export interface ObservableStore<State> {
+export interface Store<State> {
   last: StateGetter<State>
   next: StateSetter<State>
   observe(observer: Observer<State>): VoidFunction
 }
 // #endregion
 
-export const observableYobta: ObservableFactory = <State>(
+export const storeYobta: StoreFactory = <State>(
   initialState: State,
   ...plugins: StorePlugin<State>[]
 ) => {

@@ -3,7 +3,7 @@ import {
   YOBTA_IDLE,
   YOBTA_NEXT,
   YOBTA_READY,
-} from '../../stores/observableYobta/index.js'
+} from '../../stores/storeYobta/index.js'
 import { broadcastChannelPluginYobta } from './index.js'
 
 const postMessage = vi.fn()

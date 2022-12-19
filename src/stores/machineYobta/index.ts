@@ -1,9 +1,4 @@
-import {
-  observableYobta,
-  StorePlugin,
-  StateSetter,
-  Observer,
-} from '../../index.js'
+import { storeYobta, StorePlugin, StateSetter, Observer } from '../../index.js'
 
 // #region Types
 type Transitions<T> = {
@@ -25,7 +20,7 @@ interface MachineFactory {
 export const machineYobta: MachineFactory =
   transitions =>
   (initialState, ...listeners) => {
-    let store = observableYobta(initialState, ...listeners)
+    let store = storeYobta(initialState, ...listeners)
 
     return {
       ...store,
