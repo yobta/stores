@@ -6,13 +6,11 @@ export interface Observer<State> {
   (state: State, ...args: any[]): void
 }
 
-export const YOBTA_INIT = 'init'
 export const YOBTA_READY = 'ready'
 export const YOBTA_IDLE = 'idle'
 export const YOBTA_NEXT = 'next'
 
 export type StoreEvent =
-  | typeof YOBTA_INIT
   | typeof YOBTA_READY
   | typeof YOBTA_IDLE
   | typeof YOBTA_NEXT
@@ -56,7 +54,6 @@ export const storeYobta: StoreFactory = <State>(
   ...plugins: StorePlugin<State>[]
 ) => {
   let middlewares: Record<StoreEvent, StoreMiddleware<State>[]> = {
-    init: [],
     ready: [],
     idle: [],
     next: [],
@@ -68,7 +65,7 @@ export const storeYobta: StoreFactory = <State>(
     middlewares[type].push(middleware)
   }
   let observers = new Set<Observer<any>>()
-  let state: State
+  let state: State = initialState
   let next: StateSetter<State> = (action: any, ...overloads): void => {
     state = transition(
       YOBTA_NEXT,
@@ -95,7 +92,7 @@ export const storeYobta: StoreFactory = <State>(
     )
     return result
   }
-  state = transition(YOBTA_INIT, initialState)
+
   return {
     last,
     next,

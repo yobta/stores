@@ -2,7 +2,6 @@ import { expect, vi, it } from 'vitest'
 
 import {
   YOBTA_IDLE,
-  YOBTA_INIT,
   YOBTA_NEXT,
   storeYobta,
   YOBTA_READY,
@@ -17,7 +16,6 @@ const observerMock1 = vi.fn()
 let addMiddlewareSpy = vi.fn<[StoreEvent, StoreMiddleware<number>], void>()
 
 let handlersSpy = {
-  [YOBTA_INIT]: vi.fn(),
   [YOBTA_IDLE]: vi.fn(),
   [YOBTA_READY]: vi.fn(),
   [YOBTA_NEXT]: vi.fn(),
@@ -29,10 +27,6 @@ beforeEach(() => {
     handlersSpy[type].mockImplementation(handler)
   })
   pluginMock.mockImplementation(({ addMiddleware }) => {
-    addMiddleware(
-      YOBTA_INIT,
-      handlersSpy[YOBTA_INIT].mockImplementation(state => state),
-    )
     addMiddleware(
       YOBTA_READY,
       handlersSpy[YOBTA_READY].mockImplementation(state => state),
