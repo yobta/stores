@@ -193,6 +193,12 @@
       "limit": "122 B"
     },
     {
+      "name": "observableYobta",
+      "path": "./lib/index.js",
+      "import": "{ observableYobta }",
+      "limit": "122 B"
+    },
+    {
       "name": "pubSubYobta",
       "path": "./lib/index.js",
       "import": "{ pubSubYobta }",

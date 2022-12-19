@@ -12,4 +12,5 @@ export * from './plugins/validationPluginYobta/index.js'
 
 export * from './util/encoderYobta/index.js'
 export * from './util/mapEncoderYobta/index.js'
+export * from './util/observableYobta/index.js'
 export * from './util/pubSubYobta/index.js'

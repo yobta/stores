@@ -8,6 +8,7 @@ Breakng changes:
 Rename observableYobte to storeYobta
 Remove store init event
 Remove setter from store next method
+Add observable utility
 
 ## 0.0.36
 
