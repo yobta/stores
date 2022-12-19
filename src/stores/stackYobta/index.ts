@@ -20,7 +20,7 @@ export const stackYobta: StackFactory = <Item>(
   return {
     ...store,
     add(member: Item) {
-      store.next(last => new Set([member, ...last]))
+      store.next(new Set([member, ...store.last()]))
     },
     remove(member: Item) {
       let last = store.last()

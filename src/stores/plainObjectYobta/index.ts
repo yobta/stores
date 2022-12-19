@@ -37,22 +37,21 @@ export const plainObjectYobta: PlainObjectFactory = <
   return {
     ...store,
     assign(patch) {
-      store.next(last => ({ ...last, ...patch }))
+      store.next({ ...store.last(), ...patch })
     },
     omit(...keys) {
       let keysSet = new Set(keys)
       let result: OptionalKey<State>[] = []
-      store.next(last => {
-        let next = { ...last }
-        for (let key in last) {
-          // @ts-ignore
-          if (keysSet.has(key)) {
-            delete next[key]
-            result.push(key as unknown as OptionalKey<State>)
-          }
+      let last = store.last()
+      let next = { ...last }
+      for (let key in last) {
+        // @ts-ignore
+        if (keysSet.has(key)) {
+          delete next[key]
+          result.push(key as unknown as OptionalKey<State>)
         }
-        return next
-      })
+      }
+      store.next(next)
       return result
     },
   }

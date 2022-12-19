@@ -21,18 +21,12 @@ export const machineYobta: MachineFactory =
   transitions =>
   (initialState, ...listeners) => {
     let store = storeYobta(initialState, ...listeners)
-
     return {
       ...store,
-      next(action, ...overload) {
-        let lastState = store.last()
-        let nextState =
-          typeof action === 'function' ? action(lastState) : action
-        let availableTranstions = transitions[lastState]
+      next(state, ...overload) {
+        let availableTranstions = transitions[store.last()]
         // @ts-ignore
-        if (availableTranstions.has(nextState)) {
-          store.next(nextState, ...overload)
-        }
+        if (availableTranstions.has(state)) store.next(state, ...overload)
       },
     }
   }

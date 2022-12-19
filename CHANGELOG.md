@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 Breakng changes:
 Rename observableYobte to storeYobta
 Remove store init event
+Remove setter from store next method
 
 ## 0.0.36
 

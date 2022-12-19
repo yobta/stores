@@ -28,10 +28,7 @@ export type StorePlugin<State> = (props: {
 }) => void
 
 export type StateGetter<State> = () => State
-export type StateSetter<State> = (
-  action: State | ((last: State) => State),
-  ...overloads: any[]
-) => void
+export type StateSetter<State> = (action: State, ...overloads: any[]) => void
 export type StoreAction<State> = Parameters<StateSetter<State>>[0]
 
 interface StoreFactory {
@@ -66,12 +63,8 @@ export const storeYobta: StoreFactory = <State>(
   }
   let observers = new Set<Observer<any>>()
   let state: State = initialState
-  let next: StateSetter<State> = (action: any, ...overloads): void => {
-    state = transition(
-      YOBTA_NEXT,
-      typeof action === 'function' ? action(state) : action,
-      ...overloads,
-    )
+  let next: StateSetter<State> = (nextState: State, ...overloads): void => {
+    state = transition(YOBTA_NEXT, nextState, ...overloads)
     observers.forEach(observe => {
       observe(state, ...overloads)
     })

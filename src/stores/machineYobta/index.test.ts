@@ -17,15 +17,6 @@ it('sets next state', () => {
   expect(store.last()).toEqual('two')
 })
 
-it('takes next as a funscrion', () => {
-  let store = machineYobta({
-    one: new Set(['two']),
-    two: new Set(['one']),
-  })('one')
-  store.next(() => 'two')
-  expect(store.last()).toEqual('two')
-})
-
 it('ignores unexpected next state', () => {
   let store = machineYobta({
     one: new Set(['two']),

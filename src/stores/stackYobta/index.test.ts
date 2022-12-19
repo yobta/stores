@@ -35,6 +35,13 @@ it('adds', () => {
   expect(store.last()).toBe(2)
 })
 
+it('should not mutate when adds', () => {
+  let store = stackYobta()
+  let state = store.last()
+  store.add(1)
+  expect(state).not.toBe(store.last())
+})
+
 it('is unique', () => {
   let store = stackYobta()
 
@@ -65,4 +72,11 @@ it('removes', () => {
   expect(result).toBe(true)
   expect(store.size()).toBe(0)
   expect(store.last()).toBeUndefined()
+})
+
+it('should not mutate when removes', () => {
+  let store = stackYobta([2, 1])
+  let state = store.last()
+  store.remove(1)
+  expect(state).not.toBe(store.last())
 })
