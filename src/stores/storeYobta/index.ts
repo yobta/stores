@@ -80,15 +80,11 @@ export const storeYobta: YobtaStoreFactory = <State>(
     type: YobtaStoreEvent,
     nextState: any,
     ...overloads: any[]
-  ): State => {
-    let eventMiddlewares = middlewares[type]
-    let result: State = eventMiddlewares.reduce(
-      (acc, middleware) => middleware(acc, ...overloads),
+  ): State =>
+    middlewares[type].reduceRight<State>(
+      (acc, right) => right(acc, ...overloads),
       nextState,
     )
-    return result
-  }
-
   return {
     last,
     next,

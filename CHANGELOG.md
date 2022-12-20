@@ -9,6 +9,7 @@ Rename observableYobte to storeYobta
 Remove store init event
 Remove setter from store next method
 Add observable utility
+Change store to compose middlewares
 
 ## 0.0.36
 
