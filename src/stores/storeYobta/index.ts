@@ -48,6 +48,13 @@ export interface YobtaStore<State> {
 }
 // #endregion
 
+/**
+ * Creates a new observable store.
+ *
+ * @param {State} initialState The initial state for the store.
+ * @param {YobtaStorePlugin<State>[]} plugins An array of plugins to apply to the store.
+ * @returns {YobtaStore<State>} A new observable store.
+ */
 export const storeYobta: YobtaStoreFactory = <State>(
   initialState: State,
   ...plugins: YobtaStorePlugin<State>[]
