@@ -2,41 +2,33 @@
 
 # Using with React
 
-To get clean and testable code we separate stores and react tempates.
+This hook allows a React component to subscribe to changes in a Yobta store. When the state of the store changes, the hook will trigger a re-render of the component to reflect the updated state.
 
-###### counterStore.ts
+## Importing
 
 ```ts
-import { observableYobta } from '@yobta/stores'
-import { useObservable } from '@yobta/stores/react'
-
-const counterStore = observableYobta(0)
-
-const reset: VoidFunction = () => {
-  counterStore.next(0)
-}
-
-const increment: VoidFunction = () => {
-  counterStore.next(last => last + 1)
-}
-
-export const useCounter = (): number => useObservable(counterStore)
+import { useYobta } from '@yobta/stores/react'
 ```
 
-###### counterPage.tsx
+## Parameters
 
-```tsx
-import { useCounter, reset, increment } from './counterStore'
+- `store` - The Yobta store to subscribe to. This store should have the following methods:
+  - `last`: YobtaStateGetter<State> - A getter function that returns the current state of the store.
+  - `observe(observer: YobtaObserver<any>): VoidFunction` - A function that allows the component to subscribe to changes in the store. The observer parameter is a callback function that will be called whenever the state of the store changes.
 
-export const Page = (): JSX.Element => {
-  const counter = useCounter()
-  return (
-    <>
-      Counter: {counter}
-      <hr />
-      <button onClick={increment}>Next</button>|
-      <button onClick={reset}>Reset</button>
-    </>
-  )
+## Return value
+
+The hook returns the current state of the store.
+
+```ts
+import { useYobta } from './useYobta'
+
+const store = storeYobta(0)
+const increment = () => store.next(store.last() + 1)
+
+function MyComponent() {
+  const state = useYobta(store)
+  // component will re-render whenever the state of props.store changes
+  return <button onClick={increment}>Clicked: {state}</button>
 }
 ```
