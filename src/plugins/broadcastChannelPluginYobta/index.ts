@@ -1,6 +1,6 @@
 import { encoderYobta, YobtaEncoder } from '../../util/encoderYobta/index.js'
 import {
-  StorePlugin,
+  YobtaStorePlugin,
   YOBTA_IDLE,
   YOBTA_NEXT,
   YOBTA_READY,
@@ -10,7 +10,7 @@ interface BroadcastChannelFactory {
   <State>(props: {
     channel: string
     encoder?: YobtaEncoder
-  }): StorePlugin<State>
+  }): YobtaStorePlugin<State>
 }
 
 export const broadcastChannelPluginYobta: BroadcastChannelFactory =

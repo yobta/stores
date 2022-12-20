@@ -1,6 +1,6 @@
 import { encoderYobta, YobtaEncoder } from '../../util/encoderYobta/index.js'
 import {
-  StorePlugin,
+  YobtaStorePlugin,
   YOBTA_IDLE,
   YOBTA_NEXT,
   YOBTA_READY,
@@ -14,7 +14,7 @@ interface LocalStprageFactory {
   <State>(props: {
     channel: string
     encoder?: YobtaEncoder
-  }): StorePlugin<State>
+  }): YobtaStorePlugin<State>
 }
 
 export const localStoragePluginYobta: LocalStprageFactory =

@@ -1,80 +1,83 @@
-// #region Types
-export interface VoidFunction {
-  (): void
-}
-export interface Observer<State> {
-  (state: State, ...args: any[]): void
-}
+import {
+  observableYobta,
+  YobtaObserver,
+} from '../../util/observableYobta/index.js'
 
+// #region Types
 export const YOBTA_READY = 'ready'
 export const YOBTA_IDLE = 'idle'
 export const YOBTA_NEXT = 'next'
 
-export type StoreEvent =
+export type YobtaStoreEvent =
   | typeof YOBTA_READY
   | typeof YOBTA_IDLE
   | typeof YOBTA_NEXT
 
-export type StoreMiddleware<State> = (
+export type YobtaStoreMiddleware<State> = (
   state: State,
   ...overloads: any[]
 ) => State
 
-export type StorePlugin<State> = (props: {
-  addMiddleware(type: StoreEvent, middleware: StoreMiddleware<State>): void
+export type YobtaStorePlugin<State> = (props: {
+  addMiddleware(
+    type: YobtaStoreEvent,
+    middleware: YobtaStoreMiddleware<State>,
+  ): void
   initialState: State
-  next: StateSetter<State>
+  next: YobtaStateSetter<State>
   last(): State
 }) => void
 
-export type StateGetter<State> = () => State
-export type StateSetter<State> = (action: State, ...overloads: any[]) => void
-export type StoreAction<State> = Parameters<StateSetter<State>>[0]
+export type YobtaStateGetter<State> = () => State
+export type YobtaStateSetter<State> = (
+  action: State,
+  ...overloads: any[]
+) => void
 
-interface StoreFactory {
-  <State>(initialState: State, ...plugins: StorePlugin<State>[]): {
-    last: StateGetter<State>
-    next: StateSetter<State>
-    observe(observer: Observer<State>): VoidFunction
-  }
+interface YobtaStoreFactory {
+  <State>(
+    initialState: State,
+    ...plugins: YobtaStorePlugin<State>[]
+  ): YobtaStore<State>
 }
 
-export interface Store<State> {
-  last: StateGetter<State>
-  next: StateSetter<State>
-  observe(observer: Observer<State>): VoidFunction
+export interface YobtaStore<State> {
+  last: YobtaStateGetter<State>
+  next: YobtaStateSetter<State>
+  observe(observer: YobtaObserver<State>): VoidFunction
 }
 // #endregion
 
-export const storeYobta: StoreFactory = <State>(
+export const storeYobta: YobtaStoreFactory = <State>(
   initialState: State,
-  ...plugins: StorePlugin<State>[]
+  ...plugins: YobtaStorePlugin<State>[]
 ) => {
-  let middlewares: Record<StoreEvent, StoreMiddleware<State>[]> = {
+  let middlewares: Record<YobtaStoreEvent, YobtaStoreMiddleware<State>[]> = {
     ready: [],
     idle: [],
     next: [],
   }
   let addMiddleware = (
-    type: StoreEvent,
-    middleware: StoreMiddleware<State>,
+    type: YobtaStoreEvent,
+    middleware: YobtaStoreMiddleware<State>,
   ): void => {
     middlewares[type].push(middleware)
   }
-  let observers = new Set<Observer<any>>()
+  let observable = observableYobta<State>()
   let state: State = initialState
-  let next: StateSetter<State> = (nextState: State, ...overloads): void => {
+  let next: YobtaStateSetter<State> = (
+    nextState: State,
+    ...overloads
+  ): void => {
     state = transition(YOBTA_NEXT, nextState, ...overloads)
-    observers.forEach(observe => {
-      observe(state, ...overloads)
-    })
+    observable.next(state, ...overloads)
   }
-  let last: StateGetter<State> = () => state
+  let last: YobtaStateGetter<State> = () => state
   plugins.forEach(plugin => {
     plugin({ addMiddleware, initialState, next, last })
   })
   let transition = (
-    type: StoreEvent,
+    type: YobtaStoreEvent,
     nextState: any,
     ...overloads: any[]
   ): State => {
@@ -89,16 +92,12 @@ export const storeYobta: StoreFactory = <State>(
   return {
     last,
     next,
-    observe: observer => {
-      if (observers.size === 0) {
-        state = transition(YOBTA_READY, state)
-      }
-      observers.add(observer)
+    observe: (observer: YobtaObserver<State>) => {
+      if (observable.size === 0) state = transition(YOBTA_READY, state)
+      let unsubscribe = observable.observe(observer)
       return () => {
-        observers.delete(observer)
-        if (observers.size === 0) {
-          state = transition(YOBTA_IDLE, state)
-        }
+        unsubscribe()
+        if (observable.size === 0) state = transition(YOBTA_IDLE, state)
       }
     },
   }

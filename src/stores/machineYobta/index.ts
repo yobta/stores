@@ -1,4 +1,9 @@
-import { storeYobta, StorePlugin, StateSetter, Observer } from '../../index.js'
+import {
+  storeYobta,
+  YobtaStorePlugin,
+  YobtaStateSetter,
+  YobtaObserver,
+} from '../../index.js'
 
 // #region Types
 type Transitions<T> = {
@@ -8,11 +13,11 @@ type Transitions<T> = {
 interface MachineFactory {
   <T extends Transitions<T>>(transitions: T): (
     initialState: keyof T,
-    ...listeners: StorePlugin<keyof T>[]
+    ...listeners: YobtaStorePlugin<keyof T>[]
   ) => {
     last(): keyof T
-    next: StateSetter<keyof T>
-    observe(observer: Observer<keyof T>): VoidFunction
+    next: YobtaStateSetter<keyof T>
+    observe(observer: YobtaObserver<keyof T>): VoidFunction
   }
 }
 // #endregion

@@ -5,15 +5,18 @@ import {
   YOBTA_NEXT,
   storeYobta,
   YOBTA_READY,
-  StoreEvent,
-  StoreMiddleware,
+  YobtaStoreEvent,
+  YobtaStoreMiddleware,
 } from './index.js'
 
 const pluginMock = vi.fn()
 const observerMock = vi.fn()
 const observerMock1 = vi.fn()
 
-let addMiddlewareSpy = vi.fn<[StoreEvent, StoreMiddleware<number>], void>()
+let addMiddlewareSpy = vi.fn<
+  [YobtaStoreEvent, YobtaStoreMiddleware<number>],
+  void
+>()
 
 let handlersSpy = {
   [YOBTA_IDLE]: vi.fn(),

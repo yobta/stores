@@ -1,12 +1,12 @@
 import {
-  StorePlugin,
+  YobtaStorePlugin,
   YOBTA_IDLE,
   YOBTA_NEXT,
   YOBTA_READY,
 } from '../../stores/storeYobta/index.js'
 
 interface ValidationPluginFactory {
-  <State>(validate: (input: any) => State): StorePlugin<State>
+  <State>(validate: (input: any) => State): YobtaStorePlugin<State>
 }
 
 export const validationPluginYobta: ValidationPluginFactory =

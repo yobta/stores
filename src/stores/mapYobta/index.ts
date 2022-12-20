@@ -1,4 +1,9 @@
-import { Store, storeYobta, StorePlugin, OptionalKey } from '../../index.js'
+import {
+  YobtaStore,
+  storeYobta,
+  YobtaStorePlugin,
+  OptionalKey,
+} from '../../index.js'
 
 // #region Types
 export type YobtaAnyPlainObject = Record<YobtaMapKey, any>
@@ -23,8 +28,8 @@ export interface YobtaMapObserver<PlainState extends YobtaAnyPlainObject> {
 interface MapFactory {
   <PlainState extends YobtaAnyPlainObject>(
     initialState: PlainState,
-    ...listeners: StorePlugin<YobtaMapState<PlainState>>[]
-  ): Omit<Store<YobtaMapState<PlainState>>, 'next'> & {
+    ...listeners: YobtaStorePlugin<YobtaMapState<PlainState>>[]
+  ): Omit<YobtaStore<YobtaMapState<PlainState>>, 'next'> & {
     assign(patch: Partial<PlainState>, ...overloads: any[]): void
     observe(observer: YobtaMapObserver<PlainState>): VoidFunction
     omit(keys: OptionalKey<PlainState>[], ...overloads: any[]): void

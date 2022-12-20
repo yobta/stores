@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 
-import { StateGetter, Observer } from '../../index.js'
+import { YobtaObserver, YobtaStateGetter } from '../../index.js'
 
 interface AnyObservable<S> {
-  last: StateGetter<S>
-  observe(observer: Observer<any>): VoidFunction
+  last: YobtaStateGetter<S>
+  observe(observer: YobtaObserver<any>): VoidFunction
 }
 export interface ReactObservableHook {
   <S>(store: AnyObservable<S>): S
