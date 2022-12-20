@@ -8,6 +8,8 @@ Breakng changes:
 Rename observableYobte to storeYobta
 Remove store init event
 Remove setter from store next method
+Map store becomes mutable
+Renamed `useObservable` hook to `useYobta`
 
 Improvements:
 Add observable utility
