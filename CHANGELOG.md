@@ -8,8 +8,11 @@ Breakng changes:
 Rename observableYobte to storeYobta
 Remove store init event
 Remove setter from store next method
+
+Improvements:
 Add observable utility
 Change store to compose middlewares
+Update documentation
 
 ## 0.0.36
 

@@ -1,4 +1,4 @@
-# Yobta/stores
+# Yobta Stores
 
 A collection of tiny observable stores designed to move logic away from components and help write reactive applications.
 
@@ -20,13 +20,12 @@ npm i @yobta/stores
 - [Basic tutorial](docs/basic-tutorial.md)
 - [Using with React](docs/using-with-react.md)
 - [Store Plugins](docs/store-pligins.md)
-- [Overloads](docs/overloads.md)
 
 ### Stores
 
+- [Observable Store](docs/yobta-store.md)
 - Machine Store
 - [Map Store](docs/map-store.md)
-- Observable Store
 - Plain Object Store
 - Stack Store
 
