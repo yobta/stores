@@ -1,37 +1,40 @@
-import { Store, storeYobta } from '../storeYobta/index.js'
+import { YobtaObserver } from '../../util/observableYobta/index.js'
+import { storeYobta, YobtaStorePlugin } from '../storeYobta/index.js'
 
-interface StackFactory {
-  <Item>(initialState?: Set<Item> | Item[]): Omit<
-    Store<Set<Item>>,
-    'last' | 'next'
-  > & {
+interface YobtaStackFactory {
+  <Item>(
+    initialState?: Set<Item> | Item[],
+    ...plugins: YobtaStorePlugin<Set<Item>>[]
+  ): {
     add(member: Item): void
     last(): Item
+    observe(observer: YobtaObserver<Set<Item>>): VoidFunction
     remove(member: Item): boolean
     size(): number
   }
 }
 
-export const stackYobta: StackFactory = <Item>(
+export const stackYobta: YobtaStackFactory = <Item>(
   initialState?: Set<Item> | Item[],
+  ...plugins: YobtaStorePlugin<Set<Item>>[]
 ) => {
-  let { last, next, observe } = storeYobta<Set<Item>>(
-    new Set(initialState || []),
-  )
+  let { last, observe, next } = storeYobta(new Set(initialState), ...plugins)
   return {
-    add(member: Item) {
-      next(new Set([member, ...last()]))
-    },
-    observe,
-    remove(member: Item) {
-      let nextState = new Set(last())
-      let result = nextState.delete(member)
+    add(item: Item) {
+      let state = last()
+      let nextState = new Set([item, ...state])
       next(nextState)
-      return result
     },
     last() {
       let [first] = last()
       return first
+    },
+    observe,
+    remove(item: Item) {
+      let state = last()
+      let result = state.delete(item)
+      if (result) next(new Set(state))
+      return result
     },
     size: () => last().size,
   }

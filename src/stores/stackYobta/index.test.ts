@@ -14,7 +14,7 @@ it('takes set as initial state', () => {
   expect(store.last()).toBe(2)
 })
 
-it('takes arrya as initial state', () => {
+it('takes array as initial state', () => {
   let store = stackYobta([2, 1])
 
   expect(store.size()).toBe(2)
@@ -33,13 +33,6 @@ it('adds', () => {
 
   expect(store.size()).toBe(2)
   expect(store.last()).toBe(2)
-})
-
-it('should not mutate when adds', () => {
-  let store = stackYobta()
-  let state = store.last()
-  store.add(1)
-  expect(state).not.toBe(store.last())
 })
 
 it('is unique', () => {
@@ -74,9 +67,16 @@ it('removes', () => {
   expect(store.last()).toBeUndefined()
 })
 
-it('should not mutate when removes', () => {
-  let store = stackYobta([2, 1])
-  let state = store.last()
-  store.remove(1)
-  expect(state).not.toBe(store.last())
+it('adds middleware', () => {
+  let plugin1 = vi.fn()
+  let plugin2 = vi.fn()
+  let initialState = new Set([2, 1])
+  stackYobta(initialState, plugin1, plugin2)
+
+  expect(plugin1).toBeCalledWith({
+    addMiddleware: expect.any(Function),
+    initialState,
+    last: expect.any(Function),
+    next: expect.any(Function),
+  })
 })
