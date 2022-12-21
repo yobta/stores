@@ -2,24 +2,44 @@
 
 # Lazy Plugin
 
-Lazy stores automatically reset to the initial state when the last store observer disconnects.
+A plugin for the [@yobta/stores](https://www.npmjs.com/package/@yobta/stores) package that resets the store to its initial state when the last observer leaves. This can be useful in situations where you want to ensure that the store is only updated when it is actively being observed, and that it is reset to its initial state when it is no longer needed.
 
-###### Adding the Plugin
+## Usage
 
-```ts
-import { observableYobta, lazyYobta } from '@yobta/stores'
-
-const numberStore = observableYobta(0, lazyYobta)
-```
-
-###### Using the Plugin
+To use the Lazy Plugin Yobta, import it into your project and pass it as an argument to the store factory:
 
 ```ts
-const unobserve = numberStore.observe(console.log)
+import { storeYobta, lazyPluginYobta } from '@yobta/stores'
 
-numberStore.next(1) // will trace 1
-
-unobserve()
-
-numberStore.last() // will trace 0
+const store = storeYobta(0, lazyPluginYobta)
 ```
+
+Then, you can observe the store using the observe method:
+
+```ts
+const unsubscribe = store.observe(console.log)
+```
+
+You can then update the store using the next method:
+
+```ts
+store.next(1)
+```
+
+When you are finished observing the store and want to reset it to its initial state, you can call the unsubscribe function returned by the observe method:
+
+```ts
+unsubscribe()
+```
+
+You can expect the store to be reset to the initial state:
+
+```ts
+console.log(store.last()) // 0
+```
+
+## Limitations
+
+One potential limitation of the Lazy Plugin is that it may interfere with other plugins that you are using in your project. In particular, you should be careful when using the Lazy Plugin in combination with persistency plugins such as the Local Storage Plugin, as resetting the store to its initial state may overwrite any persisted data.
+
+Keep these considerations in mind when deciding whether or not to use the Lazy Plugin in your project.
