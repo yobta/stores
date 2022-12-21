@@ -18,7 +18,7 @@ npm i @yobta/stores
 ### Key Concepts
 
 - [Basic tutorial](docs/basic-tutorial.md)
-- [Using with React](docs/using-with-react.md)
+- [Using with React](src/adapters/react/index.md)
 - [Store Plugins](docs/store-pligins.md)
 
 ### Stores
