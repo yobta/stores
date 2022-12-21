@@ -1,4 +1,4 @@
-&larr; [Home](../README.md)
+&larr; [Home](../../../README.md)
 
 # Validation Plugin
 
@@ -14,4 +14,4 @@ const counterStore = observableYobta(0, validationPluginYobta(validate))
 
 ## See Also
 
-- [Store Plugins](./store-pligins.md)
+- [Store Plugins](../index.md)

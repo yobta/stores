@@ -1,4 +1,4 @@
-&larr; [Home](../README.md)
+&larr; [Home](../../../README.md)
 
 # Local Storage Plugin
 
@@ -42,4 +42,4 @@ const store = mapYobta(
 
 ## See Also
 
-- [Store Plugins](./store-pligins.md)
+- [Store Plugins](../index.md)

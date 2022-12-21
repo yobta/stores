@@ -17,31 +17,30 @@ npm i @yobta/stores
 
 ### Key Concepts
 
-- [Basic tutorial](docs/basic-tutorial.md)
 - [Using with React](src/adapters/react/index.md)
-- [Store Plugins](docs/store-pligins.md)
+- [Store Plugins](src/plugins/index.md)
 
 ### Stores
 
-- [Observable Store](docs/yobta-store.md)
+- [Observable Store](src/stores/storeYobta/index.md)
 - Machine Store
-- [Map Store](docs/map-store.md)
+- [Map Store](src/stores/mapYobta/index.md)
 - Plain Object Store
 - Stack Store
 
 ### Plugins
 
-- [Broadcast Channel Plugin](docs/broadcast-channel-plugin.md)
-- [Lazy Plugin](docs/lazy-plugin.md)
-- [Local Storage Plugin](docs/local-storage-plugin.md)
-- [Session Storage Plugin](docs/session-storage-plugin.md)
-- [Validation Plugin](docs/validation-plugin.md)
+- [Broadcast Channel Plugin](src/plugins/broadcastChannelPluginYobta/index.md)
+- [Lazy Plugin](src/plugins/lazy-plugin/index.md)
+- [Local Storage Plugin](src/plugins/local-storage-plugin/index.md)
+- [Session Storage Plugin](src/plugins/session-storage-plugin/index.md)
+- [Validation Plugin](src/plugins/validation-plugin/index.md)
 
 ### Utilities
 
 - Codec Utility
 - Map Codec Utility
-- [PubSub Utility](docs/pub-sub-utility.md)
+- [PubSub Utility](src/util/pubSubYobta/index.md)
 
 ### Recipes
 

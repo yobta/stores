@@ -1,4 +1,4 @@
-&larr; [Home](../README.md)
+&larr; [Home](../../../README.md)
 
 # Map Store
 
@@ -52,7 +52,7 @@ mapStore.omit(['key'])
 
 Map state reqires a special ecoder when used with the plugins that serialize state.
 
-### With [LS](./local-storage-plugin.md) Plugin
+### With [LS](../../plugins/lazyPluginYobta/index.md) Plugin
 
 ```ts
 import { mapYobta, mapCodecYobta, localStoragePluginYobta } from '@yobta/stores'
@@ -66,7 +66,7 @@ const mapStore = mapYobta<State>(
 )
 ```
 
-### With [SS](./session-storage-plugin.md) Plugin
+### With [SS](../../plugins/sessionStoragePluginYobta/index.md) Plugin
 
 ```ts
 import {
@@ -84,7 +84,7 @@ const mapStore = mapYobta<State>(
 )
 ```
 
-### With [BC](./broadcast-channel-plugin.md) Plugin
+### With [BC](../../plugins/broadcastChannelPluginYobta/index.md) Plugin
 
 ```ts
 import {

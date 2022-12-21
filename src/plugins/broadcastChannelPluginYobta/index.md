@@ -1,4 +1,4 @@
-&larr; [Home](../README.md)
+&larr; [Home](../../../README.md)
 
 # Broadcast Channel Plugin
 
@@ -48,5 +48,5 @@ const store = mapYobta(
 
 ## See Also
 
-- [Local Storage Plugin](./local-storage-plugin.md)
-- [Store Plugins](./store-pligins.md)
+- [Local Storage Plugin](../localStoragePluginYobta/index.md)
+- [Store Plugins](../index.md)

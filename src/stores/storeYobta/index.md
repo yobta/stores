@@ -1,4 +1,4 @@
-&larr; [Home](../README.md)
+&larr; [Home](../../../README.md)
 
 # Yobta Store
 
@@ -66,4 +66,4 @@ unsubscribe()
 
 ## See Also
 
-- [Store Plugins](./store-pligins.md)
+- [Store Plugins](../../plugins/index.md)
