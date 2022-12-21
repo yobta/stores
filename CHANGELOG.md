@@ -10,6 +10,8 @@ Remove store init event
 Remove setter from store next method
 Map store becomes mutable
 Renamed `useObservable` hook to `useYobta`
+Renamed `encoderYobta` to `codecYobta`
+Renames `mapEncoderYobta` to `mapCodecYobta`
 
 Improvements:
 Add observable utility

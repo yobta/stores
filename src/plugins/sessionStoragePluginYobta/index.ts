@@ -1,4 +1,4 @@
-import { encoderYobta, YobtaEncoder } from '../../util/encoderYobta/index.js'
+import { codecYobta, YobtaCodec } from '../../util/codecYobta/index.js'
 import {
   YobtaStorePlugin,
   YOBTA_IDLE,
@@ -9,22 +9,22 @@ import {
 interface SessionStoragePluginFactory {
   <State>(props: {
     channel: string
-    encoder?: YobtaEncoder
+    codec?: YobtaCodec
   }): YobtaStorePlugin<State>
 }
 
 export const sessionStoragePluginYobta: SessionStoragePluginFactory =
-  ({ channel, encoder = encoderYobta }) =>
+  ({ channel, codec = codecYobta }) =>
   ({ addMiddleware }) => {
     let write = (state: any): any => {
-      let encodedMessage = encoder.encode(state)
+      let encodedMessage = codec.encode(state)
       sessionStorage.setItem(channel, encodedMessage)
       return state
     }
 
     addMiddleware(YOBTA_READY, state => {
       let item = sessionStorage.getItem(channel)
-      return encoder.decode(item, () => state)[0]
+      return codec.decode(item, () => state)[0]
     })
     addMiddleware(YOBTA_IDLE, write)
     addMiddleware(YOBTA_NEXT, write)

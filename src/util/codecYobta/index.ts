@@ -1,9 +1,9 @@
-export interface YobtaEncoder {
+export interface YobtaCodec {
   encode(item: any, ...overloads: any[]): string
   decode: (item: any, fallback: () => any) => [any, ...any[]]
 }
 
-export const encoderYobta: YobtaEncoder = {
+export const codecYobta: YobtaCodec = {
   encode(item, ...overloads) {
     return JSON.stringify([item, ...overloads])
   },

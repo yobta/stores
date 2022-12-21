@@ -1,4 +1,4 @@
-import { encoderYobta, YobtaEncoder } from '../../util/encoderYobta/index.js'
+import { codecYobta, YobtaCodec } from '../../util/codecYobta/index.js'
 import {
   YobtaStorePlugin,
   YOBTA_IDLE,
@@ -9,7 +9,7 @@ import {
 interface BroadcastChannelFactory {
   <State>(props: {
     channel: string
-    encoder?: YobtaEncoder
+    codec?: YobtaCodec
   }): YobtaStorePlugin<State>
 }
 
@@ -19,13 +19,13 @@ interface BroadcastChannelFactory {
  *
  * @param {Object} options - The options for the plugin.
  * @param {string} options.channel - The name of the channel to use for communication.
- * @param {YobtaEncoder} [options.encoder=encoderYobta] - The encoder to use for encoding and decoding
- * messages. Defaults to the `encoderYobta` provided in `util/encoderYobta/index.js`.
+ * @param {YobtaCodec} [options.codec=codecYobta] - The codec to use for encoding and decoding
+ * messages. Defaults to the `codecYobta` provided in `util/codecYobta/index.js`.
  *
  * @returns {YobtaStorePlugin} A Yobta store plugin that can be passed to the store factory when creating a store.
  */
 export const broadcastChannelPluginYobta: BroadcastChannelFactory =
-  ({ channel, encoder = encoderYobta }) =>
+  ({ channel, codec = codecYobta }) =>
   ({ addMiddleware, next, last }) => {
     let bc: BroadcastChannel | null
     let shouldMute: boolean
@@ -44,7 +44,7 @@ export const broadcastChannelPluginYobta: BroadcastChannelFactory =
 
     addMiddleware(YOBTA_READY, state => {
       open().onmessage = ({ data }) => {
-        let [message, ...overloads] = encoder.decode(data, last)
+        let [message, ...overloads] = codec.decode(data, last)
         shouldMute = true
         next(message, ...overloads)
       }
@@ -61,7 +61,7 @@ export const broadcastChannelPluginYobta: BroadcastChannelFactory =
       if (shouldMute) {
         shouldMute = false
       } else {
-        let encodedMessage = encoder.encode(state, ...overloads)
+        let encodedMessage = codec.encode(state, ...overloads)
         open().postMessage(encodedMessage)
         if (shouldClose) close()
       }

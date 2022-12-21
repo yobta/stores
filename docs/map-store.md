@@ -55,17 +55,13 @@ Map state reqires a special ecoder when used with the plugins that serialize sta
 ### With [LS](./local-storage-plugin.md) Plugin
 
 ```ts
-import {
-  mapYobta,
-  mapEncoderYobta,
-  localStoragePluginYobta,
-} from '@yobta/stores'
+import { mapYobta, mapCodecYobta, localStoragePluginYobta } from '@yobta/stores'
 
 const mapStore = mapYobta<State>(
   { key: 'value' },
   localStoragePluginYobta({
     channel: 'yobta',
-    encoder: mapEncoderYobta,
+    codec: mapCodecYobta,
   }),
 )
 ```
@@ -75,7 +71,7 @@ const mapStore = mapYobta<State>(
 ```ts
 import {
   mapYobta,
-  mapEncoderYobta,
+  mapCodecYobta,
   sessionStoragePluginYobta,
 } from '@yobta/stores'
 
@@ -83,7 +79,7 @@ const mapStore = mapYobta<State>(
   { key: 'value' },
   sessionStoragePluginYobta({
     channel: 'yobta',
-    encoder: mapEncoderYobta,
+    codec: mapCodecYobta,
   }),
 )
 ```
@@ -93,7 +89,7 @@ const mapStore = mapYobta<State>(
 ```ts
 import {
   mapYobta,
-  mapEncoderYobta,
+  mapCodecYobta,
   broadcastChannelPluginYobta,
 } from '@yobta/stores'
 
@@ -101,7 +97,7 @@ const mapStore = mapYobta<State>(
   { key: 'value' },
   broadcastChannelPluginYobta({
     channel: 'yobta',
-    encoder: mapEncoderYobta,
+    codec: mapCodecYobta,
   }),
 )
 ```

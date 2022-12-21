@@ -39,8 +39,8 @@ npm i @yobta/stores
 
 ### Utilities
 
-- Encoder Utility
-- Map Encoder Utility
+- Codec Utility
+- Map Codec Utility
 - [PubSub Utility](docs/pub-sub-utility.md)
 
 ### Recipes

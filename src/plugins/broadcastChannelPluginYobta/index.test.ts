@@ -22,8 +22,8 @@ vi.stubGlobal('BroadcastChannel', broadcastChannelMock)
 let encode = vi.fn()
 let decode = vi.fn()
 
-vi.mock('../../util/encoderYobta/index.js', () => ({
-  encoderYobta: {
+vi.mock('../../util/codecYobta/index.js', () => ({
+  codecYobta: {
     encode(state: any, ...overloads: any[]) {
       encode(state, ...overloads)
       return JSON.stringify([state, ...overloads])

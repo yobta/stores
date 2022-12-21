@@ -3,7 +3,7 @@ import {
   YOBTA_NEXT,
   YOBTA_READY,
 } from '../../stores/storeYobta/index.js'
-import { YobtaEncoder } from '../../util/encoderYobta/index.js'
+import { YobtaCodec } from '../../util/codecYobta/index.js'
 import { localStoragePluginYobta } from './index.js'
 
 let defaultItem = JSON.stringify(['stored yobta'])
@@ -39,8 +39,8 @@ let encode = vi.fn()
 let decode = vi.fn()
 let fallbackMock = vi.fn()
 
-vi.mock('../../util/encoderYobta/index.js', () => ({
-  encoderYobta: {
+vi.mock('../../util/codecYobta/index.js', () => ({
+  codecYobta: {
     encode(state: any, ...overloads: any[]) {
       let args = [state, ...overloads]
       encode(...args)
@@ -55,14 +55,14 @@ vi.mock('../../util/encoderYobta/index.js', () => ({
         return [fallback()]
       }
     },
-  } as YobtaEncoder,
+  } as YobtaCodec,
 }))
 
 beforeEach(() => {
   item = defaultItem
 })
 
-it('adds middleware', () => {
+it('adds middleware to store', () => {
   localStoragePluginYobta({ channel: 'test' })(params)
   expect(params.addMiddleware).toBeCalledTimes(3)
   expect(params.addMiddleware).toBeCalledWith(YOBTA_READY, expect.any(Function))
@@ -70,7 +70,7 @@ it('adds middleware', () => {
   expect(params.addMiddleware).toBeCalledWith(YOBTA_NEXT, expect.any(Function))
 })
 
-it('does not add liteners when created', () => {
+it('does not add listeners on initialization', () => {
   localStoragePluginYobta({ channel: 'test' })(params)
   expect(windowMock.addEventListener).not.toBeCalled()
   expect(windowMock.removeEventListener).not.toBeCalled()
@@ -78,7 +78,7 @@ it('does not add liteners when created', () => {
   expect(getItem).not.toBeCalled()
 })
 
-it('adds ls listener on ready', () => {
+it('adds listeners on YOBTA_READY event', () => {
   localStoragePluginYobta({ channel: 'test' })(params)
 
   params.addMiddleware.mock.calls[0][1]('ready')
@@ -87,7 +87,7 @@ it('adds ls listener on ready', () => {
   expect(windowMock.removeEventListener).not.toBeCalled()
 })
 
-it('decodes and returnes stored value on ready', () => {
+it('decodes stored value on YOBTA_READY event', () => {
   localStoragePluginYobta({ channel: 'test' })(params)
   let state = params.addMiddleware.mock.calls[0][1]('ready')
 
@@ -96,7 +96,7 @@ it('decodes and returnes stored value on ready', () => {
   expect(state).toBe('stored yobta')
 })
 
-it('returnes initial state on ready when there is no stored value', () => {
+it('returns initial state on YOBTA_READY event when no stored value', () => {
   item = null
   localStoragePluginYobta({ channel: 'test' })(params)
   let state = params.addMiddleware.mock.calls[0][1]('ready')
@@ -106,7 +106,7 @@ it('returnes initial state on ready when there is no stored value', () => {
   expect(decode).toHaveBeenCalledWith(null, expect.any(Function))
 })
 
-it('handles idle', () => {
+it('emoves listeners on YOBTA_IDLE event', () => {
   localStoragePluginYobta({ channel: 'test' })(params)
   let state = params.addMiddleware.mock.calls[1][1]('idle')
 
@@ -119,7 +119,7 @@ it('handles idle', () => {
   expect(state).toBe('idle')
 })
 
-it('handles next', () => {
+it('encodes and stores state on YOBTA_NEXT event', () => {
   localStoragePluginYobta({ channel: 'test' })(params)
   let state = params.addMiddleware.mock.calls[2][1]('next', 'overload')
 
@@ -131,7 +131,7 @@ it('handles next', () => {
   expect(state).toBe('next')
 })
 
-it('handles onMessage', () => {
+it('handles onMessage event', () => {
   item = null
   localStoragePluginYobta({ channel: 'test' })(params)
   params.addMiddleware.mock.calls[0][1]('ready')
@@ -150,7 +150,7 @@ it('handles onMessage', () => {
   expect(params.next).toBeCalledWith('yobta', 'overload')
 })
 
-it('ingnores onMessage when channel is wrong', () => {
+it('ignores onMessage event when channel is incorrect', () => {
   item = null
   localStoragePluginYobta({ channel: 'test' })(params)
   params.addMiddleware.mock.calls[0][1]('ready')

@@ -4,7 +4,7 @@ import './App.css'
 import {
   broadcastChannelPluginYobta,
   localStoragePluginYobta,
-  mapEncoderYobta,
+  mapCodecYobta,
   mapYobta,
   observableYobta,
   sessionStoragePluginYobta,
@@ -13,7 +13,7 @@ import { useObservable } from '../../src/adapters/react'
 
 const mapStore = mapYobta<{ a?: number }>(
   {},
-  localStoragePluginYobta({ channel: 'counter', encoder: mapEncoderYobta }),
+  localStoragePluginYobta({ channel: 'counter', codec: mapCodecYobta }),
 )
 
 const stringStore = observableYobta(

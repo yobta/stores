@@ -181,15 +181,15 @@
       "limit": "79 B"
     },
     {
-      "name": "encoderYobta",
+      "name": "codecYobta",
       "path": "./lib/index.js",
-      "import": "{ encoderYobta }",
+      "import": "{ codecYobta }",
       "limit": "89 B"
     },
     {
-      "name": "mapEncoderYobta",
+      "name": "mapCodecYobta",
       "path": "./lib/index.js",
-      "import": "{ mapEncoderYobta }",
+      "import": "{ mapCodecYobta }",
       "limit": "122 B"
     },
     {

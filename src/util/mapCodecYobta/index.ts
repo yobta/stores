@@ -1,7 +1,7 @@
 import { YobtaAnyMap } from '../../stores/mapYobta/index.js'
-import { YobtaEncoder } from '../encoderYobta/index.js'
+import { YobtaCodec } from '../codecYobta/index.js'
 
-export interface YobtaMapEncoder extends YobtaEncoder {
+export interface YobtaMapCodec extends YobtaCodec {
   encode(item: YobtaAnyMap, ...overloads: any[]): string
   decode: <Result extends YobtaAnyMap>(
     item: string,
@@ -9,7 +9,7 @@ export interface YobtaMapEncoder extends YobtaEncoder {
   ) => [Result, ...any[]]
 }
 
-export const mapEncoderYobta: YobtaMapEncoder = {
+export const mapCodecYobta: YobtaMapCodec = {
   encode(item, ...overloads) {
     let entries = item.size ? [...item.entries()] : []
     return JSON.stringify([entries, ...overloads])

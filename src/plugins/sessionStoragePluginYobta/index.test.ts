@@ -3,7 +3,7 @@ import {
   YOBTA_NEXT,
   YOBTA_READY,
 } from '../../stores/storeYobta/index.js'
-import { YobtaEncoder } from '../../util/encoderYobta/index.js'
+import { YobtaCodec } from '../../util/codecYobta/index.js'
 import { sessionStoragePluginYobta } from './index.js'
 
 let defaultItem = JSON.stringify(['stored yobta'])
@@ -21,8 +21,8 @@ vi.stubGlobal('sessionStorage', {
 let encode = vi.fn()
 let decode = vi.fn()
 
-vi.mock('../../util/encoderYobta/index.js', () => ({
-  encoderYobta: {
+vi.mock('../../util/codecYobta/index.js', () => ({
+  codecYobta: {
     encode(state, ...overloads) {
       encode(state)
       return JSON.stringify([state, ...overloads])
@@ -35,7 +35,7 @@ vi.mock('../../util/encoderYobta/index.js', () => ({
         return [fallback()]
       }
     },
-  } as YobtaEncoder,
+  } as YobtaCodec,
 }))
 
 const params = {
