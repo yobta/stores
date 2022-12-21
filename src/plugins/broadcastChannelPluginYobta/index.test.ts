@@ -42,7 +42,7 @@ const params = {
   last: vi.fn(),
 }
 
-it('adds middleware', () => {
+it('it should add three middlewares', () => {
   broadcastChannelPluginYobta({ channel: 'test' })(params)
   expect(params.addMiddleware).toBeCalledTimes(3)
   expect(params.addMiddleware).toBeCalledWith(YOBTA_READY, expect.any(Function))
@@ -50,47 +50,39 @@ it('adds middleware', () => {
   expect(params.addMiddleware).toBeCalledWith(YOBTA_NEXT, expect.any(Function))
 })
 
-it('returns state when subscribes', () => {
+it('it should return state when subscribing', () => {
   broadcastChannelPluginYobta({ channel: 'test' })(params)
   expect(params.addMiddleware.mock.calls[0][1]('ready')).toBe('ready')
   expect(params.addMiddleware.mock.calls[1][1]('idle')).toBe('idle')
   expect(params.addMiddleware.mock.calls[2][1]('next')).toBe('next')
 })
 
-it('subscribes on ready', () => {
+it('it should subscribe on ready state', () => {
   broadcastChannelPluginYobta({ channel: 'test' })(params)
-
   params.addMiddleware.mock.calls[0][1](params.initialState)
   expect(onmessage).toBeCalledTimes(1)
 })
 
-it('handles next', () => {
+it('it should handle next state', () => {
   broadcastChannelPluginYobta({ channel: 'test' })(params)
-
   params.addMiddleware.mock.calls[2][1]('next', 'overload yobta')
-
   expect(encode).toBeCalledTimes(1)
   expect(encode).toBeCalledWith('next', 'overload yobta')
-
   expect(postMessage).toBeCalledTimes(1)
   expect(postMessage).toBeCalledWith(JSON.stringify(['next', 'overload yobta']))
 })
 
-it('mutes postMessage for onmessage, and then unmutes', () => {
+it('it should mute and unmute postMessage for onmessage', () => {
   broadcastChannelPluginYobta({ channel: 'test' })(params)
-
   params.addMiddleware.mock.calls[0][1]('ready')
   onmessage.mock.calls[0][0]({
     data: JSON.stringify(['next', 'overload yobta']),
   })
-
   expect(params.next).toBeCalledTimes(1)
   expect(params.next).toBeCalledWith('next', 'overload yobta')
   expect(postMessage).not.toHaveBeenCalled()
-
   params.addMiddleware.mock.calls[2][1]('next')
   expect(postMessage).not.toHaveBeenCalled()
-
   params.addMiddleware.mock.calls[2][1]('next')
   expect(postMessage).toHaveBeenCalledOnce()
 })

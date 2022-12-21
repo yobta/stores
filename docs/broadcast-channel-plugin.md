@@ -2,18 +2,20 @@
 
 # Broadcast Channel Plugin
 
-The plugin helps share NEXT events between crosstab store instances.
+A plugin for [@yobta/stores](https://www.npmjs.com/package/@yobta/stores) that allows them synchronize their states with other instances of the same store using the browser's [BroadcastChannel API](https://developer.mozilla.org/en-US/docs/Web/API/BroadcastChannel).
 
-The plugin ignores INIT and READY events by design which may result in an inconsistent initial state of the crosstab stores.
+It is important to note that this plugin does not persist state, meaning that stores may have different initial states.
 
-The plugin does not store the state between page reloads. If you need a persistent crosstab store, choose the Local Storage Plugin or implement your plugin.
+Updates are only received by the plugin when the store has subscribers.
 
-###### example
+## Usage
 
 ```ts
-const counterStore = observableYobta(
-  0,
-  broadcastChannelPluginYobta({ channel: 'yobta' }),
+import { storeYobta, broadcastChannelPluginYobta } from '@yobta/stores'
+
+const store = storeYobta(
+  { count: 0 },
+  broadcastChannelPluginYobta({ channel: 'my-store' }),
 )
 ```
 

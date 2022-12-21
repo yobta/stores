@@ -13,6 +13,17 @@ interface BroadcastChannelFactory {
   }): YobtaStorePlugin<State>
 }
 
+/**
+ * A plugin for @yobta/stores that allows them synchronize their states with other instances of the same store
+ * using the browser's BroadcastChannel API.
+ *
+ * @param {Object} options - The options for the plugin.
+ * @param {string} options.channel - The name of the channel to use for communication.
+ * @param {YobtaEncoder} [options.encoder=encoderYobta] - The encoder to use for encoding and decoding
+ * messages. Defaults to the `encoderYobta` provided in `util/encoderYobta/index.js`.
+ *
+ * @returns {YobtaStorePlugin} A Yobta store plugin that can be passed to the store factory when creating a store.
+ */
 export const broadcastChannelPluginYobta: BroadcastChannelFactory =
   ({ channel, encoder = encoderYobta }) =>
   ({ addMiddleware, next, last }) => {
