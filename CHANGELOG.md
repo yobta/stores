@@ -17,6 +17,7 @@ Improvements:
 Add observable utility
 Change store to compose middlewares
 Update documentation
+Add diffMapYobta utility
 
 ## 0.0.36
 
