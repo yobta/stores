@@ -2,7 +2,7 @@
 
 # Local Storage Plugin
 
-This module contains a factory function for creating a YobtaStorePlugin that synchronizes the state with localStorage. The plugin instance should be passed as an argument to a store factory and added after the initial state. Synchronization only works when a store has active observers. A disconnected store can write updates to localStorage, but it cannot receive them. When a first observer is added, the store tries to read the state from localStorage and decode it with the decoder. If localStorage is empty, then the store keeps its current state.
+This module contains a factory function for creating a YobtaStorePlugin that synchronizes the state with localStorage. The plugin instance should be passed as an argument to a store factory and added after the initial state. Synchronization only works when a store has active observers. A disconnected store can write updates to localStorage, but it cannot receive them. When a first observer is added, the store tries to read the state from localStorage and decode it with the codec. If localStorage is empty, then the store keeps its current state.
 
 ## Usage
 
@@ -35,7 +35,7 @@ const store = mapYobta(
   { key: 'value' },
   localStoragePluginYobta({
     channel: 'my-map-store-yobta',
-    ecoder: mapCodecYobta,
+    codec: mapCodecYobta,
   }),
 )
 ```

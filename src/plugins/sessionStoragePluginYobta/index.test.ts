@@ -49,7 +49,7 @@ beforeEach(() => {
   item = defaultItem
 })
 
-it('adds middleware', () => {
+it('Tests middleware addition for sessionStoragePluginYobta', () => {
   sessionStoragePluginYobta({ channel: 'test' })(params)
   expect(params.addMiddleware).toBeCalledTimes(3)
   expect(params.addMiddleware).toBeCalledWith(YOBTA_READY, expect.any(Function))
@@ -57,7 +57,7 @@ it('adds middleware', () => {
   expect(params.addMiddleware).toBeCalledWith(YOBTA_NEXT, expect.any(Function))
 })
 
-it('has no side effects when created', () => {
+it('Tests that sessionStoragePluginYobta has no side effects when created', () => {
   sessionStoragePluginYobta({ channel: 'test' })(params)
   expect(getItem).not.toBeCalled()
   expect(setItem).not.toBeCalled()
@@ -65,7 +65,7 @@ it('has no side effects when created', () => {
   expect(decode).not.toBeCalled()
 })
 
-it('recovers state from sessions storage', () => {
+it('Tests recovery of state from session storage in sessionStoragePluginYobta', () => {
   sessionStoragePluginYobta({ channel: 'test' })(params)
   let state = params.addMiddleware.mock.calls[0][1]('ready')
   expect(state).toEqual('stored yobta')
@@ -79,7 +79,7 @@ it('recovers state from sessions storage', () => {
   expect(setItem).not.toBeCalled()
 })
 
-it('defaults to initial state when no session is stored', () => {
+it('Tests default to initial state when no session is stored in sessionStoragePluginYobta', () => {
   item = null
   sessionStoragePluginYobta({ channel: 'test' })(params)
   let state = params.addMiddleware.mock.calls[0][1]('ready')
@@ -89,7 +89,7 @@ it('defaults to initial state when no session is stored', () => {
   expect(setItem).not.toBeCalled()
 })
 
-it('handles idle', () => {
+it('Tests handling of idle state in sessionStoragePluginYobta', () => {
   sessionStoragePluginYobta({ channel: 'test' })(params)
   let state = params.addMiddleware.mock.calls[1][1]('idle')
 
@@ -104,7 +104,7 @@ it('handles idle', () => {
   expect(state).toEqual('idle')
 })
 
-it('handles next', () => {
+it('Tests handling of next state in sessionStoragePluginYobta', () => {
   sessionStoragePluginYobta({ channel: 'test' })(params)
   let state = params.addMiddleware.mock.calls[1][1]('next')
 

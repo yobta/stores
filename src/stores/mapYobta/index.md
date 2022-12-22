@@ -50,7 +50,7 @@ mapStore.omit(['key'])
 
 ## Persistency
 
-Map state reqires a special ecoder when used with the plugins that serialize state.
+Map state reqires a special codec when used with the plugins that serialize state.
 
 ### With [LS](../../plugins/lazyPluginYobta/index.md) Plugin
 

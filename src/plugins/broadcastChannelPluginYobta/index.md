@@ -41,7 +41,7 @@ const store = mapYobta(
   { key: 'value' },
   broadcastChannelPluginYobta({
     channel: 'my-map-store-yobta',
-    ecoder: mapCodecYobta,
+    codec: mapCodecYobta,
   }),
 )
 ```
