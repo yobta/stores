@@ -23,7 +23,7 @@ npm i @yobta/stores
 ### Stores
 
 - [Observable Store](src/stores/storeYobta/index.md)
-- Machine Store
+- [Machine Store](src/stores/machineYobta/index.md)
 - [Map Store](src/stores/mapYobta/index.md)
 - Plain Object Store
 - Stack Store
