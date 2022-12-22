@@ -29,9 +29,9 @@ const machine = machineYobta(transitions)('idle')
 
 The `machine` object returned by `machineYobta` has the following methods:
 
-- `last` — Returns the current state of the machine.
-- `next` — Sets the next state of the machine. If the provided state is not a valid transition from the current state, the state is not changed.
-- `observe` — Registers an observer function to be called whenever the state of the machine changes. The observer function will be called with the new state as its argument.
+- `last`: Returns the current state of the machine.
+- `next`: Sets the next state of the machine. If the provided state is not a valid transition from the current state, the state is not changed.
+- `observe`: Registers an observer function to be called whenever the state of the machine changes. The observer function will be called with the new state as its argument.
 
 ## Example
 

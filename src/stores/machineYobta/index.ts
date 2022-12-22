@@ -32,7 +32,7 @@ type Transitions<T> = {
 interface MachineFactory {
   <T extends Transitions<T>>(transitions: T): (
     initialState: keyof T,
-    ...listeners: YobtaStorePlugin<keyof T>[]
+    ...plugins: YobtaStorePlugin<keyof T>[]
   ) => {
     last(): keyof T
     next: YobtaStateSetter<keyof T>
@@ -47,7 +47,7 @@ interface MachineFactory {
  * @template T - A type that represents the states of the machine and the transitions between them.
  * @param {T} transitions - An object that defines the transitions between states. The keys of the object represent the starting states, and the values are sets of possible ending states.
  * @param {keyof T} initialState - The initial state of the machine.
- * @param {...YobtaStorePlugin<keyof T>} listeners - Any number of listeners to be registered with the store.
+ * @param {...YobtaStorePlugin<keyof T>} plugins - Any number of store plugins to enhace the store.
  * @returns {Object} An object with the following methods:
  *  - last: Returns the current state of the machine.
  *  - next: Sets the next state of the machine. If the provided state is not a valid transition from the current state, the state is not changed.
@@ -55,8 +55,8 @@ interface MachineFactory {
  */
 export const machineYobta: MachineFactory =
   transitions =>
-  (initialState, ...listeners) => {
-    let store = storeYobta(initialState, ...listeners)
+  (initialState, ...plugins) => {
+    let store = storeYobta(initialState, ...plugins)
     return {
       ...store,
       next(state, ...overload) {

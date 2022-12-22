@@ -7,13 +7,14 @@ it('has correct default state', () => {
 
 it('assigns values correctly', () => {
   let store = mapYobta({ key1: 'yobta', key2: 'yobta' })
-  store.assign({ key2: 'yobta 3' })
+  let changes = store.assign({ key2: 'yobta 3' })
   expect(store.last()).toEqual(
     new Map([
       ['key1', 'yobta'],
       ['key2', 'yobta 3'],
     ]),
   )
+  expect(changes).toEqual(new Map([['key2', 'yobta 3']]))
 })
 
 it('does not mutate state when assigning values', () => {
@@ -33,7 +34,7 @@ it('emits diff entries and passes additional arguments when assigning values', (
       ['key', 'yobta 1'],
       ['key2', 'yobta'],
     ]),
-    [['key', 'yobta 1']],
+    new Map([['key', 'yobta 1']]),
     1,
     2,
     3,
@@ -46,8 +47,9 @@ it('omits values correctly', () => {
     key1: 'yobta',
     key2: 'yobta',
   })
-  store.omit(['key2'])
+  let changes = store.omit(['key2'])
   expect(store.last()).toEqual(new Map([['key1', 'yobta']]))
+  expect(changes).toEqual(new Set(['key2']))
 })
 
 it('does not mutate state when omitting values', () => {
@@ -65,6 +67,12 @@ it('emits diff entries and passes additional arguments when omitting values', ()
   let changes = vi.fn()
   let unobserve = store.observe(changes)
   store.omit(['key'], 1, 2, 3)
-  expect(changes).toBeCalledWith(new Map([['key2', 'yobta']]), ['key'], 1, 2, 3)
+  expect(changes).toBeCalledWith(
+    new Map([['key2', 'yobta']]),
+    new Set(['key']),
+    1,
+    2,
+    3,
+  )
   unobserve()
 })

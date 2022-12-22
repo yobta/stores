@@ -3,6 +3,7 @@ import {
   storeYobta,
   YobtaStorePlugin,
   OptionalKey,
+  diffMapYobta,
 } from '../../index.js'
 
 // #region Types
@@ -17,68 +18,82 @@ export type YobtaMapState<PlainState extends YobtaAnyPlainObject> = Map<
   keyof PlainState,
   PlainState[keyof PlainState]
 >
+
+type YobtaMapAssignChanges<PlainState extends YobtaAnyPlainObject> =
+  YobtaMapState<Partial<PlainState>>
+type YobtaMapOmitChanges<PlainState extends YobtaAnyPlainObject> = Set<
+  keyof PlainState
+>
+
+export type YobtaMapChanges<PlainState extends YobtaAnyPlainObject> =
+  | YobtaMapAssignChanges<PlainState>
+  | YobtaMapOmitChanges<PlainState>
+
 export interface YobtaMapObserver<PlainState extends YobtaAnyPlainObject> {
   (
     state: YobtaMapState<PlainState>,
-    changes: YobtaEntries<PlainState>,
+    changes: YobtaMapChanges<PlainState>,
     ...overloads: any[]
   ): void
 }
 
+/**
+ * A factory function that creates a store object that stores state as a Map.
+ * @param {YobtaAnyPlainObject} initialState - The plain object to be coverted to a js Map object and used as initial state.
+ * @param {YobtaStorePlugin<YobtaMapState<PlainState>>[]} [plugins] - Optional plugins to enhance the store.
+ * @returns {Omit<YobtaStore<YobtaMapState<PlainState>>, 'next'> & {
+ *   assign(patch: Partial<PlainState>, ...overloads: any[]): YobtaMapAssignChanges<PlainState>
+ *   observe(observer: YobtaMapObserver<PlainState>): VoidFunction
+ *   omit(keys: OptionalKey<PlainState>[], ...overloads: any[]): YobtaMapOmitChanges<PlainState>
+ * }} - A YobtaStore object that stores state as a Map.
+ */
 interface YobtaMapFactory {
   <PlainState extends YobtaAnyPlainObject>(
     initialState: PlainState,
     ...plugins: YobtaStorePlugin<YobtaMapState<PlainState>>[]
   ): Omit<YobtaStore<YobtaMapState<PlainState>>, 'next'> & {
-    assign(patch: Partial<PlainState>, ...overloads: any[]): void
+    assign(
+      patch: Partial<PlainState>,
+      ...overloads: any[]
+    ): YobtaMapAssignChanges<PlainState>
     observe(observer: YobtaMapObserver<PlainState>): VoidFunction
-    omit(keys: OptionalKey<PlainState>[], ...overloads: any[]): void
+    omit(
+      keys: OptionalKey<PlainState>[],
+      ...overloads: any[]
+    ): YobtaMapOmitChanges<PlainState>
   }
 }
 // #endregion
 
-/**
- * Creates a new Map store using a plain object as the initial state.
- * @param {object} plainState - The initial state of the store.
- * @param {...YobtaPlugin} plugins - Plugins to apply to the store.
- * @returns {YobtaMap} The created Yobta store object.
- */
 export const mapYobta: YobtaMapFactory = (plainState, ...plugins) => {
   let initialState: YobtaAnyMap = new Map(Object.entries(plainState))
   let { next, ...store } = storeYobta(initialState, ...plugins)
-
   return {
     ...store,
-    /**
-     * Assigns new values to the store.
-     * @param {object} patch - The values to assign to the store.
-     * @param {...any} overloads - Additional arguments to pass to plugins.
-     */
     assign(patch, ...overloads) {
       let state = new Map(store.last())
-      let changes = Object.entries(patch).filter(
-        ([key, value]) => value !== state.get(key),
+      let changes: YobtaMapAssignChanges<YobtaAnyPlainObject> = diffMapYobta(
+        new Map(Object.entries(patch)),
+        state,
       )
-      if (changes.length) {
-        changes.forEach(([key, value]) => state.set(key, value))
+      if (changes.size) {
+        changes.forEach((value, key) => state.set(key, value))
         next(state, changes, ...overloads)
       }
+      return changes
     },
-    /**
-     * Removes keys from the store.
-     * @param {string[]} keys - The keys to remove from the store.
-     * @param {...any} overloads - Additional arguments to pass to plugins.
-     */
     omit(keys, ...overloads) {
       let state = new Map(store.last())
-      let changes = keys.reduce<YobtaMapKey[]>((acc, key) => {
-        let result = state.delete(key)
-        if (result) acc.push(key)
-        return acc
-      }, [])
-      if (changes.length) {
-        next(state, changes, ...overloads)
-      }
+      let changes = keys.reduce<YobtaMapOmitChanges<YobtaAnyPlainObject>>(
+        (acc, key) => {
+          let result = state.delete(key)
+          if (result) acc.add(key)
+          return acc
+        },
+        new Set(),
+      )
+      if (changes.size) next(state, changes, ...overloads)
+      return changes
     },
   }
 }

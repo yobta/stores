@@ -11,6 +11,7 @@ export * from './plugins/sessionStoragePluginYobta/index.js'
 export * from './plugins/validationPluginYobta/index.js'
 
 export * from './util/codecYobta/index.js'
+export * from './util/diffMapYobta/index.js'
 export * from './util/mapCodecYobta/index.js'
 export * from './util/observableYobta/index.js'
 export * from './util/pubSubYobta/index.js'
