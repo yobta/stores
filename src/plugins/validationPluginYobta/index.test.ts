@@ -39,3 +39,15 @@ it('validates store events', () => {
   expect(params.addMiddleware.mock.calls[2][1]('next')).toBe('next')
   expect(mock).toHaveBeenCalledWith('next')
 })
+
+it('falls back to initial state if validation fails', () => {
+  validationPluginYobta(validate)(params)
+
+  mock.mockImplementation(() => {
+    throw new Error()
+  })
+
+  expect(params.addMiddleware.mock.calls[0][1]('ready')).toBe('yobta')
+  expect(params.addMiddleware.mock.calls[1][1]('idle')).toBe('yobta')
+  expect(params.addMiddleware.mock.calls[2][1]('next')).toBe('yobta')
+})
