@@ -1,4 +1,9 @@
-import { YobtaStore, storeYobta, YobtaStorePlugin } from '../../index.js'
+import {
+  storeYobta,
+  YobtaStorePlugin,
+  diffObjectYobta,
+  YobtaStore,
+} from '../../index.js'
 
 // #region Types
 type AnyPlainObject = Record<string | number | symbol, any>
@@ -13,17 +18,31 @@ export type OptionalKey<PlainObject extends AnyPlainObject> = Exclude<
   undefined
 >
 
-interface PlainObjectStore<State extends AnyPlainObject>
-  extends YobtaStore<State> {
-  assign(patch: Partial<State>): void
-  omit(...keys: OptionalKey<State>[]): OptionalKey<State>[]
+type YobtaPlainObjectAssignChanges<State extends AnyPlainObject> =
+  Partial<State>
+type YobtaPlainObjectOmitChanges<State extends AnyPlainObject> =
+  OptionalKey<State>[]
+
+export type YobtaPlainObjectChanges<State extends AnyPlainObject> =
+  | YobtaPlainObjectAssignChanges<State>
+  | YobtaPlainObjectOmitChanges<State>
+export interface YobtaPlainObjectObserver<State extends AnyPlainObject> {
+  (
+    state: State,
+    changes: YobtaPlainObjectChanges<State>,
+    ...overloads: any[]
+  ): void
 }
 
 interface PlainObjectFactory {
   <State extends AnyPlainObject>(
     initialState: State,
     ...listeners: YobtaStorePlugin<State>[]
-  ): PlainObjectStore<State>
+  ): Omit<YobtaStore<State>, 'next'> & {
+    assign(patch: Partial<State>, ...overloads: any[]): Partial<State>
+    observe(observer: YobtaPlainObjectObserver<State>): VoidFunction
+    omit(keys: OptionalKey<State>[]): OptionalKey<State>[]
+  }
 }
 // #endregion
 
@@ -33,27 +52,27 @@ export const plainObjectYobta: PlainObjectFactory = <
   initialState: State,
   ...listeners: YobtaStorePlugin<State>[]
 ) => {
-  let store = storeYobta(initialState, ...listeners)
+  let { next, last, observe } = storeYobta(initialState, ...listeners)
 
   return {
-    ...store,
-    assign(patch) {
-      store.next({ ...store.last(), ...patch })
-    },
-    omit(...keys) {
-      let keysSet = new Set(keys)
-      let result: OptionalKey<State>[] = []
-      let last = store.last()
-      let next = { ...last }
-      for (let key in last) {
-        // @ts-ignore
-        if (keysSet.has(key)) {
-          delete next[key]
-          result.push(key as unknown as OptionalKey<State>)
-        }
+    assign(patch, ...overloads) {
+      let diff = diffObjectYobta(patch, last())
+      if (Object.keys(diff).length) {
+        next({ ...last(), ...diff }, diff, ...overloads)
       }
-      store.next(next)
-      return result
+      return diff
+    },
+    last,
+    observe,
+    omit(keys, ...overloads) {
+      let state = { ...last() }
+      let changes = keys.filter(key => {
+        let result = key in state
+        if (result) delete state[key]
+        return result
+      })
+      if (changes.length) next(state, changes, ...overloads)
+      return changes
     },
   }
 }

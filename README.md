@@ -15,26 +15,26 @@ npm i @yobta/stores
 
 ## Documentation
 
-### Key Concepts
-
-- [Using with React](src/adapters/react/index.md)
-- [Store Plugins](src/plugins/index.md)
-
 ### Stores
 
 - [Observable](src/stores/storeYobta/index.md)
 - [Machine](src/stores/machineYobta/index.md)
 - [Map](src/stores/mapYobta/index.md)
-- Plain Object
+- [Plain Object](src/stores/plainObjectYobta/index.md)
 - Stack
 
 ### Plugins
 
+- [About Plugins](src/plugins/index.md)
 - [Broadcast Channel](src/plugins/broadcastChannelPluginYobta/index.md)
 - [Lazy](src/plugins/lazyPluginYobta/index.md)
 - [Local Storage](src/plugins/localStoragePluginYobta/index.md)
 - [Session Storage](src/plugins/sessionStoragePluginYobta/index.md)
 - [Validation](src/plugins/validationPluginYobta/index.md)
+
+### Adapters
+
+- [React](src/adapters/react/index.md)
 
 ### Utilities
 
