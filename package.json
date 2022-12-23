@@ -199,6 +199,12 @@
       "limit": "89 B"
     },
     {
+      "name": "diffObjectYobta",
+      "path": "./lib/index.js",
+      "import": "{ diffObjectYobta }",
+      "limit": "89 B"
+    },
+    {
       "name": "mapCodecYobta",
       "path": "./lib/index.js",
       "import": "{ mapCodecYobta }",

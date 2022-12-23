@@ -19,6 +19,7 @@ Change store to compose middlewares
 Update documentation
 Add diffMapYobta utility
 Add compose utility
+Add diff object utility
 
 ## 0.0.36
 
