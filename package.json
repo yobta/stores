@@ -187,6 +187,12 @@
       "limit": "89 B"
     },
     {
+      "name": "composeYobta",
+      "path": "./lib/index.js",
+      "import": "{ composeYobta }",
+      "limit": "89 B"
+    },
+    {
       "name": "diffMapYobta",
       "path": "./lib/index.js",
       "import": "{ diffMapYobta }",

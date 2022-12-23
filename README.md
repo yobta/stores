@@ -22,25 +22,26 @@ npm i @yobta/stores
 
 ### Stores
 
-- [Observable Store](src/stores/storeYobta/index.md)
-- [Machine Store](src/stores/machineYobta/index.md)
-- [Map Store](src/stores/mapYobta/index.md)
-- Plain Object Store
-- Stack Store
+- [Observable](src/stores/storeYobta/index.md)
+- [Machine](src/stores/machineYobta/index.md)
+- [Map](src/stores/mapYobta/index.md)
+- Plain Object
+- Stack
 
 ### Plugins
 
-- [Broadcast Channel Plugin](src/plugins/broadcastChannelPluginYobta/index.md)
-- [Lazy Plugin](src/plugins/lazy-plugin/index.md)
-- [Local Storage Plugin](src/plugins/local-storage-plugin/index.md)
-- [Session Storage Plugin](src/plugins/session-storage-plugin/index.md)
-- [Validation Plugin](src/plugins/validation-plugin/index.md)
+- [Broadcast Channel](src/plugins/broadcastChannelPluginYobta/index.md)
+- [Lazy](src/plugins/lazy-plugin/index.md)
+- [Local Storage](src/plugins/local-storage-plugin/index.md)
+- [Session Storage](src/plugins/session-storage-plugin/index.md)
+- [Validation](src/plugins/validation-plugin/index.md)
 
 ### Utilities
 
-- Codec Utility
-- Map Codec Utility
-- [PubSub Utility](src/util/pubSubYobta/index.md)
+- Codec
+- [Compose](src/util/composeYobta/index.md)
+- Map Codec
+- [PubSub](src/util/pubSubYobta/index.md)
 
 ### Recipes
 

@@ -18,6 +18,7 @@ Add observable utility
 Change store to compose middlewares
 Update documentation
 Add diffMapYobta utility
+Add compose utility
 
 ## 0.0.36
 
