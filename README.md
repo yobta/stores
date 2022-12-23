@@ -31,10 +31,10 @@ npm i @yobta/stores
 ### Plugins
 
 - [Broadcast Channel](src/plugins/broadcastChannelPluginYobta/index.md)
-- [Lazy](src/plugins/lazy-plugin/index.md)
-- [Local Storage](src/plugins/local-storage-plugin/index.md)
-- [Session Storage](src/plugins/session-storage-plugin/index.md)
-- [Validation](src/plugins/validation-plugin/index.md)
+- [Lazy](src/plugins/lazyPluginYobta/index.md)
+- [Local Storage](src/plugins/localStoragePluginYobta/index.md)
+- [Session Storage](src/plugins/sessionStoragePluginYobta/index.md)
+- [Validation](src/plugins/validationPluginYobta/index.md)
 
 ### Utilities
 
