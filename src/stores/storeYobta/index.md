@@ -28,29 +28,27 @@ To create a Yobta Store, you can use the `storeYobta` function. This function ta
 let store = storeYobta(1)
 ```
 
-## Updating the Store's State
+## Accessing and Updating the Store's State
 
-To update the store's state, you can use the `next` method. This method takes in a new value, and updates the store with it. Here's an example of updating the store's state from `1` to `2`:
+To access and update the state of a store, use the `last` and `next` methods.
 
-```ts
-store.next(2)
-```
+The `last` method retrieves the current state of the store. The `next` method updates the store's state with a new value.
 
-## Reading the Store's State
-
-The state of a store can be accessed using the `last` method, which returns the current state of the store. Here is an example of how to use the `last` method to read the state of a store:
+Here is an example of how to use these methods to both read and update the state of a store:
 
 ```ts
 const counter = storeYobta(0)
 
-// get the current state of the store
-const state = counter.last()
+export const increment = () => {
+  // Get the current state of the store
+  const currentState = counter.last()
 
-// increment the state by 1
-const newState = state + 1
+  // Add 1 to the current state to create a new state
+  const newState = currentState + 1
 
-// update the store's state with the new value
-counter.next(newState)
+  // Update the store's state with the new value
+  counter.next(newState)
+}
 ```
 
 ## Observing the Store's State
