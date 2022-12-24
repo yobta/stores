@@ -1,4 +1,4 @@
-# @yobta/stores - `machineYobta`
+# Machine Store
 
 `machineYobta` is a factory function that creates a state machine with a given set of transitions. The state machine can be used to track the current state of a process, and to set the next state based on the current state and a set of predefined transitions.
 
