@@ -46,6 +46,19 @@ interface PlainObjectFactory {
 }
 // #endregion
 
+/**
+ * Creates a new Yobta store for plain objects.
+ *
+ * @template State - The type of the state object being managed by the store.
+ * @param {State} initialState - The initial state of the store.
+ * @param {YobtaStorePlugin<State>[]} listeners - An optional list of plugins to apply to the store.
+ * @returns {
+ *   assign(patch: Partial<State>, ...overloads: any[]): Partial<State>;
+ *   last(): State;
+ *   observe(observer: YobtaPlainObjectObserver<State>): VoidFunction;
+ *   omit(keys: OptionalKey<State>[]): OptionalKey<State>[];
+ * } - The created Yobta store.
+ */
 export const plainObjectYobta: PlainObjectFactory = <
   State extends AnyPlainObject,
 >(
