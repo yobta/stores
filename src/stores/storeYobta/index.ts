@@ -2,6 +2,7 @@ import {
   observableYobta,
   YobtaObserver,
 } from '../../util/observableYobta/index.js'
+import { createTransition } from './transition.js'
 
 // #region Types
 export const YOBTA_READY = 'ready'
@@ -59,17 +60,6 @@ export const storeYobta: YobtaStoreFactory = <State>(
   initialState: State,
   ...plugins: YobtaStorePlugin<State>[]
 ) => {
-  let middlewares: Record<YobtaStoreEvent, YobtaStoreMiddleware<State>[]> = {
-    ready: [],
-    idle: [],
-    next: [],
-  }
-  let addMiddleware = (
-    type: YobtaStoreEvent,
-    middleware: YobtaStoreMiddleware<State>,
-  ): void => {
-    middlewares[type].push(middleware)
-  }
   let observable = observableYobta<State>()
   let state: State = initialState
   let next: YobtaStateSetter<State> = (
@@ -80,18 +70,12 @@ export const storeYobta: YobtaStoreFactory = <State>(
     observable.next(state, ...overloads)
   }
   let last: YobtaStateGetter<State> = () => state
-  plugins.forEach(plugin => {
-    plugin({ addMiddleware, initialState, next, last })
+  let transition = createTransition<State>({
+    initialState,
+    last,
+    next,
+    plugins,
   })
-  let transition = (
-    type: YobtaStoreEvent,
-    nextState: any,
-    ...overloads: any[]
-  ): State =>
-    middlewares[type].reduceRight<State>(
-      (acc, right) => right(acc, ...overloads),
-      nextState,
-    )
   return {
     last,
     next,
