@@ -10,6 +10,15 @@ interface YobtaObservableFactory {
   <Item>(): YobtaObservable<Item>
 }
 
+/**
+ * Creates a new YobtaObservable instance.
+ * @returns {{
+ *   next: (item: Item, ...overloads: any[]) => void,
+ *   observe: (observer: YobtaObserver<Item>) => VoidFunction,
+ *   size: number
+ * }} A new YobtaObservable instance.
+ * @template Item
+ */
 export const observableYobta: YobtaObservableFactory = () => {
   let observers = new Set<YobtaObserver<any>>()
   return {
