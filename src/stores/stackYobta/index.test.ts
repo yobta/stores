@@ -1,82 +1,94 @@
 import { stackYobta } from './index.js'
 
-it('is empty by default', () => {
-  let store = stackYobta()
+let stack: ReturnType<typeof stackYobta>
 
-  expect(store.size()).toBe(0)
-  expect(store.last()).toBeUndefined()
+beforeEach(() => {
+  stack = stackYobta(['item1', 'item2'])
 })
 
-it('takes set as initial state', () => {
-  let store = stackYobta(new Set([2, 1]))
-
-  expect(store.size()).toBe(2)
-  expect(store.last()).toBe(2)
+it('initial state', () => {
+  expect(stack.last()).toBe('item1')
+  expect(stack.size()).toBe(2)
 })
 
-it('takes array as initial state', () => {
-  let store = stackYobta([2, 1])
-
-  expect(store.size()).toBe(2)
-  expect(store.last()).toBe(2)
+it('adds new item, returns true', () => {
+  expect(stack.add('item3')).toBe(true)
+  expect(stack.last()).toBe('item3')
+  expect(stack.size()).toBe(3)
 })
 
-it('adds', () => {
-  let store = stackYobta()
-
-  store.add(1)
-
-  expect(store.size()).toBe(1)
-  expect(store.last()).toBe(1)
-
-  store.add(2)
-
-  expect(store.size()).toBe(2)
-  expect(store.last()).toBe(2)
+it('adds nothing when item exists, returns false', () => {
+  expect(stack.add('item2')).toBe(false)
+  expect(stack.last()).toBe('item1')
+  expect(stack.size()).toBe(2)
 })
 
-it('is unique', () => {
-  let store = stackYobta()
-
-  store.add(1)
-  store.add(1)
-
-  expect(store.size()).toBe(1)
-  expect(store.last()).toBe(1)
+it('updates observers when adds', () => {
+  let observer = vi.fn()
+  stack.observe(observer)
+  stack.add('item3')
+  expect(observer).toHaveBeenCalledWith(new Set(['item1', 'item2', 'item3']))
 })
 
-it('removes', () => {
-  let store = stackYobta([2, 1])
-
-  let result = store.remove(1)
-
-  expect(result).toBe(true)
-  expect(store.size()).toBe(1)
-  expect(store.last()).toBe(2)
-
-  result = store.remove(1)
-
-  expect(result).toBe(false)
-  expect(store.size()).toBe(1)
-  expect(store.last()).toBe(2)
-
-  result = store.remove(2)
-
-  expect(result).toBe(true)
-  expect(store.size()).toBe(0)
-  expect(store.last()).toBeUndefined()
+it('no updates when adding the existing items', () => {
+  let observer = vi.fn()
+  stack.observe(observer)
+  stack.add('item2')
+  expect(observer).not.toHaveBeenCalled()
 })
 
-it('adds middleware', () => {
-  let plugin1 = vi.fn()
-  let plugin2 = vi.fn()
-  let initialState = new Set([2, 1])
-  stackYobta(initialState, plugin1, plugin2)
+it('sends overloads to observers when adds', () => {
+  let observer = vi.fn()
+  stack.observe(observer)
+  stack.add('item3', 'overload1', 'overload2')
+  expect(observer).toHaveBeenCalledWith(
+    new Set(['item1', 'item2', 'item3']),
+    'overload1',
+    'overload2',
+  )
+})
 
-  expect(plugin1).toBeCalledWith({
-    addMiddleware: expect.any(Function),
-    initialState,
-    last: expect.any(Function),
-    next: expect.any(Function),
-  })
+it('reads last item', () => {
+  expect(stack.last()).toBe('item1')
+})
+
+it('removes item, returns true', () => {
+  expect(stack.remove('item2')).toBe(true)
+  expect(stack.last()).toBe('item1')
+  expect(stack.size()).toBe(1)
+})
+
+it('removes nothing if item does not exist, returns false', () => {
+  expect(stack.remove('item3')).toBe(false)
+  expect(stack.last()).toBe('item1')
+  expect(stack.size()).toBe(2)
+})
+
+it('updates observers when removes', () => {
+  let observer = vi.fn()
+  stack.observe(observer)
+  stack.remove('item2')
+  expect(observer).toHaveBeenCalledWith(new Set(['item1']))
+})
+
+it('no updates when removing items that no exist', () => {
+  let observer = vi.fn()
+  stack.observe(observer)
+  stack.remove('item3')
+  expect(observer).not.toHaveBeenCalled()
+})
+
+it('sends overloads to observers when removes', () => {
+  let observer = vi.fn()
+  stack.observe(observer)
+  stack.remove('item2', 'overload1', 'overload2')
+  expect(observer).toHaveBeenCalledWith(
+    new Set(['item1']),
+    'overload1',
+    'overload2',
+  )
+})
+
+it('allows to check size of the store', () => {
+  expect(stack.size()).toBe(2)
 })
