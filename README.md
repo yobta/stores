@@ -38,9 +38,12 @@ npm i @yobta/stores
 
 ### Utilities
 
-- Codec
+- [Codec](src/util/codecYobta/index.md)
 - [Compose](src/util/composeYobta/index.md)
-- Map Codec
+- [Map Diff](src/util/diffMapYobta/index.md)
+- [Object Diff](src/util/diffObjectYobta/index.md)
+- [Map Codec](src/util/mapCodecYobta/index.md)
+- [Observable]
 - [PubSub](src/util/pubSubYobta/index.md)
 
 ### Recipes

@@ -9,6 +9,18 @@ export interface YobtaMapCodec extends YobtaCodec {
   ) => [Result, ...any[]]
 }
 
+/**
+ * An object that implements the YobtaMapCodec interface, providing functions for
+ * encoding and decoding maps.
+ *
+ * @typedef {Object} YobtaMapCodec
+ * @property {function} encode - Encodes a map into a string.
+ * @property {function} decode - Decodes a string into a map.
+ *
+ * @example
+ * const encodedMap = mapCodecYobta.encode(new Map([[1, 'a'], [2, 'b']]))
+ * const [decodedMap, otherValues] = mapCodecYobta.decode(encodedMap, () => new Map())
+ */
 export const mapCodecYobta: YobtaMapCodec = {
   encode(item, ...overloads) {
     let entries = item.size ? [...item.entries()] : []
