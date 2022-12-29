@@ -50,30 +50,17 @@ interface YobtaStoreFactory {
 // #endregion
 
 /**
- * Factory function that creates an observable store.
+ * Creates a new observable store.
  *
- * @template State - The type of state that the store will hold.
- * @param {State} initialState - The initial state of the store.
- * @param {...YobtaStorePlugin<State>} plugins - Optional plugins that can modify the store's behavior.
- * @returns {
- *   {
- *     last: YobtaStateGetter<State>;
- *     next: YobtaStateSetter<State>;
- *     observe: (observer: YobtaObserver<State>) => VoidFunction;
- *     on: (event: YobtaStoreEvent, handler: (state: State, context: null, ...overloads: any[]) => void, ...overloads: any[]) => VoidFunction;
- *   }
- *   |
- *   {
- *     last: YobtaStateGetter<State>;
- *     next: YobtaStateSetter<State>;
- *     observe: (observer: YobtaObserver<State>, context: Context) => VoidFunction;
- *     on: (event: YobtaStoreEvent, handler: (state: State, context: Context, ...overloads: any[]) => void, ...overloads: any[]) => VoidFunction;
- *   }
- * } - An object with the following properties:
- *   - last: A function that returns the current state of the store.
- *   - next: A function that updates the state of the store.
- *   - observe: A function that allows an observer to subscribe to state changes in the store.
- *   - on: A function that allows a handler to be registered for a specific store event.
+ * @template State The type of the state object in the store.
+ * @template Context The type of the context object that is passed to event handlers.
+ * @param {State} initialState The initial state of the store.
+ * @param {...YobtaStorePlugin<State>[]} plugins An optional list of plugins that can modify the store.
+ * @returns {Object} An object containing functions for interacting with the store.
+ * @property {YobtaStateGetter<State>} last A function that returns the current state of the store.
+ * @property {YobtaStateSetter<State>} next A function that updates the state of the store.
+ * @property {(observer: YobtaObserver<State>, context?: Context) => VoidFunction} observe A function that registers an observer to be notified of state changes.
+ * @property {(event: YobtaStoreEvent, handler: (state: State, context: Context, ...overloads: any[]) => void, ...overloads: any[]) => VoidFunction} on A function that registers an event handler to be called when a particular event is published by the store.
  */
 export const storeYobta: YobtaStoreFactory = <State>(
   initialState: State,
@@ -82,11 +69,13 @@ export const storeYobta: YobtaStoreFactory = <State>(
   let observable = observableYobta<State>()
   let state: State = initialState
   let context: unknown | null = null
+  let locked: boolean
   let { publish, subscribe } = pubSubYobta<Record<YobtaStoreEvent, State>>()
   let next: YobtaStateSetter<State> = (
     nextState: State,
     ...overloads
   ): void => {
+    if (locked) throw new Error("Can't update state while updating state.")
     state = transition(YOBTA_NEXT, nextState, ...overloads)
     observable.next(state, ...overloads)
   }
@@ -98,18 +87,20 @@ export const storeYobta: YobtaStoreFactory = <State>(
     plugins,
   })
   let transition = (
-    action: YobtaStoreEvent,
+    topic: YobtaStoreEvent,
     updatedState: State,
     ...overloads: any[]
   ): State => {
-    let nextState = middleware[action](updatedState, ...overloads)
-    publish(action, nextState, context, ...overloads)
+    locked = true
+    let nextState = middleware[topic](updatedState, ...overloads)
+    publish(topic, nextState, context, ...overloads)
+    locked = false
     return nextState
   }
   return {
     last,
     next,
-    observe: (observer: YobtaObserver<State>, nextContext = null as any) => {
+    observe: (observer: YobtaObserver<State>, nextContext) => {
       if (observable.size === 0) {
         context = nextContext
         state = transition(YOBTA_READY, state)
