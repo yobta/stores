@@ -20,6 +20,7 @@ Update documentation
 Add diffMapYobta utility
 Add compose utility
 Add diff object utility
+Add on => off to all stores
 
 ## 0.0.36
 

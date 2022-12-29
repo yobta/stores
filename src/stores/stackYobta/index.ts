@@ -1,14 +1,27 @@
 import { YobtaObserver } from '../../util/observableYobta/index.js'
-import { storeYobta, YobtaStorePlugin } from '../storeYobta/index.js'
+import {
+  storeYobta,
+  YobtaStoreEvent,
+  YobtaStorePlugin,
+} from '../storeYobta/index.js'
 
 interface YobtaStackFactory {
-  <Item>(
+  <Item, Context = null>(
     initialState: Set<Item> | Item[],
     ...plugins: YobtaStorePlugin<Set<Item>>[]
   ): {
     add(member: Item, ...overloads: any[]): boolean
     last(): Item
-    observe(observer: YobtaObserver<Set<Item>>): VoidFunction
+    observe(observer: YobtaObserver<Set<Item>>, context?: Context): VoidFunction
+    on(
+      event: YobtaStoreEvent,
+      handler: (
+        state: Set<Item>,
+        context: Context,
+        ...overloads: any[]
+      ) => void,
+      ...overloads: any[]
+    ): VoidFunction
     remove(member: Item, ...overloads: any[]): boolean
     size(): number
   }
@@ -38,11 +51,14 @@ interface YobtaStackFactory {
  *
  * The `size` method returns the number of items in the stack.
  */
-export const stackYobta: YobtaStackFactory = <Item>(
+export const stackYobta: YobtaStackFactory = <Item, Context>(
   initialState?: Set<Item> | Item[],
   ...plugins: YobtaStorePlugin<Set<Item>>[]
 ) => {
-  let { last, observe, next } = storeYobta(new Set(initialState), ...plugins)
+  let { last, observe, next, on } = storeYobta<Set<Item>, Context>(
+    new Set(initialState),
+    ...plugins,
+  )
   return {
     add(item: Item, ...overloads: any[]) {
       let state = last()
@@ -58,6 +74,7 @@ export const stackYobta: YobtaStackFactory = <Item>(
       return first
     },
     observe,
+    on,
     remove(item: Item, ...overloads: any[]) {
       let state = last()
       let result = state.delete(item)

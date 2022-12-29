@@ -3,42 +3,37 @@ import {
   YobtaStorePlugin,
   YobtaStateSetter,
   YobtaObserver,
+  YobtaStoreEvent,
 } from '../../index.js'
 
 // #region Types
-
-/**
- * A type that represents the transitions between states of a state machine.
- * The keys of the object represent the starting states, and the values are sets of possible ending states.
- *
- * @template T - A type that represents the states of the machine.
- */
-type Transitions<T> = {
-  [K in keyof T]: Set<keyof Omit<T, K>>
+type TransitionMap<States> = {
+  [K in keyof States]: Set<keyof Omit<States, K>>
 }
 
-/**
- * A factory function that creates a state machine.
- *
- * @template T - A type that represents the states of the machine and the transitions between them.
- * @param {T} transitions - An object that defines the transitions between states.
- * @param {keyof T} initialState - The initial state of the machine.
- * @param {...YobtaStorePlugin<keyof T>} listeners - Any number of listeners to be registered with the store.
- * @returns {Object} An object with the following methods:
- *  - last: Returns the current state of the machine.
- *  - next: Sets the next state of the machine. If the provided state is not a valid transition from the current state, the state is not changed.
- *  - observe: Registers an observer function to be called whenever the state of the machine changes.
- */
 interface MachineFactory {
-  <T extends Transitions<T>>(transitions: T): (
-    initialState: keyof T,
-    ...plugins: YobtaStorePlugin<keyof T>[]
+  <States extends TransitionMap<States>, Context = null>(transitions: States): (
+    initialState: keyof States,
+    ...plugins: YobtaStorePlugin<keyof States>[]
   ) => {
-    last(): keyof T
-    next: YobtaStateSetter<keyof T>
-    observe(observer: YobtaObserver<keyof T>): VoidFunction
+    last(): keyof States
+    next: YobtaStateSetter<keyof States>
+    observe(
+      observer: YobtaObserver<keyof States>,
+      context?: Context,
+    ): VoidFunction
+    on(
+      event: YobtaStoreEvent,
+      handler: (
+        state: keyof States,
+        context: Context,
+        ...overloads: any[]
+      ) => void,
+      ...overloads: any[]
+    ): VoidFunction
   }
 }
+
 // #endregion
 
 /**
@@ -54,15 +49,22 @@ interface MachineFactory {
  *  - observe: Registers an observer function to be called whenever the state of the machine changes.
  */
 export const machineYobta: MachineFactory =
-  transitions =>
-  (initialState, ...plugins) => {
-    let store = storeYobta(initialState, ...plugins)
+  <States extends TransitionMap<States>, Context>(transitions: States) =>
+  (
+    initialState: keyof States,
+    ...plugins: YobtaStorePlugin<keyof States>[]
+  ) => {
+    let { last, next, on, observe } = storeYobta<keyof States, Context>(
+      initialState,
+      ...plugins,
+    )
     return {
-      ...store,
-      next(state, ...overload) {
-        let availableTranstions = transitions[store.last()]
-        // @ts-ignore
-        if (availableTranstions.has(state)) store.next(state, ...overload)
+      last,
+      next(state: keyof States, ...overloads) {
+        let availableTranstions: Set<keyof States> = transitions[last()]
+        if (availableTranstions.has(state)) next(state, ...overloads)
       },
+      observe,
+      on,
     }
   }

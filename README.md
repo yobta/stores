@@ -21,7 +21,7 @@ npm i @yobta/stores
 - [Machine](src/stores/machineYobta/index.md)
 - [Map](src/stores/mapYobta/index.md)
 - [Plain Object](src/stores/plainObjectYobta/index.md)
-- Stack
+- [Stack](src/stores/stackYobta/index.md)
 
 ### Plugins
 
@@ -43,7 +43,7 @@ npm i @yobta/stores
 - [Map Diff](src/util/diffMapYobta/index.md)
 - [Object Diff](src/util/diffObjectYobta/index.md)
 - [Map Codec](src/util/mapCodecYobta/index.md)
-- [Observable]
+- [Observable](src/util/observableYobta/ind)
 - [PubSub](src/util/pubSubYobta/index.md)
 
 ### Recipes
@@ -53,6 +53,6 @@ npm i @yobta/stores
 
 Kudos:
 
-- [`Andrey Sitnik`] — nanostores and the boilerplate
+- [`Andrey Sitnik`] — nanostores and the package boilerplate
 
 [`andrey sitnik`]: https://sitnik.ru

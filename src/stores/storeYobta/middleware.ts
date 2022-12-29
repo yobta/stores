@@ -4,16 +4,18 @@ import {
   YobtaStoreEvent,
   YobtaStoreMiddleware,
   YobtaStorePlugin,
+  YOBTA_IDLE,
+  YOBTA_NEXT,
+  YOBTA_READY,
 } from './index.js'
 
-interface TransitionFactory {
-  <State>(config: Props<State>): (
-    action: YobtaStoreEvent,
-    state: State,
-    ...overloads: any[]
-  ) => State
+interface MiddlewareFactory {
+  <State>(config: Props<State>): {
+    ready: YobtaStoreMiddleware<State>
+    idle: YobtaStoreMiddleware<State>
+    next: YobtaStoreMiddleware<State>
+  }
 }
-
 type Props<State> = {
   initialState: State
   next: YobtaStateSetter<State>
@@ -21,18 +23,17 @@ type Props<State> = {
   plugins: YobtaStorePlugin<State>[]
 }
 
-export const createTransition: TransitionFactory = <State>({
+export const composeMiddleware: MiddlewareFactory = <State>({
   initialState,
   last,
   next,
   plugins,
 }: Props<State>) => {
   let middlewares: Record<YobtaStoreEvent, YobtaStoreMiddleware<State>[]> = {
-    ready: [],
-    idle: [],
-    next: [],
+    [YOBTA_READY]: [],
+    [YOBTA_IDLE]: [],
+    [YOBTA_NEXT]: [],
   }
-
   let mount = (plugin: YobtaStorePlugin<State>): void => {
     plugin({
       addMiddleware: (
@@ -46,19 +47,12 @@ export const createTransition: TransitionFactory = <State>({
       last,
     })
   }
-
   plugins.forEach(mount)
-
-  let transitions = {
+  return {
     ready: composeYobta(
       ...(middlewares.ready as [YobtaStoreMiddleware<State>]),
     ),
     idle: composeYobta(...(middlewares.idle as [YobtaStoreMiddleware<State>])),
     next: composeYobta(...(middlewares.next as [YobtaStoreMiddleware<State>])),
-  }
-
-  return (action, state: State, ...overloads) => {
-    let transition = transitions[action]
-    return transition(state, ...overloads)
   }
 }

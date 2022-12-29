@@ -51,7 +51,7 @@ it('Sets default state on store creation', () => {
 })
 
 it('Updates store state when not observed', () => {
-  let store = storeYobta(1, pluginMock)
+  let store = storeYobta(1)
   store.next(2)
   expect(store.last()).toBe(2)
 })

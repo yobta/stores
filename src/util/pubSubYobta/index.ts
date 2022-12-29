@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
 
-export type YobtaPubsubSubscriber<R> = (data: R) => void
+export type YobtaPubsubSubscriber<R> = (data: R, ...overloads: any[]) => void
 type BaseTopics = Record<string, unknown>
 
 interface PubSubFactory {
@@ -12,6 +12,7 @@ interface PubSubFactory {
     publish: <Topic extends keyof Topics>(
       topic: Topic,
       data: Topics[Topic],
+      ...overloads: any[]
     ) => void
   }
 }
@@ -19,16 +20,16 @@ interface PubSubFactory {
 export const pubSubYobta: PubSubFactory = () => {
   let subscribers: Record<string, Set<YobtaPubsubSubscriber<any>>> = {}
   return {
-    publish(topic: any, data: any) {
+    publish(topic: any, data, ...overloads) {
       let current = subscribers[topic]
       if (current) {
         current.forEach(notify => {
-          notify(data)
+          notify(data, ...overloads)
         })
       }
     },
-    subscribe(topic: any, subscriber: YobtaPubsubSubscriber<any>) {
-      let current = subscribers[topic] || new Set<YobtaPubsubSubscriber<any>>()
+    subscribe(topic: any, subscriber) {
+      let current = subscribers[topic] || new Set()
       current.add(subscriber)
       subscribers[topic] = current
       return () => {

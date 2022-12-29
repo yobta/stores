@@ -2,19 +2,18 @@ import {
   storeYobta,
   YobtaStorePlugin,
   diffObjectYobta,
-  YobtaStore,
+  YobtaStoreEvent,
+  YobtaStateGetter,
 } from '../../index.js'
 
 // #region Types
 type AnyPlainObject = Record<string | number | symbol, any>
 // TODO: https://github.com/microsoft/TypeScript/issues/35103
 // type OptionalKey<S extends AnyMap> = keyof? S
-export type OptionalKey<PlainObject extends AnyPlainObject> = Exclude<
+export type OptionalKey<State extends AnyPlainObject> = Exclude<
   {
-    [K in keyof PlainObject]: PlainObject extends Record<K, PlainObject[K]>
-      ? never
-      : K
-  }[keyof PlainObject],
+    [K in keyof State]: State extends Record<K, State[K]> ? never : K
+  }[keyof State],
   undefined
 >
 
@@ -35,15 +34,25 @@ export interface YobtaPlainObjectObserver<State extends AnyPlainObject> {
 }
 
 interface PlainObjectFactory {
-  <State extends AnyPlainObject>(
+  <State extends AnyPlainObject, Context = null>(
     initialState: State,
     ...listeners: YobtaStorePlugin<State>[]
-  ): Omit<YobtaStore<State>, 'next'> & {
+  ): {
     assign(patch: Partial<State>, ...overloads: any[]): Partial<State>
-    observe(observer: YobtaPlainObjectObserver<State>): VoidFunction
-    omit(keys: OptionalKey<State>[]): OptionalKey<State>[]
+    last: YobtaStateGetter<State>
+    observe(
+      observer: YobtaPlainObjectObserver<State>,
+      context?: Context,
+    ): VoidFunction
+    omit(keys: OptionalKey<State>[], ...overloads: any[]): OptionalKey<State>[]
+    on(
+      event: YobtaStoreEvent,
+      handler: (state: State, context: Context, ...overloads: any[]) => void,
+      ...overloads: any[]
+    ): VoidFunction
   }
 }
+
 // #endregion
 
 /**
@@ -61,11 +70,15 @@ interface PlainObjectFactory {
  */
 export const plainObjectYobta: PlainObjectFactory = <
   State extends AnyPlainObject,
+  Context,
 >(
   initialState: State,
   ...listeners: YobtaStorePlugin<State>[]
 ) => {
-  let { next, last, observe } = storeYobta(initialState, ...listeners)
+  let { next, last, observe, on } = storeYobta<State, Context>(
+    initialState,
+    ...listeners,
+  )
 
   return {
     assign(patch, ...overloads) {
@@ -77,7 +90,7 @@ export const plainObjectYobta: PlainObjectFactory = <
     },
     last,
     observe,
-    omit(keys, ...overloads) {
+    omit(keys: OptionalKey<State>[], ...overloads) {
       let state = { ...last() }
       let changes = keys.filter(key => {
         let result = key in state
@@ -87,5 +100,6 @@ export const plainObjectYobta: PlainObjectFactory = <
       if (changes.length) next(state, changes, ...overloads)
       return changes
     },
+    on,
   }
 }
