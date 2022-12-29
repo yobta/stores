@@ -6,20 +6,16 @@ import {
 } from '../storeYobta/index.js'
 
 interface YobtaStackFactory {
-  <Item, Context = null>(
+  <Item>(
     initialState: Set<Item> | Item[],
     ...plugins: YobtaStorePlugin<Set<Item>>[]
   ): {
     add(member: Item, ...overloads: any[]): boolean
     last(): Item
-    observe(observer: YobtaObserver<Set<Item>>, context?: Context): VoidFunction
+    observe(observer: YobtaObserver<Set<Item>>): VoidFunction
     on(
       event: YobtaStoreEvent,
-      handler: (
-        state: Set<Item>,
-        context: Context,
-        ...overloads: any[]
-      ) => void,
+      handler: (state: Set<Item>, ...overloads: any[]) => void,
       ...overloads: any[]
     ): VoidFunction
     remove(member: Item, ...overloads: any[]): boolean
@@ -51,11 +47,11 @@ interface YobtaStackFactory {
  *
  * The `size` method returns the number of items in the stack.
  */
-export const stackYobta: YobtaStackFactory = <Item, Context>(
+export const stackYobta: YobtaStackFactory = <Item>(
   initialState?: Set<Item> | Item[],
   ...plugins: YobtaStorePlugin<Set<Item>>[]
 ) => {
-  let { last, observe, next, on } = storeYobta<Set<Item>, Context>(
+  let { last, observe, next, on } = storeYobta<Set<Item>>(
     new Set(initialState),
     ...plugins,
   )

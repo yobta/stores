@@ -12,28 +12,20 @@ type TransitionMap<States> = {
 }
 
 interface MachineFactory {
-  <States extends TransitionMap<States>, Context = null>(transitions: States): (
+  <States extends TransitionMap<States>>(transitions: States): (
     initialState: keyof States,
     ...plugins: YobtaStorePlugin<keyof States>[]
   ) => {
     last(): keyof States
     next: YobtaStateSetter<keyof States>
-    observe(
-      observer: YobtaObserver<keyof States>,
-      context?: Context,
-    ): VoidFunction
+    observe(observer: YobtaObserver<keyof States>): VoidFunction
     on(
       event: YobtaStoreEvent,
-      handler: (
-        state: keyof States,
-        context: Context,
-        ...overloads: any[]
-      ) => void,
+      handler: (state: keyof States, ...overloads: any[]) => void,
       ...overloads: any[]
     ): VoidFunction
   }
 }
-
 // #endregion
 
 /**
@@ -49,12 +41,12 @@ interface MachineFactory {
  *  - observe: Registers an observer function to be called whenever the state of the machine changes.
  */
 export const machineYobta: MachineFactory =
-  <States extends TransitionMap<States>, Context>(transitions: States) =>
+  <States extends TransitionMap<States>>(transitions: States) =>
   (
     initialState: keyof States,
     ...plugins: YobtaStorePlugin<keyof States>[]
   ) => {
-    let { last, next, on, observe } = storeYobta<keyof States, Context>(
+    let { last, next, on, observe } = storeYobta<keyof States>(
       initialState,
       ...plugins,
     )

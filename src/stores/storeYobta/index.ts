@@ -33,16 +33,13 @@ export type YobtaStateSetter<State> = (
 ) => void
 
 interface YobtaStoreFactory {
-  <State, Context = null>(
-    initialState: State,
-    ...plugins: YobtaStorePlugin<State>[]
-  ): {
+  <State>(initialState: State, ...plugins: YobtaStorePlugin<State>[]): {
     last: YobtaStateGetter<State>
     next: YobtaStateSetter<State>
-    observe(observer: YobtaObserver<State>, context?: Context): VoidFunction
+    observe(observer: YobtaObserver<State>): VoidFunction
     on(
       event: YobtaStoreEvent,
-      handler: (state: State, context: Context, ...overloads: any[]) => void,
+      handler: (state: State, ...overloads: any[]) => void,
       ...overloads: any[]
     ): VoidFunction
   }
@@ -53,14 +50,13 @@ interface YobtaStoreFactory {
  * Creates a new observable store.
  *
  * @template State The type of the state object in the store.
- * @template Context The type of the context object that is passed to event handlers.
  * @param {State} initialState The initial state of the store.
  * @param {...YobtaStorePlugin<State>[]} plugins An optional list of plugins that can modify the store.
  * @returns {Object} An object containing functions for interacting with the store.
  * @property {YobtaStateGetter<State>} last A function that returns the current state of the store.
  * @property {YobtaStateSetter<State>} next A function that updates the state of the store.
- * @property {(observer: YobtaObserver<State>, context?: Context) => VoidFunction} observe A function that registers an observer to be notified of state changes.
- * @property {(event: YobtaStoreEvent, handler: (state: State, context: Context, ...overloads: any[]) => void, ...overloads: any[]) => VoidFunction} on A function that registers an event handler to be called when a particular event is published by the store.
+ * @property {(observer: YobtaObserver<State>) => VoidFunction} observe A function that registers an observer to be notified of state changes.
+ * @property {(event: YobtaStoreEvent, handler: (state: State, ...overloads: any[]) => void, ...overloads: any[]) => VoidFunction} on A function that registers an event handler to be called when a particular event is published by the store.
  */
 export const storeYobta: YobtaStoreFactory = <State>(
   initialState: State,
@@ -68,7 +64,6 @@ export const storeYobta: YobtaStoreFactory = <State>(
 ) => {
   let observable = observableYobta<State>()
   let state: State = initialState
-  let context: unknown | null = null
   let locked: boolean
   let { publish, subscribe } = pubSubYobta<Record<YobtaStoreEvent, State>>()
   let next: YobtaStateSetter<State> = (
@@ -93,16 +88,15 @@ export const storeYobta: YobtaStoreFactory = <State>(
   ): State => {
     locked = true
     let nextState = middleware[topic](updatedState, ...overloads)
-    publish(topic, nextState, context, ...overloads)
+    publish(topic, nextState, ...overloads)
     locked = false
     return nextState
   }
   return {
     last,
     next,
-    observe: (observer: YobtaObserver<State>, nextContext) => {
+    observe: (observer: YobtaObserver<State>) => {
       if (observable.size === 0) {
-        context = nextContext
         state = transition(YOBTA_READY, state)
       }
       let unsubscribe = observable.observe(observer)
@@ -110,7 +104,6 @@ export const storeYobta: YobtaStoreFactory = <State>(
         unsubscribe()
         if (observable.size === 0) {
           state = transition(YOBTA_IDLE, state)
-          context = null
         }
       }
     },

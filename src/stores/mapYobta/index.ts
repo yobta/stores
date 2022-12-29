@@ -37,7 +37,7 @@ export interface YobtaMapObserver<PlainState extends YobtaAnyPlainObject> {
   ): void
 }
 interface YobtaMapFactory {
-  <PlainState extends YobtaAnyPlainObject, Context = null>(
+  <PlainState extends YobtaAnyPlainObject>(
     initialState: PlainState,
     ...plugins: YobtaStorePlugin<YobtaMapState<PlainState>>[]
   ): {
@@ -46,21 +46,14 @@ interface YobtaMapFactory {
       ...overloads: any[]
     ): YobtaMapAssignChanges<PlainState>
     last: YobtaStateGetter<YobtaMapState<PlainState>>
-    observe(
-      observer: YobtaMapObserver<PlainState>,
-      context?: Context,
-    ): VoidFunction
+    observe(observer: YobtaMapObserver<PlainState>): VoidFunction
     omit(
       keys: OptionalKey<PlainState>[],
       ...overloads: any[]
     ): YobtaMapOmitChanges<PlainState>
     on(
       event: YobtaStoreEvent,
-      handler: (
-        state: YobtaMapState<PlainState>,
-        context: Context,
-        ...overloads: any[]
-      ) => void,
+      handler: (state: YobtaMapState<PlainState>, ...overloads: any[]) => void,
       ...overloads: any[]
     ): VoidFunction
   }
@@ -69,7 +62,6 @@ interface YobtaMapFactory {
 
 export const mapYobta: YobtaMapFactory = <
   PlainState extends YobtaAnyPlainObject,
-  Context,
 >(
   plainState: PlainState,
   ...plugins: any[]
@@ -77,10 +69,10 @@ export const mapYobta: YobtaMapFactory = <
   let initialState: YobtaMapState<PlainState> = new Map(
     Object.entries(plainState),
   )
-  let { next, last, observe, on } = storeYobta<
-    YobtaMapState<PlainState>,
-    Context
-  >(initialState, ...plugins)
+  let { next, last, observe, on } = storeYobta<YobtaMapState<PlainState>>(
+    initialState,
+    ...plugins,
+  )
   return {
     assign(patch, ...overloads) {
       let state = new Map(last())

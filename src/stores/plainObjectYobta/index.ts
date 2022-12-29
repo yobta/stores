@@ -34,20 +34,17 @@ export interface YobtaPlainObjectObserver<State extends AnyPlainObject> {
 }
 
 interface PlainObjectFactory {
-  <State extends AnyPlainObject, Context = null>(
+  <State extends AnyPlainObject>(
     initialState: State,
     ...listeners: YobtaStorePlugin<State>[]
   ): {
     assign(patch: Partial<State>, ...overloads: any[]): Partial<State>
     last: YobtaStateGetter<State>
-    observe(
-      observer: YobtaPlainObjectObserver<State>,
-      context?: Context,
-    ): VoidFunction
+    observe(observer: YobtaPlainObjectObserver<State>): VoidFunction
     omit(keys: OptionalKey<State>[], ...overloads: any[]): OptionalKey<State>[]
     on(
       event: YobtaStoreEvent,
-      handler: (state: State, context: Context, ...overloads: any[]) => void,
+      handler: (state: State, ...overloads: any[]) => void,
       ...overloads: any[]
     ): VoidFunction
   }
@@ -70,12 +67,11 @@ interface PlainObjectFactory {
  */
 export const plainObjectYobta: PlainObjectFactory = <
   State extends AnyPlainObject,
-  Context,
 >(
   initialState: State,
   ...listeners: YobtaStorePlugin<State>[]
 ) => {
-  let { next, last, observe, on } = storeYobta<State, Context>(
+  let { next, last, observe, on } = storeYobta<State>(
     initialState,
     ...listeners,
   )

@@ -114,40 +114,12 @@ const store = storeYobta(0)
 
 const unsubscribe = store.on('next', nextState => {
   console.log(`Next state is ${nextState}`, `Last state is ${store.last()}`)
-
   store.next(2) // will throw an error
+  fetchNewNumber().then(store.next) // will not throw an error
 })
 
 // Later if you need to:
 unsubscribe()
-```
-
-## Context
-
-The `context` data can be added to stores when adding observers. The store will send the context to the subscribers. The store updates the context only when the first observer is added, and when the last observer leaves the store, the context is updated to `null`. If the `observe` method does not have a context, then the store sends `null` to subscribers.
-
-The context is useful when you need to add side effects to your stores. In TypeScript, you need to explicitly type the context.
-
-In the following example, we will create a store that holds a news item:
-
-```ts
-type NewsItem = {
-  title: string
-  description: string
-}
-
-type Context = {
-  id: number
-}
-
-const store = storeYobta<NewsItem | null, Context>(null)
-
-store.on('ready', (_next, context) => {
-  // Note that you can update the store value as follows because the fetching works asynchronously
-  fetchNewsItem<NewsItem>(context.id).then(store.next)
-})
-
-store.observe(console.log, { id: 1 })
 ```
 
 ## Overloads
