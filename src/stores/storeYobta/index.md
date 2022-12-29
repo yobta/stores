@@ -2,7 +2,7 @@
 
 # Yobta Store
 
-`storeYobta` is a factory function that creates an observable store, which serves as a base store for all other stores in the `@yobta/stores` package. An observable store is a simple data structure that allows you to store a value and subscribe to changes to that value. The `storeYobta` store is designed to be easy to use and extend with plugins that add middleware to state transitions.
+`storeYobta` is a factory function that creates an observable store. An observable store is a simple data structure that allows you to store a value and subscribe to changes to that value. The `storeYobta` store is designed to be easy to use and extend with plugins that add middleware to state transitions.
 
 ## Features
 
@@ -23,17 +23,6 @@ To create a store, you can use the `storeYobta` factory function with just the d
 import { storeYobta } from '@yobta/stores'
 
 let store = storeYobta(1)
-```
-
-## Creating a Store With Plugins
-
-To create a `storeYobta` store with plugins, you can pass in any number of plugins as additional arguments to the `storeYobta` factory function after the initial state value. For example:
-
-```ts
-import { storeYobta, lazyPluginYobta } from '@yobta/stores'
-
-// Create an enhanced store
-const store = storeYobta(0, lazyPluginYobta)
 ```
 
 ## Accessing and Updating the Store's State
