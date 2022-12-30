@@ -51,10 +51,6 @@ let unsubscribe = store.observe(console.log)
 unsubscribe()
 ```
 
-## Overloads
-
-You can also pass additional arguments to the next method, which will be passed along to any middleware functions or subscribers that are listening for updates to the store's value. These additional arguments are referred to as "overloads."
-
 ## Extending Stores With Plugins
 
 There are a number of [plugins](../../plugins/index.md) available that you can use to extend your stores. You can add any number of plugins to your stores to enhance their functionality.
