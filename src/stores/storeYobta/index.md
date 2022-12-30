@@ -24,13 +24,15 @@ import { storeYobta } from '@yobta/stores'
 let store = storeYobta(1)
 ```
 
-## Accessing and Updating the Store's State
+## Accessing the Store's State
 
 To access the store's current value, you can use the `last` method:
 
 ```ts
 const currentValue = store.last()
 ```
+
+## Updating the Store's State
 
 To update the store's value, you can use the `next` method, which takes a new value as an argument:
 
