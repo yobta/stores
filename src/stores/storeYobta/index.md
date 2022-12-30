@@ -2,18 +2,17 @@
 
 # Yobta Store
 
-`storeYobta` is a factory function that creates an observable store. An observable store is a simple data structure that allows you to store a value and subscribe to changes to that value. The `storeYobta` store is designed to be easy to use and extend with plugins that add middleware to state transitions.
+Yobta Store is a factory function that creates an observable store for storing and observing the changes of a value. The storeYobta store is designed to be easy to use and extend with plugins that add middleware to state transitions.
 
 ## Features
 
 The `storeYobta` store has the following features:
 
-- Provides a default state when the store is created
+- Provides a default value when the store is created
 - Allows for the extension of the store with plugins that add middleware to state transitions
 - Allows for the updating and reading of the store's state
-- Triggers events on registered plugins when the state is updated
 - Allows for the observation of the store's state, with the option to unsubscribe
-- Allows for the subscription to store events
+- Allows for the subscription to store `ready` and `idle` events
 
 ## Creating a Basic Store
 
@@ -27,16 +26,16 @@ let store = storeYobta(1)
 
 ## Accessing and Updating the Store's State
 
-To access and update the state of a store, use the `last` and `next` methods. The `last` method retrieves the current state of the store, while the `next` method updates the store's state with a new value. For example:
+To access the store's current value, you can use the `last` method:
 
 ```ts
-const counter = storeYobta(0)
+const currentValue = store.last()
+```
 
-export const increment = () => {
-  const currentState = counter.last() // Get the current state of the store
-  const newState = currentState + 1 // Add 1 to the current state to create a new state
-  counter.next(newState) // Update the store's state with the new value
-}
+To update the store's value, you can use the `next` method, which takes a new value as an argument:
+
+```ts
+store.next(1)
 ```
 
 ## Observing the Store's State
@@ -50,99 +49,77 @@ let unsubscribe = store.observe(console.log)
 unsubscribe()
 ```
 
-## Events
+## Overloads
 
-All `@yobta/stores` support the following lifecycle events:
-
-- `ready`: fires when the first observer adds to the store
-- `idle`: fires when the last observer leaves the store
-- `next`: fires on every store update
-
-You can use these events to trigger actions in your application, such as fetching data or updating UI.
+You can also pass additional arguments to the next method, which will be passed along to any middleware functions or subscribers that are listening for updates to the store's value. These additional arguments are referred to as "overloads."
 
 ## Extending Stores With Plugins
 
 There are a number of [plugins](../../plugins/index.md) available that you can use to extend your stores. You can add any number of plugins to your stores to enhance their functionality.
-
-Plugins allow you to add middlewares to store lifecycle events. A middleware is a function that is executed during a state transition in the store. Middlewares allow you to silently modify the store value during transitions without firing update events.
 
 To extend a store with a plugin, simply pass the plugin as an additional argument to the `storeYobta` factory function when creating the store.
 
 For example, to extend a store with the [lazy plugin](../../plugins/lazyPluginYobta/index.md) which resets the store to its initial state when the last observer leaves the store, you can do the following:
 
 ```ts
-// Import the store factory and lazy plugin
 import { storeYobta, lazyPluginYobta } from '@yobta/stores'
 
-// Create an enhanced store
-const store = storeYobta(0, lazyPluginYobta)
-
-// Add an observer
-const unobserve = store.observe(console.log)
-
-// Change the store value
-store.next(1) // an observer will trace 1 to the console
-
-// Check the store value
-console.log(store.last()) // will trace 1
-
-// Remove the observer
-unobserve()
-
-// Check the store value
-console.log(store.last()) // will trace 0
-```
-
-## Typing the Store State
-
-When using Typescript, stores are typically able to infer the types of their values based on the initial states. However, in some cases, it may be necessary to explicitly specify the value types. This can be done using the following syntax:
-
-```ts
-const store = storeYobta<{ name?: string }>({})
-
-store.next({ name: 'yobta' })
+const store = storeYobta(0, lazyPluginYobta) // Create an enhanced store
+const unobserve = store.observe(console.log) // Add an observer
+store.next(1) // Change the store value
+console.log(store.last()) // Check the store value
+unobserve() // Remove the observer
+console.log(store.last()) // Check the store value
 ```
 
 ## Subscribing to Store Events
 
-Each store has a method called `on` which allows you to subscribe to store lifecycle events. Subscribers receive an updated store value before the transition is applied, meaning that inside a subscriber, you can access the next store value as an argument and the previous value using the store's `last` method.
-
-Note that you cannot update the store value by calling the `next` method synchronously inside a subscriber. Doing so will result in an error.
+Each store has a method called `on` which allows you to subscribe to store lifecycle events. Subscribers receive the current store value before.
 
 ```ts
 const store = storeYobta(0)
 
-const unsubscribe = store.on('next', nextState => {
-  console.log(`Next state is ${nextState}`, `Last state is ${store.last()}`)
-  store.next(2) // will throw an error
-  fetchNewNumber().then(store.next) // will not throw an error
+const unsubscribeReady = store.on('ready', nextState => {
+  fetchNewNumber().then(store.next)
+})
+const unsubscribeIdle = store.on('idle', nextState => {
+  fetchNewNumber().then(store.next)
 })
 
 // Later if you need to:
-unsubscribe()
+unsubscribeReady()
 ```
 
 ## Overloads
 
-Overloads are a feature that allow you to pass additional information, or metadata, along with updates to a store's value. They can be used by observers and subscribers to better understand the context of the update. All stores support overloads, and you can pass any number of overloads when updating the store's value.
+Overloads are a feature that allow you to pass additional information, or metadata, along with updates to a store's value. They can be used by observers and the `next` middleware to better understand the context of the update. All stores support overloads, and you can pass any number of overloads when updating the store's value.
 
 ```ts
-const store = storeYobta(0)
-
-const add = number => {
-  let value = store.last() + number
-  let meta = {
-    operation: 'add',
-    payload: number,
-  }
-  store.next(value, operation)
+const myPlugin = ({ addMiddleware }) => {
+  addMiddleware('next', state => {
+    console.log(`The store will update to: ${value}. Operation: "${meta.type}"`)
+    return state
+  })
 }
-
-store.on('next', (value, meta) => {
-  console.log(`The store will update to ${value}. Added ${meta.payload}`)
-})
-
+const store = storeYobta(0, myPlugin)
 store.observe((value, meta) => {
-  console.log(`The store has updated to ${value}. Added ${meta.payload}`)
+  console.log(`The store has updated to: ${value}. Operation: "${meta.type}"`)
 })
+store.next(1, { type: 'increment' })
+```
+
+## Using with Typescript
+
+When using Typescript with `@yobta/stores`, the types of the store's values can usually be inferred from the initial state. However, in some cases, it may be necessary to explicitly specify the types of the values.
+
+For the overloads, the types cannot be inferred and are treated as an array of `any` by default. To specify the types of the overloads, you can define the `Oveloads` type.
+
+Here's an example of how to use storeYobta with Typescript:
+
+```ts
+type State = { name?: string }
+type Oveloads = [{ action: string }]
+
+const store = storeYobta<State, Oveloads>({})
+store.next({ name: 'yobta' }, { action: 'set name' })
 ```

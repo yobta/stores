@@ -7,10 +7,10 @@ import {
 } from '../../stores/storeYobta/index.js'
 
 interface BroadcastChannelFactory {
-  <State>(props: {
+  <State, Overloads extends any[] = any[]>(props: {
     channel: string
     codec?: YobtaCodec
-  }): YobtaStorePlugin<State>
+  }): YobtaStorePlugin<State, Overloads>
 }
 
 /**
@@ -25,7 +25,7 @@ interface BroadcastChannelFactory {
  * @returns {YobtaStorePlugin} A Yobta store plugin that can be passed to the store factory when creating a store.
  */
 export const broadcastChannelPluginYobta: BroadcastChannelFactory =
-  ({ channel, codec = codecYobta }) =>
+  ({ channel, codec = codecYobta }: { channel: string; codec?: YobtaCodec }) =>
   ({ addMiddleware, next, last }) => {
     let bc: BroadcastChannel | null
     let shouldMute: boolean
@@ -46,7 +46,7 @@ export const broadcastChannelPluginYobta: BroadcastChannelFactory =
       open().onmessage = ({ data }) => {
         let [message, ...overloads] = codec.decode(data, last)
         shouldMute = true
-        next(message, ...overloads)
+        next(message, ...(overloads as any))
       }
       return state
     })

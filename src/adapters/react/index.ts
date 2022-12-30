@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react'
 
 import { YobtaObserver, YobtaStateGetter } from '../../index.js'
 
-interface YobtaAnyStore<State> {
+interface YobtaAnyStore<State, Overloads extends any[]> {
   last: YobtaStateGetter<State>
-  observe(observer: YobtaObserver<any>): VoidFunction
+  observe(observer: YobtaObserver<State, Overloads>): VoidFunction
 }
 export interface YobtaReactStoreHook {
-  <State>(store: YobtaAnyStore<State>): State
+  <State, Overloads extends any[] = any[]>(
+    store: YobtaAnyStore<State, Overloads>,
+  ): State
 }
 
 /**

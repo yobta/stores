@@ -11,7 +11,7 @@ it('should create an observable object', () => {
 
 it('should allow observers to be added and removed', () => {
   let observable = observableYobta<string>()
-  let observer: YobtaObserver<string> = vi.fn()
+  let observer: YobtaObserver<string, any> = vi.fn()
   let unsubscribe = observable.observe(observer)
 
   expect(observer).not.toHaveBeenCalled()
@@ -26,7 +26,7 @@ it('should allow observers to be added and removed', () => {
 
 it('should pass along any additional arguments to the observer', () => {
   let observable = observableYobta<string>()
-  let observer: YobtaObserver<string> = vi.fn()
+  let observer: YobtaObserver<string, any> = vi.fn()
   let unsubscribe = observable.observe(observer)
 
   observable.next('hello', 1, 2, 3)
@@ -36,7 +36,7 @@ it('should pass along any additional arguments to the observer', () => {
 
 it('should return the number of observers', () => {
   let observable = observableYobta<string>()
-  let observer: YobtaObserver<string> = vi.fn()
+  let observer: YobtaObserver<string, any> = vi.fn()
   let unsubscribe = observable.observe(observer)
 
   expect(observable.size).toBe(1)

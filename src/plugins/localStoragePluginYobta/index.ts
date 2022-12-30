@@ -11,10 +11,10 @@ interface StorageListener {
 }
 
 interface LocalStorageFactory {
-  <State>(props: {
+  <State, Overloads extends any[] = any[]>(props: {
     channel: string
     codec?: YobtaCodec
-  }): YobtaStorePlugin<State>
+  }): YobtaStorePlugin<State, Overloads>
 }
 
 /**
@@ -30,7 +30,7 @@ export const localStoragePluginYobta: LocalStorageFactory =
     let onMessage: StorageListener = ({ key, newValue }) => {
       if (key === channel) {
         let [message, ...overloads] = codec.decode(newValue, last)
-        next(message, ...overloads)
+        next(message, ...(overloads as any))
       }
     }
     let write = (item: any, ...overloads: any[]): void => {

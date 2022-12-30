@@ -4,7 +4,7 @@ import {
   OptionalKey,
   diffMapYobta,
   YobtaStateGetter,
-  YobtaStoreEvent,
+  YobtaStoreSubscriberEvent,
 } from '../../index.js'
 
 // #region Types
@@ -37,24 +37,23 @@ export interface YobtaMapObserver<PlainState extends YobtaAnyPlainObject> {
   ): void
 }
 interface YobtaMapFactory {
-  <PlainState extends YobtaAnyPlainObject>(
+  <PlainState extends YobtaAnyPlainObject, Overloads extends any[] = any[]>(
     initialState: PlainState,
-    ...plugins: YobtaStorePlugin<YobtaMapState<PlainState>>[]
+    ...plugins: YobtaStorePlugin<YobtaMapState<PlainState>, Overloads>[]
   ): {
     assign(
       patch: Partial<PlainState>,
-      ...overloads: any[]
+      ...overloads: Overloads
     ): YobtaMapAssignChanges<PlainState>
     last: YobtaStateGetter<YobtaMapState<PlainState>>
     observe(observer: YobtaMapObserver<PlainState>): VoidFunction
     omit(
       keys: OptionalKey<PlainState>[],
-      ...overloads: any[]
+      ...overloads: Overloads
     ): YobtaMapOmitChanges<PlainState>
     on(
-      event: YobtaStoreEvent,
-      handler: (state: YobtaMapState<PlainState>, ...overloads: any[]) => void,
-      ...overloads: any[]
+      event: YobtaStoreSubscriberEvent,
+      handler: (state: YobtaMapState<PlainState>) => void,
     ): VoidFunction
   }
 }

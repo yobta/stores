@@ -1,13 +1,16 @@
-export type YobtaObservable<Item> = {
-  next(item: Item, ...overloads: any[]): void
-  observe(observer: YobtaObserver<Item>): VoidFunction
+export type YobtaObservable<Item, Overloads extends any[]> = {
+  next(item: Item, ...overloads: Overloads): void
+  observe(observer: YobtaObserver<Item, Overloads>): VoidFunction
   size: number
 }
 
-export type YobtaObserver<Item> = (item: Item, ...overloads: any[]) => void
+export type YobtaObserver<Item, Overloads extends any[]> = (
+  item: Item,
+  ...overloads: Overloads
+) => void
 
 interface YobtaObservableFactory {
-  <Item>(): YobtaObservable<Item>
+  <Item, Overloads extends any[] = any[]>(): YobtaObservable<Item, Overloads>
 }
 
 /**
@@ -20,7 +23,7 @@ interface YobtaObservableFactory {
  * @template Item
  */
 export const observableYobta: YobtaObservableFactory = () => {
-  let observers = new Set<YobtaObserver<any>>()
+  let observers = new Set<YobtaObserver<any, any>>()
   return {
     next(item, ...overloads) {
       observers.forEach(observer => {

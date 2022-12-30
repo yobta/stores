@@ -9,7 +9,7 @@ import { YOBTA_IDLE, YobtaStorePlugin } from '../../stores/storeYobta/index.js'
  * @param {any} options.initialState - The initial state of the store.
  * @returns {void}
  */
-export const lazyPluginYobta: YobtaStorePlugin<any> = ({
+export const lazyPluginYobta: YobtaStorePlugin<any, any[]> = ({
   addMiddleware,
   initialState,
 }) => {

@@ -2,8 +2,9 @@ import {
   storeYobta,
   YobtaStorePlugin,
   diffObjectYobta,
-  YobtaStoreEvent,
   YobtaStateGetter,
+  YobtaStoreSubscriberEvent,
+  YobtaObserver,
 } from '../../index.js'
 
 // #region Types
@@ -16,68 +17,58 @@ export type OptionalKey<State extends AnyPlainObject> = Exclude<
   }[keyof State],
   undefined
 >
-
 type YobtaPlainObjectAssignChanges<State extends AnyPlainObject> =
   Partial<State>
 type YobtaPlainObjectOmitChanges<State extends AnyPlainObject> =
   OptionalKey<State>[]
-
 export type YobtaPlainObjectChanges<State extends AnyPlainObject> =
   | YobtaPlainObjectAssignChanges<State>
   | YobtaPlainObjectOmitChanges<State>
-export interface YobtaPlainObjectObserver<State extends AnyPlainObject> {
-  (
-    state: State,
-    changes: YobtaPlainObjectChanges<State>,
-    ...overloads: any[]
-  ): void
-}
-
+type ChangesWithOverloads<
+  State extends AnyPlainObject,
+  Overloads extends any[],
+> = [YobtaPlainObjectChanges<State>, ...Overloads]
 interface PlainObjectFactory {
-  <State extends AnyPlainObject>(
+  <State extends AnyPlainObject, Overloads extends any[] = any[]>(
     initialState: State,
-    ...listeners: YobtaStorePlugin<State>[]
+    ...plugins: YobtaStorePlugin<
+      State,
+      ChangesWithOverloads<State, Overloads>
+    >[]
   ): {
-    assign(patch: Partial<State>, ...overloads: any[]): Partial<State>
+    assign(patch: Partial<State>, ...overloads: Overloads): Partial<State>
     last: YobtaStateGetter<State>
-    observe(observer: YobtaPlainObjectObserver<State>): VoidFunction
-    omit(keys: OptionalKey<State>[], ...overloads: any[]): OptionalKey<State>[]
+    observe(
+      observer: YobtaObserver<State, ChangesWithOverloads<State, Overloads>>,
+    ): VoidFunction
+    omit(
+      keys: OptionalKey<State>[],
+      ...overloads: Overloads
+    ): OptionalKey<State>[]
     on(
-      event: YobtaStoreEvent,
-      handler: (state: State, ...overloads: any[]) => void,
-      ...overloads: any[]
+      event: YobtaStoreSubscriberEvent,
+      handler: (state: State) => void,
     ): VoidFunction
   }
 }
-
 // #endregion
 
-/**
- * Creates a new Yobta store for plain objects.
- *
- * @template State - The type of the state object being managed by the store.
- * @param {State} initialState - The initial state of the store.
- * @param {YobtaStorePlugin<State>[]} listeners - An optional list of plugins to apply to the store.
- * @returns {
- *   assign(patch: Partial<State>, ...overloads: any[]): Partial<State>;
- *   last(): State;
- *   observe(observer: YobtaPlainObjectObserver<State>): VoidFunction;
- *   omit(keys: OptionalKey<State>[]): OptionalKey<State>[];
- * } - The created Yobta store.
- */
 export const plainObjectYobta: PlainObjectFactory = <
   State extends AnyPlainObject,
+  Overloads extends any[],
 >(
   initialState: State,
-  ...listeners: YobtaStorePlugin<State>[]
+  ...listeners: YobtaStorePlugin<
+    State,
+    ChangesWithOverloads<State, Overloads>
+  >[]
 ) => {
-  let { next, last, observe, on } = storeYobta<State>(
-    initialState,
-    ...listeners,
-  )
-
+  let { next, last, observe, on } = storeYobta<
+    State,
+    ChangesWithOverloads<State, Overloads>
+  >(initialState, ...listeners)
   return {
-    assign(patch, ...overloads) {
+    assign(patch, ...overloads: Overloads) {
       let diff = diffObjectYobta(patch, last())
       if (Object.keys(diff).length) {
         next({ ...last(), ...diff }, diff, ...overloads)
@@ -86,7 +77,7 @@ export const plainObjectYobta: PlainObjectFactory = <
     },
     last,
     observe,
-    omit(keys: OptionalKey<State>[], ...overloads) {
+    omit(keys: OptionalKey<State>[], ...overloads: Overloads) {
       let state = { ...last() }
       let changes = keys.filter(key => {
         let result = key in state

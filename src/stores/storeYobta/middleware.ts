@@ -1,7 +1,6 @@
 import { composeYobta } from '../../util/composeYobta/index.js'
 import {
   YobtaStateSetter,
-  YobtaStoreEvent,
   YobtaStoreMiddleware,
   YobtaStorePlugin,
   YOBTA_IDLE,
@@ -9,50 +8,58 @@ import {
   YOBTA_READY,
 } from './index.js'
 
+type Props<State, Overloads extends any[]> = {
+  initialState: State
+  next: YobtaStateSetter<State, Overloads>
+  last(): State
+  plugins: YobtaStorePlugin<State, Overloads>[]
+}
+type Middlewares<State> = {
+  [YOBTA_READY]: YobtaStoreMiddleware<State, any>[]
+  [YOBTA_IDLE]: YobtaStoreMiddleware<State, any>[]
+  [YOBTA_NEXT]: YobtaStoreMiddleware<State, any>[]
+}
 interface MiddlewareFactory {
-  <State>(config: Props<State>): {
-    ready: YobtaStoreMiddleware<State>
-    idle: YobtaStoreMiddleware<State>
-    next: YobtaStoreMiddleware<State>
+  <State, Overloads extends any[]>(config: Props<State, Overloads>): {
+    [YOBTA_READY]: YobtaStoreMiddleware<State, any>
+    [YOBTA_IDLE]: YobtaStoreMiddleware<State, any>
+    [YOBTA_NEXT]: YobtaStoreMiddleware<State, Overloads>
   }
 }
-type Props<State> = {
-  initialState: State
-  next: YobtaStateSetter<State>
-  last(): State
-  plugins: YobtaStorePlugin<State>[]
-}
 
-export const composeMiddleware: MiddlewareFactory = <State>({
+export const composeMiddleware: MiddlewareFactory = <
+  State,
+  Overloads extends any[],
+>({
   initialState,
   last,
   next,
   plugins,
-}: Props<State>) => {
-  let middlewares: Record<YobtaStoreEvent, YobtaStoreMiddleware<State>[]> = {
+}: Props<State, Overloads>) => {
+  let middlewares: Middlewares<State> = {
     [YOBTA_READY]: [],
     [YOBTA_IDLE]: [],
     [YOBTA_NEXT]: [],
   }
-  let mount = (plugin: YobtaStorePlugin<State>): void => {
+  plugins.forEach((plugin: YobtaStorePlugin<State, Overloads>): void => {
     plugin({
-      addMiddleware: (
-        type: YobtaStoreEvent,
-        middleware: YobtaStoreMiddleware<State>,
-      ): void => {
-        middlewares[type].push(middleware)
+      addMiddleware(type, middleware) {
+        middlewares[type].push(middleware as any)
       },
       initialState,
       next,
       last,
     })
-  }
-  plugins.forEach(mount)
+  })
   return {
     ready: composeYobta(
-      ...(middlewares.ready as [YobtaStoreMiddleware<State>]),
+      ...(middlewares.ready as [YobtaStoreMiddleware<State, any[]>]),
     ),
-    idle: composeYobta(...(middlewares.idle as [YobtaStoreMiddleware<State>])),
-    next: composeYobta(...(middlewares.next as [YobtaStoreMiddleware<State>])),
+    idle: composeYobta(
+      ...(middlewares.idle as [YobtaStoreMiddleware<State, any[]>]),
+    ),
+    next: composeYobta(
+      ...(middlewares.next as [YobtaStoreMiddleware<State, any[]>]),
+    ),
   }
 }

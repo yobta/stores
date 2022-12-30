@@ -14,7 +14,7 @@ const observerMock = vi.fn()
 const observerMock1 = vi.fn()
 
 let addMiddlewareSpy = vi.fn<
-  [YobtaStoreEvent, YobtaStoreMiddleware<number>],
+  [YobtaStoreEvent, YobtaStoreMiddleware<number, any>],
   void
 >()
 
@@ -42,6 +42,16 @@ beforeEach(() => {
       YOBTA_IDLE,
       handlersSpy[YOBTA_IDLE].mockImplementation(state => state),
     )
+  })
+})
+
+it('returnes a store object', () => {
+  let store = storeYobta(1)
+  expect(store).toEqual({
+    last: expect.any(Function),
+    next: expect.any(Function),
+    observe: expect.any(Function),
+    on: expect.any(Function),
   })
 })
 
@@ -174,4 +184,40 @@ it('Compose middlewares', () => {
   store.next(3)
   expect(mock1).toHaveBeenCalledWith(2)
   expect(mock2).toHaveBeenCalledWith(3)
+})
+
+it('subscribes to ready event', () => {
+  let store = storeYobta(1)
+  let readyMock = vi.fn()
+  let unsubscribe = store.on(YOBTA_READY, readyMock)
+  let unobserve = store.observe(vi.fn())
+  expect(readyMock).toHaveBeenCalledTimes(1)
+  expect(readyMock).toHaveBeenCalledWith(1)
+  unobserve()
+  unsubscribe()
+  expect(readyMock).toHaveBeenCalledTimes(1)
+})
+
+it('subscribes to idle event', () => {
+  let store = storeYobta(1)
+  let idleMock = vi.fn()
+  let unsubscribe = store.on(YOBTA_IDLE, idleMock)
+  let unobserve = store.observe(vi.fn())
+  expect(idleMock).toHaveBeenCalledTimes(0)
+  unobserve()
+  unsubscribe()
+  expect(idleMock).toHaveBeenCalledTimes(1)
+  expect(idleMock).toHaveBeenCalledWith(1)
+})
+
+it('unloks next after transitions', () => {
+  let store = storeYobta(1)
+  store.on(YOBTA_READY, () => {
+    expect(
+      Promise.resolve().then(() => {
+        store.next(3)
+      }),
+    ).resolves.not.toThrow()
+  })
+  store.observe(vi.fn())()
 })
