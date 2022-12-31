@@ -12,6 +12,7 @@ Map store becomes mutable
 Renamed `useObservable` hook to `useYobta`
 Renamed `encoderYobta` to `codecYobta`
 Renames `mapEncoderYobta` to `mapCodecYobta`
+Machine store now takes map of arrays instead of sets
 
 Improvements:
 Add observable utility
