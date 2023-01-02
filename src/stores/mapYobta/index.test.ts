@@ -1,5 +1,16 @@
 import { mapYobta } from './index.js'
 
+it('returns store object', () => {
+  let store = mapYobta({ key: 'yobta' })
+  expect(store).toEqual({
+    assign: expect.any(Function),
+    last: expect.any(Function),
+    observe: expect.any(Function),
+    omit: expect.any(Function),
+    on: expect.any(Function),
+  })
+})
+
 it('has correct default state', () => {
   let store = mapYobta({ key: 'yobta' })
   expect(store.last()).toEqual(new Map([['key', 'yobta']]))

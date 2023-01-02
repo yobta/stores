@@ -36,13 +36,34 @@ export interface YobtaMapObserver<PlainState extends YobtaAnyPlainObject> {
     ...overloads: any[]
   ): void
 }
+type IfEquals<X, Y, A, B> = (<T>() => T extends X ? 1 : 2) extends <
+  T,
+>() => T extends Y ? 1 : 2
+  ? A
+  : B
+
+type WritableKeysOf<T> = {
+  [P in keyof T]: IfEquals<
+    { [Q in P]: T[P] },
+    { -readonly [Q in P]: T[P] },
+    P,
+    never
+  >
+}[keyof T]
+
+export type YobtaPatch<PlainState> = Partial<
+  Pick<PlainState, WritableKeysOf<PlainState>>
+>
 interface YobtaMapFactory {
   <PlainState extends YobtaAnyPlainObject, Overloads extends any[] = any[]>(
     initialState: PlainState,
-    ...plugins: YobtaStorePlugin<YobtaMapState<PlainState>, Overloads>[]
+    ...plugins: YobtaStorePlugin<
+      YobtaMapState<PlainState>,
+      [YobtaMapChanges<PlainState>, ...Overloads]
+    >[]
   ): {
     assign(
-      patch: Partial<PlainState>,
+      patch: YobtaPatch<PlainState>,
       ...overloads: Overloads
     ): YobtaMapAssignChanges<PlainState>
     last: YobtaStateGetter<YobtaMapState<PlainState>>

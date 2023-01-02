@@ -2,74 +2,52 @@
 
 # Map Store
 
-`mapYobta` is a factory function that creates a new store object that stores state as a JavaScript [`Map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) object. The type of the `Map` object will be inferred from the plain object provided as the initial state. The state of the store is immutable, and each time the `assign` or `omit` method is called, the store is given a new instance of the `Map` object.
+Map store factory creates an observable object that stores value as a JavaScript [`Map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) object.
 
-## Parameters
+## Creating a Store
 
-- `initialState`: A plain object that will be converted to a `Map` object and used as the initial state of the store.
-- `plugins`: (optional) An array of `YobtaStorePlugin` objects that modify the behavior of the store.
-
-## Returns
-
-A store object with the following methods:
-
-- `assign`: Takes an object containing new values for the store and assigns them to the store. Any keys in the object that already exist in the store will be overwritten with the new values. This method will only send updates to observers if the state has changed, and returns a [`Map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) object containing the changes that were made to the store.
-
-- `observe`: Takes a function as an argument and registers it as an observer of the store. The observer function will be called every time the store's state is updated, and will be passed the current state of the store and a list of the changes that were made to the store. This method returns a void function that removes the observer when called.
-
-- `omit`: Takes an array of keys and removes them from the store. This method will only send updates to observers if the state has changed, and returns a [`Set`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set) object containing the keys that were removed from the store.
-
-- `last`: A method that returns the current state of the store.
-
-# Examples
-
-## Initializing the store with the initial state
-
-To initialize the store with the initial state, you can pass an initial state object to the `mapYobta` function. This will create a `Map` object from the initial state object and use it as the store's initial state.
+When creating a Map Store, you will need to provide an initial state as a plain object:
 
 ```ts
-import { localStoragePluginYobta } from '@yobta/stores'
+import { mapYobta } from '@yobta/stores'
 
-const initialState = {
+const store = mapYobta({
   foo: 'bar',
   baz: 123,
-}
-
-const store = mapYobta(initialState)
+})
 ```
 
-## Retrieving the state
+## Retrieving the State
 
-To retrieve the current state from the store, you can use the `getState` method of the store object.
+To retrieve the current state of the store, you can use the `last` method provided by the store. This method returns the latest state object stored in the store.
+
+Here is an example of how you can retrieve and log the current state:
 
 ```ts
-const currentState = store.getState()
+const currentState = store.last()
 ```
 
-## Assigning to the state and retrieving the changes
+## Assigning to the State
 
-To assign new values to the store's state and retrieve the changes, you can use the `assign` method of the store object. This method takes a patch object containing the keys and values to be updated in the state, and returns a `Map` object containing the changes.
+You can use the `assign` method to update one or more keys of the state. Please note that in TypeScript, you can only assign values to writable keys that belong to the state. Attempting to assign a value to a key that is not part of the state or is read-only will result in an error.
 
 ```ts
-const patch = {
+const changes = store.assign({
   foo: 'new value',
   baz: 456,
-}
-
-const changes = store.assign(patch)
+})
 ```
 
-## Omitting the keys and retrieving the changes
+## Omitting the Keys
 
-To omit keys from the store's state and retrieve the changes, you can use the `omit` method of the store object. This method takes an array of keys to be omitted from the state, and returns a `Set` object containing the omitted keys.
+To remove one or multiple keys from the state, you can use the `assign` method. However, in TypeScript, you can only omit optional keys from the state. If a key is required or not part of the state, you will receive a TypeScript error.
 
 ```ts
 const keysToOmit = ['foo']
-
 const changes = store.omit(keysToOmit)
 ```
 
-## Observing store updates
+## Observing Store
 
 To observe updates to the store's state, you can use the `observe` method of the store object. This method takes an observer function as an argument, which will be called whenever the store's state is updated. The observer function receives three arguments: the current state, the changes, and any additional arguments passed to the `next` method.
 
@@ -103,11 +81,9 @@ const patch = {
   foo: 'new value',
   baz: 456,
 }
-
 const metadata = {
-  source: 'user action',
+  type: 'ASSIGN',
 }
-
 const changes = store.assign(patch, metadata)
 ```
 
@@ -117,11 +93,9 @@ Here is an example of using the `omit` method with an overload:
 
 ```ts
 const keysToOmit = ['foo']
-
 const metadata = {
-  source: 'user action',
+  type: 'OMIT',
 }
-
 const changes = store.omit(keysToOmit, metadata)
 ```
 
@@ -141,7 +115,7 @@ const observer = (state, changes, metadata) => {
 store.observe(observer)
 ```
 
-## Extending the store with one plugin
+## Extending the Store with Plugins
 
 To extend the store with a plugin, you can pass the plugin as an argument to the `mapYobta` function when creating the store. The plugin should be an object with a `middleware` method that takes the store's `next` method as an argument and returns a new `next` method.
 
@@ -159,22 +133,8 @@ const store = mapYobta(
 
 Note that the `codec` property of the Local Storage plugin is optional. However, when using the plugin with a `mapYobta` store, a `codec` is required to serialize the store's state to JSON. If the state has nested maps, sets, or other types that cannot be easily serialized to JSON, you may need to create your own codec.
 
-## Extending the store with multiple plugins
+The Machine store supports plugins in the same way that other stores do. For more information, see the [Plugins documentation](../../plugins/index.md).
 
-To extend the store with multiple plugins, you can pass multiple plugin objects as arguments to the `mapYobta` function when creating the store. The plugins will be applied in the order they are passed, with each plugin's `middleware` method wrapping the previous plugin's `middleware` method. This means that each middleware receives updates from the middleware added by the next plugin.
+## Subscribing to Store Events
 
-Here is an example of using the [Lazy](../../plugins/lazyPluginYobta/index.md) and [Validation](../../plugins/validationPluginYobta/index.md) plugins:
-
-```ts
-const store = mapYobta(
-  { key: 'value' },
-  lazyPluginYobta,
-  validationPluginYobta(state => state.get('key') === 'value'),
-)
-```
-
-When the store is unsubscribed, the middleware of the `validationPluginYobta` will receive the state first, and then the output will be passed to the middleware of the `lazyPluginYobta` plugin.
-
-The `validationPluginYobta` plugin takes a validation function as an argument, which is called with the store's state before each update. If the validation function throws an error, the state is forced to the default state by the middleware. If the validation function returns a valid state, the update is allowed to proceed.
-
-The `lazyPluginYobta` plugin resets the store to the initial state when it is left by its last observer. This can be useful for optimizing the performance of the store by avoiding unnecessary updates when the store is not being used.
+The Machine store supports the same events as other stores. For more information, see the [Store documentation](../storeYobta/index.md).
