@@ -5,6 +5,7 @@ import {
   YobtaStateGetter,
   YobtaStoreSubscriberEvent,
   YobtaObserver,
+  YobtaWritablePartial,
 } from '../../index.js'
 
 // #region Types
@@ -17,17 +18,11 @@ export type OptionalKey<State extends AnyPlainObject> = Exclude<
   }[keyof State],
   undefined
 >
-type YobtaPlainObjectAssignChanges<State extends AnyPlainObject> =
-  Partial<State>
-type YobtaPlainObjectOmitChanges<State extends AnyPlainObject> =
-  OptionalKey<State>[]
-export type YobtaPlainObjectChanges<State extends AnyPlainObject> =
-  | YobtaPlainObjectAssignChanges<State>
-  | YobtaPlainObjectOmitChanges<State>
+
 type ChangesWithOverloads<
   State extends AnyPlainObject,
   Overloads extends any[],
-> = [YobtaPlainObjectChanges<State>, ...Overloads]
+> = [YobtaWritablePartial<State> | OptionalKey<State>[], ...Overloads]
 interface PlainObjectFactory {
   <State extends AnyPlainObject, Overloads extends any[] = any[]>(
     initialState: State,
@@ -36,7 +31,10 @@ interface PlainObjectFactory {
       ChangesWithOverloads<State, Overloads>
     >[]
   ): {
-    assign(patch: Partial<State>, ...overloads: Overloads): Partial<State>
+    assign(
+      patch: YobtaWritablePartial<State>,
+      ...overloads: Overloads
+    ): YobtaWritablePartial<State>
     last: YobtaStateGetter<State>
     observe(
       observer: YobtaObserver<State, ChangesWithOverloads<State, Overloads>>,
