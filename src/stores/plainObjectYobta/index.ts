@@ -22,7 +22,10 @@ export type OptionalKey<State extends AnyPlainObject> = Exclude<
 type ChangesWithOverloads<
   State extends AnyPlainObject,
   Overloads extends any[],
-> = [YobtaWritablePartial<State> | OptionalKey<State>[], ...Overloads]
+> = [
+  Readonly<YobtaWritablePartial<State>> | readonly OptionalKey<State>[],
+  ...Overloads,
+]
 interface PlainObjectFactory {
   <State extends AnyPlainObject, Overloads extends any[] = any[]>(
     initialState: State,
@@ -45,7 +48,7 @@ interface PlainObjectFactory {
     ): OptionalKey<State>[]
     on(
       event: YobtaStoreSubscriberEvent,
-      handler: (state: State) => void,
+      handler: (state: Readonly<State>) => void,
     ): VoidFunction
   }
 }
