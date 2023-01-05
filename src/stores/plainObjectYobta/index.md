@@ -1,50 +1,36 @@
 # Plain Object Store
 
-`plainObjectYobta` is a function that creates a store for a plain JavaScript object. It allows you to assign new values to the object, omit keys from the object, observe changes to the object, and retrieve the current state of the object.
-
-## Immutability
-
-It's important to note that the state object created by `plainObjectYobta` is immutable, meaning that its values cannot be directly modified. Instead, you must use the `assign` or `omit` functions to make changes to the state object.
+A plain object store factory creates an observable store that holds an immutable value. The store creates a new value instance each time you update the value using the `assign` or `omit` operation.
 
 ## Importing and Initializing
 
-To use the store, you will need to import it from the `@yobta/stores` package:
+The store factory function requires that you supply a value to be used as the initial state of the store.
 
 ```ts
 import { plainObjectYobta } from '@yobta/stores'
-```
 
-You can then initialize a new store by calling the `plainObjectYobta` function and passing in an initial state object:
-
-```ts
 const store = plainObjectYobta({ name: 'John', age: 30 })
 ```
 
-## Immutability
-
-It's important to note that the state object created by `plainObjectYobta` is immutable, meaning that its values cannot be directly modified. Instead, you must use the `assign` or `omit` functions to make changes to the state object.
-
 ## Assigning New Values
 
-To assign new values to the state object, you can use the `assign` function and pass in a patch object containing the keys and values you want to update. The `assign` function will return a new object containing the updated values.
+The `assign` method of the store allows you to modify one or more keys of the store value in an immutable manner, resulting in a new value for the store. When the transition is complete, it returns an object containing the changed keys. If there were no changes to the store and no updates were made, you will receive an empty object.
 
 ```ts
 const updatedState = store.assign({ name: 'Jane', age: 35 })
-// updatedState = { name: 'Jane', age: 35 }
 ```
 
 ## Omitting Keys
 
-To `omit` a key from the state object, you can use the omit function and pass in an array of keys to be removed. The `omit` function will return an array of the keys that were actually removed.
+The `omit` method allows you to remove one or more keys from the store value without mutating the store value. As a result, you will receive an array of the removed keys. If no keys were removed and the store was not updated, you will receive an empty array.
 
 ```ts
 const removedKeys = store.omit(['name'])
-// removedKeys = ['name']
 ```
 
-## Retrieving the Current State
+## Retrieving the Store Value
 
-To retrieve the current state of the object, you can use the `last` function. This will return a copy of the current state object.
+The `last` method returns a read-only value that represents the current state of the store object.
 
 ```ts
 const currentState = store.last()
@@ -52,21 +38,28 @@ const currentState = store.last()
 
 ## Observing Changes
 
-To observe changes to the state object, you can use the `observe` function and pass in an observer function. The observer function will be called every time the state object is updated, and will be passed the current state object, an object containing the changes made, and any additional overloads.
+The `observe` method allows you to receive updates to the store value by providing an observer callback function. It returns a void function that you can call to remove your observer from the store.
 
 ```ts
-store.observe((state, changes, ...overloads) => {
-  console.log(state, changes, overloads)
+const stopObserving = store.observe((state, changes) => {
+  console.log(state, changes)
 })
-```
 
-## Determining the Type of Change
+// Later, when you need to:
+stopObserving()
+```
 
 The observer function can determine whether the change was an `assign` or `omit` operation by checking the type of the `changes` argument. If `changes` is an object, it was an `assign` operation. If `changes` is an array, it was an `omit` operation.
 
-## No Update if Nothing Was Changed
-
-Both the `assign` and `omit` functions will not emit an update if no values were actually changed.
+```ts
+store.observe((state, changes) => {
+  if (Array.isArray(changes)) {
+    console.log('Update caused by omit operation')
+  } else {
+    console.log('Update caused by assign operation')
+  }
+})
+```
 
 ## Handling Overloads
 
@@ -96,16 +89,27 @@ store.observe((state, changes, message, timestamp) => {
 
 You can use the overloads to pass any type of data that is relevant to your application. Just make sure to document the expected types and usage of the overloads in your code, so that other developers using the store know how to properly use them.
 
-## Plugins
+## Typescript
 
-The plain object store can be extended with one or several plugins to add additional functionality. In this example, we'll add the `lazyPluginYobta` plugin, which resets the store to its initial state when the last observer leaves the store. This can be useful in cases where you want to ensure that the store is reset to its original state after it is no longer being used.
-
-To use the `lazyPluginYobta` plugin, simply pass it as an argument when initializing the store:
+To make certain properties optional or read-only, you may need to explicitly specify their types. In the example below, we use TypeScript to make the `key` property required and read-only by preventing it from being omitted or modified. The `optionalKey` property is also specified, but it is marked as optional so it can be omitted.
 
 ```ts
-import { lazyPluginYobta } from '@yobta/plugins'
-
-const store = plainObjectYobta({ name: 'John', age: 30 }, lazyPluginYobta)
+type State = {
+  readonly key: string
+  optionalKey?: string
+}
+const store = plainObjectYobta<State>({
+  key: 'can not be changed or removed',
+  optionalKey: 'can be removed',
+})
+store.omit(['optionalKey'])
+store.assign({ optionalKey: 'can be removed again' })
 ```
 
-For additional information on available plugins and their usage, you can [visit](../../plugins/index.md) the plugins documentation page.
+## Plugins
+
+You can enhance the functionality of the plain object store by using plugins in the same way as with other stores. For more information, please refer to the [plugins documentation page](../../plugins/index.md).
+
+## Subscribing to Store Events
+
+The Machine store supports the same events as other stores. For more information, see the [Store documentation](../storeYobta/index.md).
