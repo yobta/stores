@@ -15,7 +15,7 @@ export type YobtaNextEvent = typeof YOBTA_NEXT
 export type YobtaStoreEvent = YobtaReadyEvent | YobtaIdleEvent | YobtaNextEvent
 export type YobtaStoreSubscriberEvent = YobtaReadyEvent | YobtaIdleEvent
 export type YobtaStoreMiddleware<State, Overloads extends any[]> = (
-  state: State,
+  state: Readonly<State>,
   ...overloads: Overloads
 ) => State
 
@@ -35,7 +35,7 @@ export type YobtaStorePlugin<State, Overloads extends any[]> = (props: {
   next: YobtaStateSetter<State, Overloads>
   last(): State
 }) => void
-export type YobtaStateGetter<State> = () => State
+export type YobtaStateGetter<State> = () => Readonly<State>
 export type YobtaStateSetter<State, Overloads extends any[]> = (
   action: State,
   ...overloads: Overloads
@@ -51,7 +51,7 @@ interface YobtaStoreFactory {
     observe(observer: YobtaObserver<State, Overloads>): VoidFunction
     on(
       event: YobtaStoreSubscriberEvent,
-      handler: (state: State) => void,
+      handler: (state: Readonly<State>) => void,
     ): VoidFunction
   }
 }
