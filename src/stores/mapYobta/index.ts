@@ -35,14 +35,15 @@ export type YobtaMapState<PlainState extends YobtaAnyPlainObject> = Map<
   keyof PlainState,
   PlainState[keyof PlainState]
 >
-type YobtaMapAssigned<PlainState extends YobtaAnyPlainObject> = YobtaMapState<
-  YobtaWritablePartial<PlainState>
->
-type YobtaOmittedKeysSet<PlainState extends YobtaAnyPlainObject> = Set<
-  keyof PlainState
+type YobtaReadonlyMapState<PlainState extends YobtaAnyPlainObject> =
+  ReadonlyMap<keyof PlainState, PlainState[keyof PlainState]>
+type YobtaMapAssigned<PlainState extends YobtaAnyPlainObject> =
+  YobtaReadonlyMapState<YobtaWritablePartial<PlainState>>
+type YobtaOmittedKeysSet<PlainState extends YobtaAnyPlainObject> = ReadonlySet<
+  OptionalKey<PlainState>
 >
 type YobtaMapChanges<PlainState extends YobtaAnyPlainObject> =
-  | YobtaMapAssigned<PlainState>
+  | YobtaReadonlyMapState<YobtaWritablePartial<PlainState>>
   | YobtaOmittedKeysSet<PlainState>
 
 interface YobtaMapFactory {
@@ -57,10 +58,10 @@ interface YobtaMapFactory {
       patch: YobtaWritablePartial<PlainState>,
       ...overloads: Overloads
     ): YobtaMapAssigned<PlainState>
-    last: YobtaStateGetter<YobtaMapState<PlainState>>
+    last: YobtaStateGetter<YobtaReadonlyMapState<PlainState>>
     observe(
       observer: YobtaObserver<
-        YobtaMapState<PlainState>,
+        YobtaReadonlyMapState<PlainState>,
         [YobtaMapChanges<PlainState>, ...Overloads]
       >,
     ): VoidFunction
@@ -96,7 +97,7 @@ export const mapYobta: YobtaMapFactory = <
       let changes = diffMapYobta(
         new Map(Object.entries(patch)),
         state,
-      ) as YobtaMapAssigned<PlainState>
+      ) as unknown as YobtaMapAssigned<PlainState>
       if (changes.size) {
         changes.forEach((value, key) =>
           state.set(key, value as PlainState[keyof PlainState]),
@@ -109,13 +110,11 @@ export const mapYobta: YobtaMapFactory = <
     observe,
     omit(keys: OptionalKey<PlainState>[], ...overloads: Overloads) {
       let state = new Map(last())
-      let changes: YobtaOmittedKeysSet<YobtaAnyPlainObject> = keys.reduce<
-        YobtaOmittedKeysSet<YobtaAnyPlainObject>
-      >((acc, key) => {
+      let changes = keys.reduce((acc, key) => {
         let result = state.delete(key)
         if (result) acc.add(key)
         return acc
-      }, new Set())
+      }, new Set()) as unknown as YobtaOmittedKeysSet<YobtaAnyPlainObject>
       if (changes.size) next(state, changes, ...overloads)
       return changes
     },
