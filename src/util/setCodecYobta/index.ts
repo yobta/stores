@@ -1,8 +1,9 @@
-import { YobtaAnyCodec, YobtaJsonValue } from '../codecYobta/index.js'
+import { YobtaGenericCodec, YobtaJsonValue } from '../codecYobta/index.js'
 
-export interface YobtaSetCodec extends YobtaAnyCodec {
+type YobtaJsonSet = Set<YobtaJsonValue>
+export interface YobtaSetCodec extends YobtaGenericCodec<YobtaJsonSet> {
   encode(item: Set<YobtaJsonValue>, ...overloads: YobtaJsonValue[]): string
-  decode: <Result extends Set<YobtaJsonValue>>(
+  decode: <Result extends YobtaJsonSet>(
     item: string,
     fallback: () => Result,
   ) => [Result, ...YobtaJsonValue[]]

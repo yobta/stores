@@ -1,4 +1,9 @@
-import { codecYobta, YobtaAnyCodec } from '../../util/codecYobta/index.js'
+import {
+  codecYobta,
+  YobtaGenericCodec,
+  YobtaJsonValue,
+  YobtaSimpleCodec,
+} from '../../util/codecYobta/index.js'
 import {
   YobtaStorePlugin,
   YOBTA_IDLE,
@@ -11,10 +16,18 @@ interface StorageListener {
 }
 
 interface LocalStorageFactory {
-  <State extends any, Overloads extends any[] = any[]>(props: {
-    channel: string
-    codec?: YobtaAnyCodec
-  }): YobtaStorePlugin<State, Overloads>
+  <
+    State extends any,
+    Codec extends YobtaGenericCodec<State>,
+    Overloads extends any[] = any[],
+  >(
+    props: State extends YobtaJsonValue
+      ? { channel: string; codec?: YobtaSimpleCodec }
+      : {
+          channel: string
+          codec: Codec
+        },
+  ): YobtaStorePlugin<State, Overloads>
 }
 
 export const localStoragePluginYobta: LocalStorageFactory =

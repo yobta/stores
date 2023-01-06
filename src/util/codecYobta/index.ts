@@ -6,12 +6,12 @@ export type YobtaJsonValue =
   | { [property: string | number]: YobtaJsonValue }
   | YobtaJsonValue[]
 
-export interface YobtaAnyCodec {
-  encode(item: any, ...overloads: any[]): string
+export interface YobtaGenericCodec<Value> {
+  encode(item: Value, ...overloads: YobtaJsonValue[]): string
   decode: (item: any, fallback: () => any) => [any, ...any[]]
 }
 
-interface YobtaSimpleCodec extends YobtaAnyCodec {
+export interface YobtaSimpleCodec extends YobtaGenericCodec<YobtaJsonValue> {
   encode(item: YobtaJsonValue, ...overloads: YobtaJsonValue[]): string
   decode: (
     item: any,

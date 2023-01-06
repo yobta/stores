@@ -1,4 +1,9 @@
-import { codecYobta, YobtaAnyCodec } from '../../util/codecYobta/index.js'
+import {
+  codecYobta,
+  YobtaGenericCodec,
+  YobtaJsonValue,
+  YobtaSimpleCodec,
+} from '../../util/codecYobta/index.js'
 import {
   YobtaStorePlugin,
   YOBTA_IDLE,
@@ -7,17 +12,21 @@ import {
 } from '../../stores/storeYobta/index.js'
 
 interface SessionStoragePluginFactory {
-  <State>(props: { channel: string; codec?: YobtaAnyCodec }): YobtaStorePlugin<
-    State,
-    never[]
-  >
+  <State, Codec extends YobtaGenericCodec<State>>(
+    props: State extends YobtaJsonValue
+      ? { channel: string; codec?: YobtaSimpleCodec }
+      : {
+          channel: string
+          codec: Codec
+        },
+  ): YobtaStorePlugin<State, any[]>
 }
 
 export const sessionStoragePluginYobta: SessionStoragePluginFactory =
   ({ channel, codec = codecYobta }) =>
   ({ addMiddleware }) => {
     let write = <State>(state: State): State => {
-      let encodedMessage = codec.encode(state)
+      let encodedMessage = codec.encode(state as any)
       sessionStorage.setItem(channel, encodedMessage)
       return state
     }
