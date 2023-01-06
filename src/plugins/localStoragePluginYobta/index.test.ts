@@ -3,7 +3,7 @@ import {
   YOBTA_NEXT,
   YOBTA_READY,
 } from '../../stores/storeYobta/index.js'
-import { YobtaCodec } from '../../util/codecYobta/index.js'
+import { YobtaAnyCodec } from '../../util/codecYobta/index.js'
 import { localStoragePluginYobta } from './index.js'
 
 let defaultItem = JSON.stringify(['stored yobta'])
@@ -55,7 +55,7 @@ vi.mock('../../util/codecYobta/index.js', () => ({
         return [fallback()]
       }
     },
-  } as YobtaCodec,
+  } as YobtaAnyCodec,
 }))
 
 beforeEach(() => {

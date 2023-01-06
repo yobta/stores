@@ -1,4 +1,4 @@
-import { codecYobta, YobtaCodec } from '../../util/codecYobta/index.js'
+import { codecYobta, YobtaAnyCodec } from '../../util/codecYobta/index.js'
 import {
   YobtaStorePlugin,
   YOBTA_IDLE,
@@ -9,7 +9,7 @@ import {
 interface BroadcastChannelFactory {
   <State, Overloads extends any[] = any[]>(props: {
     channel: string
-    codec?: YobtaCodec
+    codec?: YobtaAnyCodec
   }): YobtaStorePlugin<State, Overloads>
 }
 
@@ -19,13 +19,19 @@ interface BroadcastChannelFactory {
  *
  * @param {Object} options - The options for the plugin.
  * @param {string} options.channel - The name of the channel to use for communication.
- * @param {YobtaCodec} [options.codec=codecYobta] - The codec to use for encoding and decoding
+ * @param {YobtaAnyCodec} [options.codec=codecYobta] - The codec to use for encoding and decoding
  * messages. Defaults to the `codecYobta` provided in `util/codecYobta/index.js`.
  *
  * @returns {YobtaStorePlugin} A Yobta store plugin that can be passed to the store factory when creating a store.
  */
 export const broadcastChannelPluginYobta: BroadcastChannelFactory =
-  ({ channel, codec = codecYobta }: { channel: string; codec?: YobtaCodec }) =>
+  ({
+    channel,
+    codec = codecYobta,
+  }: {
+    channel: string
+    codec?: YobtaAnyCodec
+  }) =>
   ({ addMiddleware, next, last }) => {
     let bc: BroadcastChannel | null
     let shouldMute: boolean

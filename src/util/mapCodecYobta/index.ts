@@ -1,7 +1,6 @@
-import { YobtaCodec } from '../codecYobta/index.js'
-import { YobtaJsonValue } from '../setCodecYobta/index.js'
+import { YobtaAnyCodec, YobtaJsonValue } from '../codecYobta/index.js'
 
-export interface YobtaMapCodec extends YobtaCodec {
+export interface YobtaMapCodec extends YobtaAnyCodec {
   encode(
     item: Map<YobtaJsonValue, YobtaJsonValue>,
     ...overloads: YobtaJsonValue[]

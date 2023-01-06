@@ -1,4 +1,4 @@
-import { codecYobta, YobtaCodec } from '../../util/codecYobta/index.js'
+import { codecYobta, YobtaAnyCodec } from '../../util/codecYobta/index.js'
 import {
   YobtaStorePlugin,
   YOBTA_IDLE,
@@ -11,19 +11,12 @@ interface StorageListener {
 }
 
 interface LocalStorageFactory {
-  <State, Overloads extends any[] = any[]>(props: {
+  <State extends any, Overloads extends any[] = any[]>(props: {
     channel: string
-    codec?: YobtaCodec
+    codec?: YobtaAnyCodec
   }): YobtaStorePlugin<State, Overloads>
 }
 
-/**
- * A factory function for creating a YobtaStorePlugin that syncs the state with localStorage.
- * @param {Object} props - The properties for the plugin.
- * @param {string} props.channel - The key in localStorage to use for storing the state.
- * @param {YobtaCodec} [props.codec=codecYobta] - The codec to use for serializing and deserializing the state.
- * @returns {YobtaStorePlugin<State>} - The created YobtaStorePlugin.
- */
 export const localStoragePluginYobta: LocalStorageFactory =
   ({ channel, codec = codecYobta }) =>
   ({ addMiddleware, next, last }) => {

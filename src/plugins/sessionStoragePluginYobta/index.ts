@@ -1,4 +1,4 @@
-import { codecYobta, YobtaCodec } from '../../util/codecYobta/index.js'
+import { codecYobta, YobtaAnyCodec } from '../../util/codecYobta/index.js'
 import {
   YobtaStorePlugin,
   YOBTA_IDLE,
@@ -7,7 +7,7 @@ import {
 } from '../../stores/storeYobta/index.js'
 
 interface SessionStoragePluginFactory {
-  <State>(props: { channel: string; codec?: YobtaCodec }): YobtaStorePlugin<
+  <State>(props: { channel: string; codec?: YobtaAnyCodec }): YobtaStorePlugin<
     State,
     never[]
   >
