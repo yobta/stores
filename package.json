@@ -221,6 +221,12 @@
       "path": "./lib/index.js",
       "import": "{ pubSubYobta }",
       "limit": "109 B"
+    },
+    {
+      "name": "setCodecYobta",
+      "path": "./lib/index.js",
+      "import": "{ setCodecYobta }",
+      "limit": "109 B"
     }
   ]
 }
