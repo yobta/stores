@@ -28,7 +28,6 @@ export const stackYobta: YobtaStackFactory = <Item, Overloads extends any[]>(
 ) => {
   let { last, observe, next, on } = storeYobta<ReadonlySet<Item>, Overloads>(
     new Set(initialState),
-
     ...plugins,
   )
   return {
