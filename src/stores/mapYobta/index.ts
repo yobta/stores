@@ -77,6 +77,16 @@ interface YobtaMapFactory {
 }
 // #endregion
 
+/**
+ * Creates an observable object that stores value as a JavaScript Map object.
+ *
+ * @example
+ * const store = mapYobta({
+ *  foo: 'bar',
+ *  baz: 123,
+ * })
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/stores/mapYobta/index.md}
+ */
 export const mapYobta: YobtaMapFactory = <
   PlainState extends YobtaAnyPlainObject,
   Overloads extends any[] = any[],
