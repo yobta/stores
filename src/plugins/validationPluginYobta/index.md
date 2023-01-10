@@ -2,7 +2,7 @@
 
 # Validation Plugin
 
-The `validationPluginYobta` is a factory function that creates a plugin for [@yobta/stores](https://github.com/yobta/stores). This plugin can be used to validate the state of a store before it is updated.
+A factory function that creates a store plugin. This plugin can be used to validate the state of a store before it is updated.
 
 The factory function takes a `validate` function as an argument, which should take an input of any type and return a state that is expected by the store. The `validate` function will be called every time the store's state is updated, and if it throws an error, the plugin will default to the store's initial state.
 
