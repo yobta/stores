@@ -8,12 +8,22 @@ const unsubscribeMock = vi.fn()
 vi.mock('../../stores/storeYobta/index.js', () => ({
   storeYobta(initialState: any) {
     let state = initialState
+    let observers: Set<() => void> = new Set()
     return {
       last: vi.fn().mockImplementation(() => state),
       next: vi.fn().mockImplementation((nextState: any) => {
         state = nextState
+        for (let observer of observers) {
+          observer()
+        }
       }),
-      observe: vi.fn().mockImplementation(() => unsubscribeMock),
+      observe: vi.fn().mockImplementation(observer => {
+        observers.add(observer)
+        return () => {
+          observers.delete(observer)
+          unsubscribeMock()
+        }
+      }),
     }
   },
 }))
@@ -47,8 +57,8 @@ it('should handle store updates', () => {
   act(() => {
     store.next(2)
   })
-  expect(store.last).toHaveBeenCalledTimes(2)
-  rerender()
   expect(store.last).toHaveBeenCalledTimes(3)
+  rerender()
+  expect(store.last).toHaveBeenCalledTimes(4)
   expect(result.current).toEqual(2)
 })
