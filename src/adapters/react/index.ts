@@ -13,11 +13,11 @@ export interface YobtaReactStoreHook {
 }
 
 /**
-A hook for subscribing to changes in a Yobta store in a React component.
-@param {YobtaAnyStore<State>} store - The Yobta store to subscribe to.
-@returns {State} - The current state of the store.
-@template State - The type of state contained in the store.
-*/
+ * A react hook for @yobta/stores
+ * @example
+ * const state = useYobta(myStore)
+ * @see {@link https://github.com/yobta/stores/blob/master/src/adapters/react/index.md} component docs.
+ */
 export const useYobta: YobtaReactStoreHook = store => {
   let [, forceUpdate] = useState({})
   useEffect(() => {
