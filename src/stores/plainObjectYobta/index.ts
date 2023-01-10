@@ -54,6 +54,16 @@ interface PlainObjectFactory {
 }
 // #endregion
 
+/**
+ * Creates an observable store that holds an immutable value.
+ *
+ * @example
+ * const store = plainObjectYobta({
+ *  foo: 'bar',
+ *  baz: 123,
+ * })
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/stores/plainObjectYobta/index.md}
+ */
 export const plainObjectYobta: PlainObjectFactory = <
   State extends AnyPlainObject,
   Overloads extends any[],
