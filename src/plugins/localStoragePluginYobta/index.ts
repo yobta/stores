@@ -30,6 +30,17 @@ interface LocalStorageFactory {
   ): YobtaStorePlugin<State, Overloads>
 }
 
+/**
+ * A plugin for @yobta/stores that persists store state in local storage and synchronizes state across multiple browser tabs.
+ * @example
+ * const store = storeYobta(
+ *  'initial state',
+ *  localStoragePluginYobta({
+ *     channel: 'my-store-yobta',
+ *  })
+ * ),
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/plugins/localStoragePluginYobta/index.md}.
+ */
 export const localStoragePluginYobta: LocalStorageFactory =
   ({ channel, codec = codecYobta }) =>
   ({ addMiddleware, next, last }) => {
