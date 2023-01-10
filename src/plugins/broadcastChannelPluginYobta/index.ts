@@ -26,6 +26,15 @@ interface BroadcastChannelFactory {
   ): YobtaStorePlugin<State, Overloads>
 }
 
+/**
+ * A plugin for @yobta/stores that allows them to receive state updates from other instances of the same store using the browser's BroadcastChannel API.
+ * @example
+ * const store = storeYobta(
+ *  'initial state',
+ *  broadcastChannelPluginYobta({ channel: 'my-store' })
+ * ),
+ * @see docs: {@link https://github.com/yobta/stores/tree/master/src/plugins/broadcastChannelPluginYobta/index.md}.
+ */
 export const broadcastChannelPluginYobta: BroadcastChannelFactory =
   ({ channel, codec = codecYobta }) =>
   ({ addMiddleware, next, last }) => {

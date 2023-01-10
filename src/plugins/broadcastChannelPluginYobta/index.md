@@ -2,7 +2,7 @@
 
 # Broadcast Channel Plugin
 
-A plugin for [@yobta/stores](https://www.npmjs.com/package/@yobta/stores) that allows them synchronize their states with other instances of the same store using the browser's [BroadcastChannel API](https://developer.mozilla.org/en-US/docs/Web/API/BroadcastChannel).
+A plugin for [@yobta/stores](https://www.npmjs.com/package/@yobta/stores) that allows them to receive state updates from other instances of the same store using the browser's [BroadcastChannel API](https://developer.mozilla.org/en-US/docs/Web/API/BroadcastChannel).
 
 It is important to note that this plugin does not persist state, meaning that stores may have different initial states.
 
