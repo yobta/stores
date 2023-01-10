@@ -22,6 +22,13 @@ interface YobtaStackFactory {
   }
 }
 
+/**
+ * Creates an observable stack store.
+ *
+ * @example
+ * const store = stackYobta([])
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/stores/stackYobta/index.md}
+ */
 export const stackYobta: YobtaStackFactory = <Item, Overloads extends any[]>(
   initialState?: Set<Item> | Item[],
   ...plugins: YobtaStorePlugin<ReadonlySet<Item>, Overloads>[]

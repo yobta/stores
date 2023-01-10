@@ -30,9 +30,9 @@ myStack.add(1)
 
 The `add` method returns `true` if the item was successfully added, and `false` if the item already exists in the stack.
 
-## Removing the Last Item
+## Removing Items
 
-To remove the last item from the stack, you can use the `remove` method:
+To remove any item from the stack, you can use the `remove` method:
 
 ```ts
 myStack.remove(4)
