@@ -30,30 +30,16 @@ interface MachineFactory {
 // #endregion
 
 /**
- * A factory function for creating an observable state machine stores.
- *
- * @template States - An object type representing the possible states in the machine.
- * @template Overloads - The type(s) of the additional arguments passed to the `next` function.
- *
- * @param {States} transitions - A map of transitions for the machine.
- * @param {keyof States} initialState - The initial state of the machine.
- * @param {...YobtaStorePlugin<keyof States, Overloads>} plugins - The plugins to apply to the Yobta store.
- *
- * @returns {(initialState: keyof States, ...plugins: YobtaStorePlugin<keyof States, Overloads>[]) => {
- *   last: () => keyof States,
- *   next: YobtaStateSetter<keyof States, Overloads>,
- *   observe: (observer: YobtaObserver<keyof States, Overloads>) => VoidFunction,
- *   on: (event: YobtaStoreEvent, handler: (state: keyof States) => void) => VoidFunction
- * }}
+ * Creates an observable state machine store.
  *
  * @example
  * const transitions = {
- *   IDLE: ['LOADING'],
- *   LOADING: ['IDLE', 'ERROR'],
- *   ERROR: ['LOADING'],
+ *  IDLE: ['LOADING'],
+ *  LOADING: ['IDLE', 'ERROR'],
+ *  ERROR: ['LOADING'],
  * }
- *
- * const myMachine = machineYobta(transitions)('IDLE')
+ * const machine = machineYobta(transitions)('IDLE')
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/stores/machineYobta/index.md}
  */
 export const machineYobta: MachineFactory =
   <States extends TransitionMap<States>>(transitions: States) =>
