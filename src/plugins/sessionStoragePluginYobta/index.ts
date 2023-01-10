@@ -22,6 +22,17 @@ interface SessionStoragePluginFactory {
   ): YobtaStorePlugin<State, any[]>
 }
 
+/**
+ * A plugin for @yobta/stores that persists store state in session storage.
+ * @example
+ * const store = storeYobta(
+ *  'initial state',
+ *  sessionStoragePluginYobta({
+ *     channel: 'my-store-yobta',
+ *  })
+ * ),
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/plugins/sessionStoragePluginYobta/index.md}.
+ */
 export const sessionStoragePluginYobta: SessionStoragePluginFactory =
   ({ channel, codec = codecYobta }) =>
   ({ addMiddleware }) => {
