@@ -33,7 +33,7 @@ interface BroadcastChannelFactory {
  *  'initial state',
  *  broadcastChannelPluginYobta({ channel: 'my-store' })
  * ),
- * @see docs: {@link https://github.com/yobta/stores/tree/master/src/plugins/broadcastChannelPluginYobta/index.md}.
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/plugins/broadcastChannelPluginYobta/index.md}.
  */
 export const broadcastChannelPluginYobta: BroadcastChannelFactory =
   ({ channel, codec = codecYobta }) =>

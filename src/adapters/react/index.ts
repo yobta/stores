@@ -16,7 +16,7 @@ export interface YobtaReactStoreHook {
  * A react hook for @yobta/stores
  * @example
  * const state = useYobta(myStore)
- * @see docs: {@link https://github.com/yobta/stores/blob/master/src/adapters/react/index.md}.
+ * @documentation {@link https://github.com/yobta/stores/blob/master/src/adapters/react/index.md}.
  */
 export const useYobta: YobtaReactStoreHook = store => {
   let [, forceUpdate] = useState({})
