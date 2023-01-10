@@ -24,7 +24,6 @@ interface YobtaStackFactory {
 
 /**
  * Creates an observable stack store.
- *
  * @example
  * const store = stackYobta([])
  * @documentation {@link https://github.com/yobta/stores/tree/master/src/stores/stackYobta/index.md}

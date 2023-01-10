@@ -58,18 +58,10 @@ interface YobtaStoreFactory {
 // #endregion
 
 /**
- * A factory function for creating an observable store object.
- *
- * @template State The type of the state object to be managed by the store.
- * @template Overloads The types of additional arguments that can be passed to the `next` function.
- * @param {State} initialState The initial state of the store.
- * @param {...YobtaStorePlugin<State, Overloads>[]} plugins An optional list of store plugins to apply.
- * @returns {
- *   last: YobtaStateGetter<State>,
- *   next: YobtaStateSetter<State, Overloads>,
- *   observe: (observer: YobtaObserver<State, Overloads>) => void,
- *   on: (event: YobtaStoreSubscriberEvent, handler: (state: State) => void) => void
- * } An observable store object containing functions to manage the store, including `last`, `next`, `observe`, and `on`.
+ * Creates an observable store object.
+ * @example
+ * const store = storeYobta('initial state')
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/stores/storeYobta/index.md}
  */
 export const storeYobta: YobtaStoreFactory = <
   State,

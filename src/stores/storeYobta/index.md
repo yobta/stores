@@ -2,7 +2,7 @@
 
 # Yobta Store
 
-Yobta Store is a factory function that creates an observable store for storing and observing the changes of a value. The storeYobta store is designed to be easy to use and extend with plugins that add middleware to state transitions.
+Creates an observable store for storing and observing the changes of a value. Designed to be easy to use and extend with plugins that add middleware to state transitions.
 
 ## Features
 
