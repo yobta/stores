@@ -1,6 +1,12 @@
-import { YOBTA_IDLE, StorePlugin } from '../../stores/observableYobta/index.js'
+import { YOBTA_IDLE, YobtaStorePlugin } from '../../stores/storeYobta/index.js'
 
-export const lazyPluginYobta: StorePlugin<any> = ({
+/**
+ * A plugin for the @yobta/stores that resets the store to its initial state when the store is idle.
+ * @example
+ * const store = storeYobta('initial state', lazyPluginYobta),
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/plugins/lazyPluginYobta/index.md}.
+ */
+export const lazyPluginYobta: YobtaStorePlugin<any, any[]> = ({
   addMiddleware,
   initialState,
 }) => {

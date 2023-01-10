@@ -38,7 +38,7 @@
     "@babel/core": "^7.19.3",
     "@logux/eslint-config": "^47.2.0",
     "@size-limit/preset-small-lib": "^8.1.0",
-    "@testing-library/react": "^12.1.5",
+    "@testing-library/react": "^13.4.0",
     "@types/jest": "^28.1.8",
     "@types/jsdom": "^16.2.15",
     "@types/node": "^16.11.66",
@@ -64,8 +64,8 @@
     "eslint-plugin-vitest-globals": "^1.2.0",
     "happy-dom": "^5.4.0",
     "prettier": "^2.7.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
     "size-limit": "^8.1.0",
     "typescript": "^4.8.4",
     "vite": "^3.1.8",
@@ -118,43 +118,19 @@
     {
       "name": "all",
       "path": "./lib/index.js",
-      "limit": "1222 B"
+      "limit": "1467 B"
     },
     {
-      "name": "machineYobta",
-      "path": "./lib/index.js",
-      "import": "{ machineYobta }",
-      "limit": "343 B"
-    },
-    {
-      "name": "mapYobta",
-      "path": "./lib/index.js",
-      "import": "{ mapYobta }",
-      "limit": "420 B"
-    },
-    {
-      "name": "observableYobta",
-      "path": "./lib/index.js",
-      "import": "{ observableYobta }",
-      "limit": "276 B"
-    },
-    {
-      "name": "plainObjectYobta",
-      "path": "./lib/index.js",
-      "import": "{ plainObjectYobta }",
-      "limit": "370 B"
-    },
-    {
-      "name": "stackYobta",
-      "path": "./lib/index.js",
-      "import": "{ stackYobta }",
-      "limit": "363 B"
+      "name": "useYobta",
+      "path": "./lib/adapters/react/index.js",
+      "import": "{ useYobta }",
+      "limit": "2941 B"
     },
     {
       "name": "broadcastChannelPluginYobta",
       "path": "./lib/index.js",
       "import": "{ broadcastChannelPluginYobta }",
-      "limit": "307 B"
+      "limit": "306 B"
     },
     {
       "name": "lazyPluginYobta",
@@ -172,31 +148,91 @@
       "name": "sessionStoragePluginYobta",
       "path": "./lib/index.js",
       "import": "{ sessionStoragePluginYobta }",
-      "limit": "212 B"
+      "limit": "213 B"
     },
     {
       "name": "validationPluginYobta",
       "path": "./lib/index.js",
       "import": "{ validationPluginYobta }",
-      "limit": "79 B"
+      "limit": "107 B"
     },
     {
-      "name": "encoderYobta",
+      "name": "machineYobta",
       "path": "./lib/index.js",
-      "import": "{ encoderYobta }",
+      "import": "{ machineYobta }",
+      "limit": "531 B"
+    },
+    {
+      "name": "mapYobta",
+      "path": "./lib/index.js",
+      "import": "{ mapYobta }",
+      "limit": "645 B"
+    },
+    {
+      "name": "plainObjectYobta",
+      "path": "./lib/index.js",
+      "import": "{ plainObjectYobta }",
+      "limit": "626 B"
+    },
+    {
+      "name": "stackYobta",
+      "path": "./lib/index.js",
+      "import": "{ stackYobta }",
+      "limit": "597 B"
+    },
+    {
+      "name": "storeYobta",
+      "path": "./lib/index.js",
+      "import": "{ storeYobta }",
+      "limit": "480 B"
+    },
+    {
+      "name": "codecYobta",
+      "path": "./lib/index.js",
+      "import": "{ codecYobta }",
       "limit": "89 B"
     },
     {
-      "name": "mapEncoderYobta",
+      "name": "composeYobta",
       "path": "./lib/index.js",
-      "import": "{ mapEncoderYobta }",
+      "import": "{ composeYobta }",
+      "limit": "69 B"
+    },
+    {
+      "name": "diffMapYobta",
+      "path": "./lib/index.js",
+      "import": "{ diffMapYobta }",
+      "limit": "70 B"
+    },
+    {
+      "name": "diffObjectYobta",
+      "path": "./lib/index.js",
+      "import": "{ diffObjectYobta }",
+      "limit": "60 B"
+    },
+    {
+      "name": "mapCodecYobta",
+      "path": "./lib/index.js",
+      "import": "{ mapCodecYobta }",
       "limit": "122 B"
+    },
+    {
+      "name": "observableYobta",
+      "path": "./lib/index.js",
+      "import": "{ observableYobta }",
+      "limit": "98 B"
     },
     {
       "name": "pubSubYobta",
       "path": "./lib/index.js",
       "import": "{ pubSubYobta }",
-      "limit": "109 B"
+      "limit": "116 B"
+    },
+    {
+      "name": "setCodecYobta",
+      "path": "./lib/index.js",
+      "import": "{ setCodecYobta }",
+      "limit": "116 B"
     }
   ]
 }

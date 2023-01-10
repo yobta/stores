@@ -1,68 +1,133 @@
 import {
-  ObservableStore,
-  observableYobta,
-  StorePlugin,
+  storeYobta,
+  YobtaStorePlugin,
   OptionalKey,
+  diffMapYobta,
+  YobtaStateGetter,
+  YobtaStoreSubscriberEvent,
+  YobtaObserver,
 } from '../../index.js'
 
 // #region Types
+type IfEquals<X, Y, A, B> = (<T>() => T extends X ? 1 : 2) extends <
+  T,
+>() => T extends Y ? 1 : 2
+  ? A
+  : B
+type WritableKeyOf<PlainObject extends YobtaAnyPlainObject> = {
+  [Key in keyof PlainObject]: IfEquals<
+    { [Q in Key]: PlainObject[Key] },
+    { -readonly [Q in Key]: PlainObject[Key] },
+    Key,
+    never
+  >
+}[keyof PlainObject]
+export type YobtaWritablePartial<PlainState extends YobtaAnyPlainObject> =
+  Partial<Pick<PlainState, WritableKeyOf<PlainState>>>
+
 export type YobtaAnyPlainObject = Record<YobtaMapKey, any>
 export type YobtaEntries<PlainObject> = {
   [K in keyof PlainObject]: [K, PlainObject[K]]
 }[keyof PlainObject][]
-
 export type YobtaMapKey = string | number | symbol
 export type YobtaAnyMap = Map<YobtaMapKey, any>
 export type YobtaMapState<PlainState extends YobtaAnyPlainObject> = Map<
   keyof PlainState,
   PlainState[keyof PlainState]
 >
-export interface YobtaMapObserver<PlainState extends YobtaAnyPlainObject> {
-  (
-    state: YobtaMapState<PlainState>,
-    changes: YobtaEntries<PlainState>,
-    ...overloads: any[]
-  ): void
-}
+type YobtaReadonlyMapState<PlainState extends YobtaAnyPlainObject> =
+  ReadonlyMap<keyof PlainState, PlainState[keyof PlainState]>
+type YobtaMapAssigned<PlainState extends YobtaAnyPlainObject> =
+  YobtaReadonlyMapState<YobtaWritablePartial<PlainState>>
+type YobtaOmittedKeysSet<PlainState extends YobtaAnyPlainObject> = ReadonlySet<
+  OptionalKey<PlainState>
+>
+type YobtaMapChanges<PlainState extends YobtaAnyPlainObject> =
+  | YobtaReadonlyMapState<YobtaWritablePartial<PlainState>>
+  | YobtaOmittedKeysSet<PlainState>
 
-interface MapFactory {
-  <PlainState extends YobtaAnyPlainObject>(
+interface YobtaMapFactory {
+  <PlainState extends YobtaAnyPlainObject, Overloads extends any[] = any[]>(
     initialState: PlainState,
-    ...listeners: StorePlugin<YobtaMapState<PlainState>>[]
-  ): Omit<ObservableStore<YobtaMapState<PlainState>>, 'next'> & {
-    assign(patch: Partial<PlainState>, ...overloads: any[]): void
-    observe(observer: YobtaMapObserver<PlainState>): VoidFunction
-    omit(keys: OptionalKey<PlainState>[], ...overloads: any[]): void
+    ...plugins: YobtaStorePlugin<
+      YobtaMapState<PlainState>,
+      [YobtaMapChanges<PlainState>, ...Overloads]
+    >[]
+  ): {
+    assign(
+      patch: YobtaWritablePartial<PlainState>,
+      ...overloads: Overloads
+    ): YobtaMapAssigned<PlainState>
+    last: YobtaStateGetter<YobtaReadonlyMapState<PlainState>>
+    observe(
+      observer: YobtaObserver<
+        YobtaReadonlyMapState<PlainState>,
+        [YobtaMapChanges<PlainState>, ...Overloads]
+      >,
+    ): VoidFunction
+    omit(
+      keys: OptionalKey<PlainState>[],
+      ...overloads: Overloads
+    ): YobtaOmittedKeysSet<PlainState>
+    on(
+      event: YobtaStoreSubscriberEvent,
+      handler: (state: YobtaMapState<PlainState>) => void,
+    ): VoidFunction
   }
 }
 // #endregion
 
-export const mapYobta: MapFactory = (plainState, ...listeners) => {
-  let initialState: YobtaAnyMap = new Map(Object.entries(plainState))
-  let { next, ...store } = observableYobta(initialState, ...listeners)
-
+/**
+ * Creates an observable object that stores value as a JavaScript Map object.
+ *
+ * @example
+ * const store = mapYobta({
+ *  foo: 'bar',
+ *  baz: 123,
+ * })
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/stores/mapYobta/index.md}
+ */
+export const mapYobta: YobtaMapFactory = <
+  PlainState extends YobtaAnyPlainObject,
+  Overloads extends any[] = any[],
+>(
+  plainState: PlainState,
+  ...plugins: any[]
+) => {
+  let initialState: YobtaMapState<PlainState> = new Map(
+    Object.entries(plainState),
+  )
+  let { next, last, observe, on } = storeYobta<
+    YobtaMapState<PlainState>,
+    [YobtaMapChanges<PlainState>, ...Overloads]
+  >(initialState, ...plugins)
   return {
-    ...store,
-    assign(patch, ...overloads) {
-      let state = store.last()
-      let changes = Object.entries(patch).filter(
-        ([key, value]) => value !== state.get(key),
-      )
-      if (changes.length) {
-        changes.forEach(([key, value]) => state.set(key, value))
+    assign(patch, ...overloads: Overloads) {
+      let state = new Map(last())
+      let changes = diffMapYobta(
+        new Map(Object.entries(patch)),
+        state,
+      ) as unknown as YobtaMapAssigned<PlainState>
+      if (changes.size) {
+        changes.forEach((value, key) =>
+          state.set(key, value as PlainState[keyof PlainState]),
+        )
         next(state, changes, ...overloads)
       }
+      return changes
     },
-    omit(keys, ...overloads) {
-      let state = store.last()
-      let changes = keys.reduce<YobtaMapKey[]>((acc, key) => {
+    last,
+    observe,
+    omit(keys: OptionalKey<PlainState>[], ...overloads: Overloads) {
+      let state = new Map(last())
+      let changes = keys.reduce((acc, key) => {
         let result = state.delete(key)
-        if (result) acc.push(key)
+        if (result) acc.add(key)
         return acc
-      }, [])
-      if (changes.length) {
-        next(state, changes, ...overloads)
-      }
+      }, new Set()) as unknown as YobtaOmittedKeysSet<YobtaAnyPlainObject>
+      if (changes.size) next(state, changes, ...overloads)
+      return changes
     },
+    on,
   }
 }

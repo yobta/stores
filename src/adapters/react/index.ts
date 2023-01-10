@@ -1,24 +1,30 @@
 import { useState, useEffect } from 'react'
 
-import { StateGetter, Observer } from '../../index.js'
+import { YobtaObserver, YobtaStateGetter } from '../../index.js'
 
-interface AnyObservable<S> {
-  last: StateGetter<S>
-  observe(observer: Observer<any>): VoidFunction
+interface YobtaAnyStore<State, Overloads extends any[]> {
+  last: YobtaStateGetter<State>
+  observe(observer: YobtaObserver<State, Overloads>): VoidFunction
 }
-export interface ReactObservableHook {
-  <S>(store: AnyObservable<S>): S
+export interface YobtaReactStoreHook {
+  <State, Overloads extends any[] = any[]>(
+    store: YobtaAnyStore<State, Overloads>,
+  ): State
 }
 
-export const useObservable: ReactObservableHook = store => {
+/**
+ * A react hook for @yobta/stores
+ * @example
+ * const state = useYobta(myStore)
+ * @documentation {@link https://github.com/yobta/stores/blob/master/src/adapters/react/index.md}.
+ */
+export const useYobta: YobtaReactStoreHook = store => {
   let [, forceUpdate] = useState({})
-
   useEffect(() => {
     forceUpdate({})
     return store.observe(() => {
       forceUpdate({})
     })
   }, [store])
-
   return store.last()
 }

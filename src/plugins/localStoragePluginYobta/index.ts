@@ -1,41 +1,63 @@
-import { encoderYobta, YobtaEncoder } from '../../util/encoderYobta/index.js'
 import {
-  StorePlugin,
+  codecYobta,
+  YobtaGenericCodec,
+  YobtaJsonValue,
+  YobtaSimpleCodec,
+} from '../../util/codecYobta/index.js'
+import {
+  YobtaStorePlugin,
   YOBTA_IDLE,
   YOBTA_NEXT,
   YOBTA_READY,
-} from '../../stores/observableYobta/index.js'
+} from '../../stores/storeYobta/index.js'
 
 interface StorageListener {
   (event: StorageEvent): void
 }
 
-interface LocalStprageFactory {
-  <State>(props: {
-    channel: string
-    encoder?: YobtaEncoder
-  }): StorePlugin<State>
+interface LocalStorageFactory {
+  <
+    State extends any,
+    Codec extends YobtaGenericCodec<State>,
+    Overloads extends any[] = any[],
+  >(
+    props: State extends YobtaJsonValue
+      ? { channel: string; codec?: YobtaSimpleCodec }
+      : {
+          channel: string
+          codec: Codec
+        },
+  ): YobtaStorePlugin<State, Overloads>
 }
 
-export const localStoragePluginYobta: LocalStprageFactory =
-  ({ channel, encoder = encoderYobta }) =>
+/**
+ * A plugin for @yobta/stores that persists store state in local storage and synchronizes state across multiple browser tabs.
+ * @example
+ * const store = storeYobta(
+ *  'initial state',
+ *  localStoragePluginYobta({
+ *     channel: 'my-store-yobta',
+ *  })
+ * ),
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/plugins/localStoragePluginYobta/index.md}.
+ */
+export const localStoragePluginYobta: LocalStorageFactory =
+  ({ channel, codec = codecYobta }) =>
   ({ addMiddleware, next, last }) => {
     let onMessage: StorageListener = ({ key, newValue }) => {
       if (key === channel) {
-        let [message, ...overloads] = encoder.decode(newValue, last)
-        next(message, ...overloads)
+        let [message, ...overloads] = codec.decode(newValue, last)
+        next(message, ...(overloads as any))
       }
     }
-
     let write = (item: any, ...overloads: any[]): void => {
-      let encodedMessage = encoder.encode(item, ...overloads)
+      let encodedMessage = codec.encode(item, ...overloads)
       localStorage.setItem(channel, encodedMessage)
     }
-
     addMiddleware(YOBTA_READY, state => {
       let item = localStorage.getItem(channel)
       window.addEventListener('storage', onMessage)
-      return encoder.decode(item, () => state)[0]
+      return codec.decode(item, () => state)[0]
     })
     addMiddleware(YOBTA_IDLE, state => {
       write(state)

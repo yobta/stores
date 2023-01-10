@@ -5,13 +5,13 @@ const next = vi.fn()
 const last = vi.fn()
 const initialState = 1
 
-it('adds middleware', () => {
+it('alls addMiddleware with idle and a function when lazyPluginYobta is called', () => {
   lazyPluginYobta({ addMiddleware, initialState, next, last })
 
   expect(addMiddleware).toHaveBeenCalledWith('idle', expect.any(Function))
 })
 
-it('resets to initial state when idle', () => {
+it('resets the state to the initial value when the idle middleware is called', () => {
   lazyPluginYobta({ addMiddleware, initialState, next, last })
 
   let idle = addMiddleware.mock.calls[0][1]
@@ -19,7 +19,7 @@ it('resets to initial state when idle', () => {
   expect(idle(2)).toEqual(1)
 })
 
-it("doesn't call next", () => {
+it('does not call the next function when lazyPluginYobta is called', () => {
   lazyPluginYobta({ addMiddleware, initialState, next, last })
 
   expect(next).not.toHaveBeenCalled()

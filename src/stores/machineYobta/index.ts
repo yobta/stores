@@ -1,43 +1,63 @@
 import {
-  observableYobta,
-  StorePlugin,
-  StateSetter,
-  Observer,
+  storeYobta,
+  YobtaStorePlugin,
+  YobtaStateSetter,
+  YobtaObserver,
+  YobtaStoreEvent,
 } from '../../index.js'
 
 // #region Types
-type Transitions<T> = {
-  [K in keyof T]: Set<keyof Omit<T, K>>
+type TransitionMap<States> = {
+  [K in keyof States]: [keyof Omit<States, K>]
 }
 
 interface MachineFactory {
-  <T extends Transitions<T>>(transitions: T): (
-    initialState: keyof T,
-    ...listeners: StorePlugin<keyof T>[]
+  <States extends TransitionMap<States>>(transitions: States): <
+    Overloads extends any[] = any[],
+  >(
+    initialState: keyof States,
+    ...plugins: YobtaStorePlugin<keyof States, Overloads>[]
   ) => {
-    last(): keyof T
-    next: StateSetter<keyof T>
-    observe(observer: Observer<keyof T>): VoidFunction
+    last(): keyof States
+    next: YobtaStateSetter<keyof States, Overloads>
+    observe(observer: YobtaObserver<keyof States, Overloads>): VoidFunction
+    on(
+      event: YobtaStoreEvent,
+      handler: (state: keyof States) => void,
+    ): VoidFunction
   }
 }
 // #endregion
 
+/**
+ * Creates an observable state machine store.
+ *
+ * @example
+ * const transitions = {
+ *  IDLE: ['LOADING'],
+ *  LOADING: ['IDLE', 'ERROR'],
+ *  ERROR: ['LOADING'],
+ * }
+ * const machine = machineYobta(transitions)('IDLE')
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/stores/machineYobta/index.md}
+ */
 export const machineYobta: MachineFactory =
-  transitions =>
-  (initialState, ...listeners) => {
-    let store = observableYobta(initialState, ...listeners)
-
+  <States extends TransitionMap<States>>(transitions: States) =>
+  <Overloads extends any[] = any[]>(
+    initialState: keyof States,
+    ...plugins: YobtaStorePlugin<keyof States, Overloads>[]
+  ) => {
+    let { last, next, on, observe } = storeYobta<keyof States, Overloads>(
+      initialState,
+      ...plugins,
+    )
     return {
-      ...store,
-      next(action, ...overload) {
-        let lastState = store.last()
-        let nextState =
-          typeof action === 'function' ? action(lastState) : action
-        let availableTranstions = transitions[lastState]
-        // @ts-ignore
-        if (availableTranstions.has(nextState)) {
-          store.next(nextState, ...overload)
-        }
+      last,
+      next(state: keyof States, ...overloads: Overloads) {
+        let availableTranstions: [keyof States] = transitions[last()]
+        if (availableTranstions.includes(state)) next(state, ...overloads)
       },
+      observe,
+      on,
     }
   }

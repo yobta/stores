@@ -1,37 +1,63 @@
-import { ObservableStore, observableYobta } from '../observableYobta/index.js'
+import { YobtaObserver } from '../../util/observableYobta/index.js'
+import {
+  storeYobta,
+  YobtaStoreEvent,
+  YobtaStorePlugin,
+} from '../storeYobta/index.js'
 
-interface StackFactory {
-  <Item>(initialState?: Set<Item> | Item[]): Omit<
-    ObservableStore<Set<Item>>,
-    'last' | 'next'
-  > & {
-    add(member: Item): void
+interface YobtaStackFactory {
+  <Item, Overloads extends any[] = any[]>(
+    initialState: Set<Item> | Item[],
+    ...plugins: YobtaStorePlugin<ReadonlySet<Item>, Overloads>[]
+  ): {
+    add(member: Item, ...overloads: any[]): boolean
     last(): Item
-    next(state: Set<Item>): void
-    remove(member: Item): boolean
+    observe(observer: YobtaObserver<ReadonlySet<Item>, Overloads>): VoidFunction
+    on(
+      event: YobtaStoreEvent,
+      handler: (state: ReadonlySet<Item>) => void,
+    ): VoidFunction
+    remove(member: Item, ...overloads: any[]): boolean
     size(): number
   }
 }
 
-export const stackYobta: StackFactory = <Item>(
+/**
+ * Creates an observable stack store.
+ * @example
+ * const store = stackYobta([])
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/stores/stackYobta/index.md}
+ */
+export const stackYobta: YobtaStackFactory = <Item, Overloads extends any[]>(
   initialState?: Set<Item> | Item[],
+  ...plugins: YobtaStorePlugin<ReadonlySet<Item>, Overloads>[]
 ) => {
-  let store = observableYobta<Set<Item>>(new Set([...(initialState || [])]))
+  let { last, observe, next, on } = storeYobta<ReadonlySet<Item>, Overloads>(
+    new Set(initialState),
+    ...plugins,
+  )
   return {
-    ...store,
-    add(member: Item) {
-      store.next(last => new Set([member, ...last]))
-    },
-    remove(member: Item) {
-      let last = store.last()
-      let result = last.delete(member)
-      store.next(last)
-      return result
+    add(item: Item, ...overloads: Overloads) {
+      let state = last()
+      if (!state.has(item)) {
+        let nextState = new Set([item, ...state])
+        next(nextState, ...overloads)
+        return true
+      }
+      return false
     },
     last() {
-      let [first] = store.last()
+      let [first] = last()
       return first
     },
-    size: () => store.last().size,
+    observe,
+    on,
+    remove(item: Item, ...overloads: Overloads) {
+      let state = new Set(last())
+      let result = state.delete(item)
+      if (result) next(state, ...overloads)
+      return result
+    },
+    size: () => last().size,
   }
 }

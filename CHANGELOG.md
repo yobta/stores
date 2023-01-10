@@ -2,6 +2,27 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.1.1
+
+Breakng changes:
+Rename observableYobte to storeYobta
+Remove store init event
+Remove setter from store next method
+Map store becomes mutable
+Renamed `useObservable` hook to `useYobta`
+Renamed `encoderYobta` to `codecYobta`
+Renames `mapEncoderYobta` to `mapCodecYobta`
+Machine store now takes map of arrays instead of sets
+
+Improvements:
+Add observable utility
+Change store to compose middlewares
+Update documentation
+Add diffMapYobta utility
+Add compose utility
+Add diff object utility
+Add on => off to all stores
+
 ## 0.0.36
 
 Fix build command
