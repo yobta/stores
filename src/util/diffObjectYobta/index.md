@@ -1,3 +1,5 @@
+&larr; [Home](../../../README.md)
+
 # Object Diff Utility
 
 The `diffObjectYobta` utility is a function that compares two objects and returns a new object containing only the key-value pairs that are different between the two objects. If there are no differences, returns `null`.

@@ -10,17 +10,21 @@ export type YobtaObserver<Item, Overloads extends any[]> = (
 ) => void
 
 interface YobtaObservableFactory {
-  <Item, Overloads extends any[] = any[]>(): YobtaObservable<Item, Overloads>
+  <Item extends any, Overloads extends any[] = any[]>(): YobtaObservable<
+    Item,
+    Overloads
+  >
 }
 
 /**
- * Creates a new YobtaObservable instance.
- * @returns {{
- *   next: (item: Item, ...overloads: any[]) => void,
- *   observe: (observer: YobtaObserver<Item>) => VoidFunction,
- *   size: number
- * }} A new YobtaObservable instance.
- * @template Item
+ * Creates an observable object.
+ *
+ * @example
+ * const observable = observableYobta()
+ * const unsubscribe = observable.observe(console.log)
+ * observable.next('value')
+ * unsubscribe()
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/util/observableYobta/index.md}
  */
 export const observableYobta: YobtaObservableFactory = () => {
   let observers = new Set<YobtaObserver<any, any>>()

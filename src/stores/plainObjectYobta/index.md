@@ -1,3 +1,5 @@
+&larr; [Home](../../../README.md)
+
 # Plain Object Store
 
 Creates an observable store that holds an immutable value. The store creates a new value instance each time you update the value using the `assign` or `omit` operation.

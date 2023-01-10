@@ -1,3 +1,5 @@
+&larr; [Home](../../../README.md)
+
 # Machine Store
 
 A factory function for creating observable state machine stores with a given set of transitions. The state machine can be used to track the current state of a process, and to set the next state based on the current state and a set of predefined transitions.

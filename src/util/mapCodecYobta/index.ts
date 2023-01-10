@@ -9,6 +9,14 @@ export interface YobtaMapCodec extends YobtaGenericCodec<YobtaJsonMap> {
   ) => [Result, ...YobtaJsonValue[]]
 }
 
+/**
+ * Encodes and decodes Map objects to JSON.
+ *
+ * @example
+ * const encoded = mapCodecYobta.encode(new Map(), [...overloads])
+ * const [decoded, ...overloads] = mapCodecYobta.decode(encoded, fallback)
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/util/mapCodecYobta/index.md}
+ */
 export const mapCodecYobta: YobtaMapCodec = {
   encode(item, ...overloads) {
     let entries = item.size ? [...item.entries()] : []

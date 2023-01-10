@@ -46,11 +46,11 @@ interface YobtaCompose {
 }
 
 /**
- * A function that composes a list of functions into a single function.
+ * Composes a list of functions into a single function.
  *
- * @template Functions A list of functions to be composed.
- * @param {Composed<Functions>} yobtas The list of functions to be composed.
- * @returns {(input: ArgType<Last<Functions>>, ...overloads: any[]) => FirstReturned<Functions>} A function that is the result of composing the list of functions.
+ * @example
+ * const composed = composeYobta(functionA, functionB, ...functionN[])
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/util/composeYobta/index.md}
  */
 export const composeYobta: YobtaCompose = (...yobtas) => {
   if (yobtas.length === 0) return (arg: any) => arg

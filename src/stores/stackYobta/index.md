@@ -1,3 +1,5 @@
+&larr; [Home](../../../README.md)
+
 # Stack Store
 
 The Stack Store is a data structure for storing items in a last-in, first-out (LIFO) order. It provides methods for adding and removing items, observing changes to the stack, and getting the current size of the stack.

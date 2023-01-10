@@ -7,11 +7,11 @@ interface YobtaDiffObject {
 }
 
 /**
- * Returns a new object containing the key-value pairs in `inputObject` that are not present in `referenceObject`, or have different values in `referenceObject`.
+ * Compares two plain objects and returns the difference object.
  *
- * @param {Map<K, V>} inputObject - The first object to compare.
- * @param {Map<K, V>} referenceObject - The second object to compare.
- * @returns {Map<K, V>} A new object containing the key-value pairs in `inputObject` that are not present in `referenceObject`, or have different values in `referenceObject`.
+ * @example
+ * const diff = diffObjectYobta(inputObject, referenceObject)
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/util/diffObjectYobta/index.md}
  */
 export const diffObjectYobta: YobtaDiffObject = (
   inputObject,

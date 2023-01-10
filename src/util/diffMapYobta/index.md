@@ -1,6 +1,8 @@
+&larr; [Home](../../../README.md)
+
 # Diff Map Utility
 
-The `diffMapYobta` utility is a function that takes in two [`Map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) objects, `inputMap` and `referenceMap`, and returns a new `Map` containing the key-value pairs in `inputMap` that are not present in `referenceMap`, or have different values in `referenceMap`.
+A utility that takes in two [`Map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) objects, `inputMap` and `referenceMap`, and returns a new `Map` containing the key-value pairs in `inputMap` that are not present in `referenceMap`, or have different values in `referenceMap`.
 
 ## How to use the utility
 

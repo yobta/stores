@@ -9,6 +9,14 @@ export interface YobtaSetCodec extends YobtaGenericCodec<YobtaJsonSet> {
   ) => [Result, ...YobtaJsonValue[]]
 }
 
+/**
+ * Encodes and decodes Set objects to JSON.
+ *
+ * @example
+ * const encoded = setCodecYobta.encode(new Set(), [...overloads])
+ * const [decoded, ...overloads] = setCodecYobta.decode(encoded, fallback)
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/util/setCodecYobta/index.md}
+ */
 export const setCodecYobta: YobtaSetCodec = {
   encode(item, ...overloads) {
     let entries = item.size ? [...item] : []

@@ -2,7 +2,7 @@
 
 # Compose Utility
 
-`composeYobta` is a utility function that allows you to combine multiple functions into a single function. It is useful for creating complex functionality by building it up from smaller, simpler functions.
+A utility function that allows you to combine multiple functions into a single function. It is useful for creating complex functionality by building it up from smaller, simpler functions.
 
 ## Importing
 

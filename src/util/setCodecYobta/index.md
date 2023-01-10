@@ -1,6 +1,8 @@
+&larr; [Home](../../../README.md)
+
 # Set Codec
 
-The Set Codec is a utility for encoding and decoding [sets](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set) of values. These values can be strings, numbers, booleans, null, objects, or arrays. Objects and arrays can contain other values of these types, but the set as a whole can only contain simple values that can be serialized to a JSON string. We implemented the utility as an object with two functions: `encode` serializes a set of simple values to a JSON string, and `decode` deserializes a JSON string back into a set of simple values.
+A utility for encoding and decoding [sets](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set) of values. These values can be strings, numbers, booleans, null, objects, or arrays. Objects and arrays can contain other values of these types, but the set as a whole can only contain simple values that can be serialized to a JSON string. We implemented the utility as an object with two functions: `encode` serializes a set of simple values to a JSON string, and `decode` deserializes a JSON string back into a set of simple values.
 
 ## Basic Usage
 

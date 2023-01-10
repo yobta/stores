@@ -1,6 +1,8 @@
+&larr; [Home](../../../README.md)
+
 # Map Codec
 
-The Map Codec is a utility for encoding and decoding [maps](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) of values. A map is a collection of key-value pairs, where both the keys and values are of the same type. The type can be any of the following: string, number, boolean, null, an object with string or number keys and values of the same type, or an array of values of the same type. The Map Codec can be used to serialize a map of simple values to a JSON string and deserialize it back into a map.
+A utility for encoding and decoding [maps](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) of values. A map is a collection of key-value pairs, where both the keys and values are of the same type. The type can be any of the following: string, number, boolean, null, an object with string or number keys and values of the same type, or an array of values of the same type. The Map Codec can be used to serialize a map of simple values to a JSON string and deserialize it back into a map.
 
 ## Introduction
 
