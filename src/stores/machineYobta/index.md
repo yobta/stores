@@ -15,10 +15,14 @@ import { machineYobta } from '@yobta/stores'
 Next, you will need to define a `transitions` object that specifies the allowed transitions between states. The keys of the object represent the possible states, and the values are arrays of allowed transition states. For example:
 
 ```ts
+const IDLE = 'IDLE' as const;
+const LOADING = 'LOADING' as const;
+const ERROR = 'ERROR' as const;
+
 const transitions = {
-  IDLE: ['LOADING'],
-  LOADING: ['IDLE', 'ERROR'],
-  ERROR: ['LOADING'],
+  [IDLE]: [LOADING],
+  [LOADING]: [IDLE, ERROR],
+  [ERROR]: [LOADING],
 }
 ```
 
