@@ -6,26 +6,18 @@ A factory function for creating observable state machine stores with a given set
 
 ## Usage
 
-To use the `machineYobta` function, you will need to import it from the `@yobta/stores` package:
+The following code imports the machine factory from the `@yobta/stores` package. It then defines a transition map and creates a new machine instance.
 
 ```ts
 import { machineYobta } from '@yobta/stores'
-```
 
-Next, you will need to define a `transitions` object that specifies the allowed transitions between states. The keys of the object represent the possible states, and the values are arrays of allowed transition states. For example:
-
-```ts
-const transitions = {
+const createMachine = machineYobta({
   IDLE: ['LOADING'],
   LOADING: ['IDLE', 'ERROR'],
   ERROR: ['LOADING'],
-}
-```
+})
 
-With the `transitions` object defined, you can create a state machine store by calling `machineYobta` and passing in the transitions object. You will also need to specify an initial state for the store:
-
-```ts
-const machine = machineYobta(transitions)('IDLE')
+const machine = createMachine('IDLE')
 ```
 
 ## Setting State
@@ -36,7 +28,7 @@ To set the state of the state machine store, you can use the `next` function:
 machine.next('LOADING')
 ```
 
-## Reading STate
+## Reading State
 
 To read the current state of the state machine store, you can use the `last` function:
 

@@ -8,7 +8,7 @@ import {
 
 // #region Types
 type TransitionMap<States> = {
-  [K in keyof States]: [keyof Omit<States, K>]
+  [K in keyof States]: (keyof Omit<States, K>)[]
 }
 
 interface MachineFactory {
@@ -54,7 +54,7 @@ export const machineYobta: MachineFactory =
     return {
       last,
       next(state: keyof States, ...overloads: Overloads) {
-        let availableTranstions: [keyof States] = transitions[last()]
+        let availableTranstions: (keyof States)[] = transitions[last()]
         if (availableTranstions.includes(state)) next(state, ...overloads)
       },
       observe,
