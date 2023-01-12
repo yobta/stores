@@ -72,7 +72,7 @@ unobserve()
 
 ## Overloads
 
-The `add`, `remove`, and `observe` methods support overloads, which are additional arguments that can be passed to the methods. These overloads can be used to provide additional context or data when interacting with the stack.
+The `add` and `remove` methods support overloads, which are additional arguments that can be passed to the methods. These overloads can be used to provide additional context or data when interacting with the stack.
 
 For example, you can use the `add` method with overloads like this:
 
