@@ -41,19 +41,21 @@ export type YobtaStateSetter<State, Overloads extends any[]> = (
   ...overloads: Overloads
 ) => void
 
+export type YobtaStore<State, Overloads extends any[] = any[]> = {
+  last: YobtaStateGetter<State>
+  next: YobtaStateSetter<State, Overloads>
+  observe(observer: YobtaObserver<State, Overloads>): VoidFunction
+  on(
+    event: YobtaStoreSubscriberEvent,
+    handler: (state: Readonly<State>) => void,
+  ): VoidFunction
+}
+
 interface YobtaStoreFactory {
   <State, Overloads extends any[] = any[]>(
     initialState: State,
     ...plugins: YobtaStorePlugin<State, Overloads>[]
-  ): {
-    last: YobtaStateGetter<State>
-    next: YobtaStateSetter<State, Overloads>
-    observe(observer: YobtaObserver<State, Overloads>): VoidFunction
-    on(
-      event: YobtaStoreSubscriberEvent,
-      handler: (state: Readonly<State>) => void,
-    ): VoidFunction
-  }
+  ): YobtaStore<State, Overloads>
 }
 // #endregion
 

@@ -1,6 +1,6 @@
-import { plainObjectYobta } from './index.js'
+import { plainObjectYobta, YobtaPlainObjectStore } from './index.js'
 
-let store: ReturnType<typeof plainObjectYobta>
+let store: YobtaPlainObjectStore<{ foo?: string; bar: string; baz?: never }>
 
 beforeEach(() => {
   store = plainObjectYobta({

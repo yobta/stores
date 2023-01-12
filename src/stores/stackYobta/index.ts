@@ -5,21 +5,23 @@ import {
   YobtaStorePlugin,
 } from '../storeYobta/index.js'
 
-interface YobtaStackFactory {
+export type YobtaStackStore<Item, Overloads extends any[] = any[]> = {
+  add(member: Item, ...overloads: any[]): boolean
+  last(): Item
+  observe(observer: YobtaObserver<ReadonlySet<Item>, Overloads>): VoidFunction
+  on(
+    event: YobtaStoreEvent,
+    handler: (state: ReadonlySet<Item>) => void,
+  ): VoidFunction
+  remove(member: Item, ...overloads: any[]): boolean
+  size(): number
+}
+
+interface YobtaStackStoreFactory {
   <Item, Overloads extends any[] = any[]>(
     initialState: Set<Item> | Item[],
     ...plugins: YobtaStorePlugin<ReadonlySet<Item>, Overloads>[]
-  ): {
-    add(member: Item, ...overloads: any[]): boolean
-    last(): Item
-    observe(observer: YobtaObserver<ReadonlySet<Item>, Overloads>): VoidFunction
-    on(
-      event: YobtaStoreEvent,
-      handler: (state: ReadonlySet<Item>) => void,
-    ): VoidFunction
-    remove(member: Item, ...overloads: any[]): boolean
-    size(): number
-  }
+  ): YobtaStackStore<Item, Overloads>
 }
 
 /**
@@ -28,7 +30,10 @@ interface YobtaStackFactory {
  * const store = stackYobta([])
  * @documentation {@link https://github.com/yobta/stores/tree/master/src/stores/stackYobta/index.md}
  */
-export const stackYobta: YobtaStackFactory = <Item, Overloads extends any[]>(
+export const stackYobta: YobtaStackStoreFactory = <
+  Item,
+  Overloads extends any[],
+>(
   initialState?: Set<Item> | Item[],
   ...plugins: YobtaStorePlugin<ReadonlySet<Item>, Overloads>[]
 ) => {

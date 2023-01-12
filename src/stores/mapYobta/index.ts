@@ -46,34 +46,39 @@ type YobtaMapChanges<PlainState extends YobtaAnyPlainObject> =
   | YobtaReadonlyMapState<YobtaWritablePartial<PlainState>>
   | YobtaOmittedKeysSet<PlainState>
 
-interface YobtaMapFactory {
+export type YobtaMapStore<
+  PlainState extends YobtaAnyPlainObject,
+  Overloads extends any[] = any[],
+> = {
+  assign(
+    patch: YobtaWritablePartial<PlainState>,
+    ...overloads: Overloads
+  ): YobtaMapAssigned<PlainState>
+  last: YobtaStateGetter<YobtaReadonlyMapState<PlainState>>
+  observe(
+    observer: YobtaObserver<
+      YobtaReadonlyMapState<PlainState>,
+      [YobtaMapChanges<PlainState>, ...Overloads]
+    >,
+  ): VoidFunction
+  omit(
+    keys: OptionalKey<PlainState>[],
+    ...overloads: Overloads
+  ): YobtaOmittedKeysSet<PlainState>
+  on(
+    event: YobtaStoreSubscriberEvent,
+    handler: (state: YobtaMapState<PlainState>) => void,
+  ): VoidFunction
+}
+
+interface YobtaMapStoreFactory {
   <PlainState extends YobtaAnyPlainObject, Overloads extends any[] = any[]>(
     initialState: PlainState,
     ...plugins: YobtaStorePlugin<
       YobtaMapState<PlainState>,
       [YobtaMapChanges<PlainState>, ...Overloads]
     >[]
-  ): {
-    assign(
-      patch: YobtaWritablePartial<PlainState>,
-      ...overloads: Overloads
-    ): YobtaMapAssigned<PlainState>
-    last: YobtaStateGetter<YobtaReadonlyMapState<PlainState>>
-    observe(
-      observer: YobtaObserver<
-        YobtaReadonlyMapState<PlainState>,
-        [YobtaMapChanges<PlainState>, ...Overloads]
-      >,
-    ): VoidFunction
-    omit(
-      keys: OptionalKey<PlainState>[],
-      ...overloads: Overloads
-    ): YobtaOmittedKeysSet<PlainState>
-    on(
-      event: YobtaStoreSubscriberEvent,
-      handler: (state: YobtaMapState<PlainState>) => void,
-    ): VoidFunction
-  }
+  ): YobtaMapStore<PlainState, Overloads>
 }
 // #endregion
 
@@ -87,7 +92,7 @@ interface YobtaMapFactory {
  * })
  * @documentation {@link https://github.com/yobta/stores/tree/master/src/stores/mapYobta/index.md}
  */
-export const mapYobta: YobtaMapFactory = <
+export const mapYobta: YobtaMapStoreFactory = <
   PlainState extends YobtaAnyPlainObject,
   Overloads extends any[] = any[],
 >(

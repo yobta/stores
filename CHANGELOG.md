@@ -2,6 +2,14 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.1.3
+
+Export store types
+
+## 0.1.2
+
+Fix machine store typings
+
 ## 0.1.1
 
 Breakng changes:

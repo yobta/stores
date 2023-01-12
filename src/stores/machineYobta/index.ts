@@ -11,21 +11,26 @@ type TransitionMap<States> = {
   [K in keyof States]: (keyof Omit<States, K>)[]
 }
 
-interface MachineFactory {
+export type YobtaMachineStore<
+  States extends TransitionMap<States>,
+  Overloads extends any[] = any[],
+> = {
+  last(): keyof States
+  next: YobtaStateSetter<keyof States, Overloads>
+  observe(observer: YobtaObserver<keyof States, Overloads>): VoidFunction
+  on(
+    event: YobtaStoreEvent,
+    handler: (state: keyof States) => void,
+  ): VoidFunction
+}
+
+interface YobtaMachineStoreFactory {
   <States extends TransitionMap<States>>(transitions: States): <
     Overloads extends any[] = any[],
   >(
     initialState: keyof States,
     ...plugins: YobtaStorePlugin<keyof States, Overloads>[]
-  ) => {
-    last(): keyof States
-    next: YobtaStateSetter<keyof States, Overloads>
-    observe(observer: YobtaObserver<keyof States, Overloads>): VoidFunction
-    on(
-      event: YobtaStoreEvent,
-      handler: (state: keyof States) => void,
-    ): VoidFunction
-  }
+  ) => YobtaMachineStore<States, Overloads>
 }
 // #endregion
 
@@ -41,7 +46,7 @@ interface MachineFactory {
  * const machine = machineYobta(transitions)('IDLE')
  * @documentation {@link https://github.com/yobta/stores/tree/master/src/stores/machineYobta/index.md}
  */
-export const machineYobta: MachineFactory =
+export const machineYobta: YobtaMachineStoreFactory =
   <States extends TransitionMap<States>>(transitions: States) =>
   <Overloads extends any[] = any[]>(
     initialState: keyof States,

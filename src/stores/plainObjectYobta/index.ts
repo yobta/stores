@@ -26,31 +26,36 @@ type ChangesWithOverloads<
   Readonly<YobtaWritablePartial<State>> | readonly OptionalKey<State>[],
   ...Overloads,
 ]
-interface PlainObjectFactory {
+
+export type YobtaPlainObjectStore<
+  State extends AnyPlainObject,
+  Overloads extends any[] = any[],
+> = {
+  assign(
+    patch: YobtaWritablePartial<State>,
+    ...overloads: Overloads
+  ): YobtaWritablePartial<State>
+  last: YobtaStateGetter<State>
+  observe(
+    observer: YobtaObserver<State, ChangesWithOverloads<State, Overloads>>,
+  ): VoidFunction
+  omit(
+    keys: OptionalKey<State>[],
+    ...overloads: Overloads
+  ): OptionalKey<State>[]
+  on(
+    event: YobtaStoreSubscriberEvent,
+    handler: (state: Readonly<State>) => void,
+  ): VoidFunction
+}
+interface YobtaPlainObjectStoreFactory {
   <State extends AnyPlainObject, Overloads extends any[] = any[]>(
     initialState: State,
     ...plugins: YobtaStorePlugin<
       State,
       ChangesWithOverloads<State, Overloads>
     >[]
-  ): {
-    assign(
-      patch: YobtaWritablePartial<State>,
-      ...overloads: Overloads
-    ): YobtaWritablePartial<State>
-    last: YobtaStateGetter<State>
-    observe(
-      observer: YobtaObserver<State, ChangesWithOverloads<State, Overloads>>,
-    ): VoidFunction
-    omit(
-      keys: OptionalKey<State>[],
-      ...overloads: Overloads
-    ): OptionalKey<State>[]
-    on(
-      event: YobtaStoreSubscriberEvent,
-      handler: (state: Readonly<State>) => void,
-    ): VoidFunction
-  }
+  ): YobtaPlainObjectStore<State, Overloads>
 }
 // #endregion
 
@@ -64,7 +69,7 @@ interface PlainObjectFactory {
  * })
  * @documentation {@link https://github.com/yobta/stores/tree/master/src/stores/plainObjectYobta/index.md}
  */
-export const plainObjectYobta: PlainObjectFactory = <
+export const plainObjectYobta: YobtaPlainObjectStoreFactory = <
   State extends AnyPlainObject,
   Overloads extends any[],
 >(
