@@ -9,6 +9,17 @@ beforeEach(() => {
   })
 })
 
+it('returns a store object', () => {
+  expect(store).toEqual({
+    assign: expect.any(Function),
+    last: expect.any(Function),
+    observe: expect.any(Function),
+    onReady: expect.any(Function),
+    onIdle: expect.any(Function),
+    omit: expect.any(Function),
+  })
+})
+
 it('creates a store with the correct initial state', () => {
   expect(store.last()).toEqual({
     foo: 'foo',

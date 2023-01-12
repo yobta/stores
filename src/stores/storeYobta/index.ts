@@ -2,7 +2,10 @@ import {
   observableYobta,
   YobtaObserver,
 } from '../../util/observableYobta/index.js'
-import { pubSubYobta } from '../../util/pubSubYobta/index.js'
+import {
+  pubSubYobta,
+  YobtaPubsubSubscriber,
+} from '../../util/pubSubYobta/index.js'
 import { composeMiddleware } from './middleware.js'
 
 // #region Types
@@ -45,10 +48,8 @@ export type YobtaStore<State, Overloads extends any[] = any[]> = {
   last: YobtaStateGetter<State>
   next: YobtaStateSetter<State, Overloads>
   observe(observer: YobtaObserver<State, Overloads>): VoidFunction
-  on(
-    event: YobtaStoreSubscriberEvent,
-    handler: (state: Readonly<State>) => void,
-  ): VoidFunction
+  onReady(handler: YobtaPubsubSubscriber<Readonly<State>, never>): VoidFunction
+  onIdle(handler: YobtaPubsubSubscriber<Readonly<State>, never>): VoidFunction
 }
 
 interface YobtaStoreFactory {
@@ -56,6 +57,11 @@ interface YobtaStoreFactory {
     initialState: State,
     ...plugins: YobtaStorePlugin<State, Overloads>[]
   ): YobtaStore<State, Overloads>
+}
+
+type Topics<State> = {
+  [YOBTA_READY]: Readonly<State>
+  [YOBTA_IDLE]: Readonly<State>
 }
 // #endregion
 
@@ -74,8 +80,7 @@ export const storeYobta: YobtaStoreFactory = <
 ) => {
   let observable = observableYobta<State, Overloads>()
   let state: State = initialState
-  let { publish, subscribe } =
-    pubSubYobta<Record<YobtaStoreSubscriberEvent, State>>()
+  let { publish, subscribe } = pubSubYobta<Topics<State>, never>()
   let next: YobtaStateSetter<State, Overloads> = (
     nextState: State,
     ...overloads
@@ -112,6 +117,9 @@ export const storeYobta: YobtaStoreFactory = <
         }
       }
     },
-    on: subscribe,
+    onReady: (cb: YobtaPubsubSubscriber<Readonly<State>, never>) =>
+      subscribe(YOBTA_READY, cb),
+    onIdle: (cb: YobtaPubsubSubscriber<Readonly<State>, never>) =>
+      subscribe(YOBTA_IDLE, cb),
   }
 }

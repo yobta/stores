@@ -6,6 +6,18 @@ beforeEach(() => {
   stack = stackYobta(['item1', 'item2'])
 })
 
+it('returns a store object', () => {
+  expect(stack).toEqual({
+    add: expect.any(Function),
+    last: expect.any(Function),
+    observe: expect.any(Function),
+    onReady: expect.any(Function),
+    onIdle: expect.any(Function),
+    remove: expect.any(Function),
+    size: expect.any(Function),
+  })
+})
+
 it('initial state', () => {
   expect(stack.last()).toBe('item1')
   expect(stack.size()).toBe(2)

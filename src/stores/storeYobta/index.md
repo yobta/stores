@@ -72,16 +72,16 @@ console.log(store.last()) // Check the store value
 
 ## Subscribing to Store Events
 
-Each store has a method called `on` which allows you to subscribe to store lifecycle events. Subscribers receive the current store value before.
+Each store has two methods called `onReady` and `onIdle` which allows you to subscribe to store lifecycle events. Subscribers receive the current store value before.
 
 ```ts
 const store = storeYobta(0)
 
-const unsubscribeReady = store.on('ready', nextState => {
-  fetchNewNumber().then(store.next)
+const unsubscribeReady = store.onReady(state => {
+  console.log(`Ready with: ${state}`)
 })
-const unsubscribeIdle = store.on('idle', nextState => {
-  fetchNewNumber().then(store.next)
+const unsubscribeIdle = store.onIdle(state => {
+  console.log(`Idle with: ${state}`)
 })
 
 // Later if you need to:

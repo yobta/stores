@@ -7,7 +7,8 @@ it('returns store object', () => {
     last: expect.any(Function),
     observe: expect.any(Function),
     omit: expect.any(Function),
-    on: expect.any(Function),
+    onReady: expect.any(Function),
+    onIdle: expect.any(Function),
   })
 })
 

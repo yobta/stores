@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.1.4
+
+Update the stores api:
+
+- remove: store.on
+- add: store.onReady, store.onIdle
+
 ## 0.1.3
 
 Export store types

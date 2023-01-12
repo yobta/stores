@@ -51,7 +51,8 @@ it('returnes a store object', () => {
     last: expect.any(Function),
     next: expect.any(Function),
     observe: expect.any(Function),
-    on: expect.any(Function),
+    onReady: expect.any(Function),
+    onIdle: expect.any(Function),
   })
 })
 
@@ -189,7 +190,7 @@ it('Compose middlewares', () => {
 it('subscribes to ready event', () => {
   let store = storeYobta(1)
   let readyMock = vi.fn()
-  let unsubscribe = store.on(YOBTA_READY, readyMock)
+  let unsubscribe = store.onReady(readyMock)
   let unobserve = store.observe(vi.fn())
   expect(readyMock).toHaveBeenCalledTimes(1)
   expect(readyMock).toHaveBeenCalledWith(1)
@@ -201,7 +202,7 @@ it('subscribes to ready event', () => {
 it('subscribes to idle event', () => {
   let store = storeYobta(1)
   let idleMock = vi.fn()
-  let unsubscribe = store.on(YOBTA_IDLE, idleMock)
+  let unsubscribe = store.onIdle(idleMock)
   let unobserve = store.observe(vi.fn())
   expect(idleMock).toHaveBeenCalledTimes(0)
   unobserve()
@@ -212,7 +213,7 @@ it('subscribes to idle event', () => {
 
 it('unloks next after transitions', () => {
   let store = storeYobta(1)
-  store.on(YOBTA_READY, () => {
+  store.onReady(() => {
     expect(
       Promise.resolve().then(() => {
         store.next(3)
