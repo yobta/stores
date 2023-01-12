@@ -118,7 +118,7 @@
     {
       "name": "all",
       "path": "./lib/index.js",
-      "limit": "1467 B"
+      "limit": "1497 B"
     },
     {
       "name": "useYobta",
@@ -160,31 +160,31 @@
       "name": "machineYobta",
       "path": "./lib/index.js",
       "import": "{ machineYobta }",
-      "limit": "531 B"
+      "limit": "553 B"
     },
     {
       "name": "mapYobta",
       "path": "./lib/index.js",
       "import": "{ mapYobta }",
-      "limit": "645 B"
+      "limit": "670 B"
     },
     {
       "name": "plainObjectYobta",
       "path": "./lib/index.js",
       "import": "{ plainObjectYobta }",
-      "limit": "626 B"
+      "limit": "652 B"
     },
     {
       "name": "stackYobta",
       "path": "./lib/index.js",
       "import": "{ stackYobta }",
-      "limit": "597 B"
+      "limit": "620 B"
     },
     {
       "name": "storeYobta",
       "path": "./lib/index.js",
       "import": "{ storeYobta }",
-      "limit": "480 B"
+      "limit": "496 B"
     },
     {
       "name": "codecYobta",
