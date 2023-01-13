@@ -114,4 +114,4 @@ You can enhance the functionality of the plain object store by using plugins in 
 
 ## Subscribing to Store Events
 
-The Machine store supports the same events as other stores. For more information, see the [Store documentation](../storeYobta/index.md).
+The Plain Object store supports the same events as other stores. For more information, see the [Store documentation](../storeYobta/index.md).
