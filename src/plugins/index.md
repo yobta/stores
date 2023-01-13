@@ -29,7 +29,7 @@ const loggerPlugin: YobtaStorePlugin<number> = ({ addMiddleware }) => {
     return state
   })
 }
-const store = yobtaStore(0, loggerPlugin)
+const store = storeYobta(0, loggerPlugin)
 ```
 
 ## Composition of Middlewares
@@ -56,7 +56,7 @@ const loggerPlugin: YobtaStorePlugin<number> = ({ addMiddleware }) => {
     return state
   })
 }
-const store = yobtaStore(0, loggerPlugin)
+const store = storeYobta(0, loggerPlugin)
 store.next(store.last() + 1, 'add', '1')
 ```
 
