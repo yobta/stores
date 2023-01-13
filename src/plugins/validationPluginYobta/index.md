@@ -8,7 +8,7 @@ The factory function takes a `validate` function as an argument, which should ta
 
 To use the plugin, you can pass it to the store as an overload when creating the store:
 
-```ts
+```js
 import { storeYobta, validationPluginYobta } from '@yobta/stores'
 
 const initialState = {
@@ -29,7 +29,7 @@ In this example, the `validate` function will be called every time the store's s
 
 You can also use the `validationPluginYobta` factory function to create multiple validation plugins with different validate functions and pass them all to the store as overloads. This can be useful if you want to split up your validation logic into smaller, more reusable chunks.
 
-```ts
+```js
 import { storeYobta, validationPluginYobta } from '@yobta/stores'
 
 const initialState = {
