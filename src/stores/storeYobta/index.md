@@ -93,8 +93,8 @@ unsubscribeReady()
 Overloads are a feature that allow you to pass additional information, or metadata, along with updates to a store's value. They can be used by observers and the `next` middleware to better understand the context of the update. All stores support overloads, and you can pass any number of overloads when updating the store's value.
 
 ```ts
-const myPlugin = ({ addMiddleware }) => {
-  addMiddleware('next', state => {
+const myPlugin: YobtaStorePlugin<number, [{type: 'increment'}]> = ({ addMiddleware }) => {
+  addMiddleware('next', (value, meta) => {
     console.log(`The store will update to: ${value}. Operation: "${meta.type}"`)
     return state
   })
