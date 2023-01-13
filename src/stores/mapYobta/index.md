@@ -133,8 +133,8 @@ const store = mapYobta(
 
 Note that the `codec` property of the Local Storage plugin is optional. However, when using the plugin with a `mapYobta` store, a `codec` is required to serialize the store's state to JSON. If the state has nested maps, sets, or other types that cannot be easily serialized to JSON, you may need to create your own codec.
 
-The Machine store supports plugins in the same way that other stores do. For more information, see the [Plugins documentation](../../plugins/index.md).
+The Map store supports plugins in the same way that other stores do. For more information, see the [Plugins documentation](../../plugins/index.md).
 
 ## Subscribing to Store Events
 
-The Machine store supports the same events as other stores. For more information, see the [Store documentation](../storeYobta/index.md).
+The Map store supports the same events as other stores. For more information, see the [Store documentation](../storeYobta/index.md).
