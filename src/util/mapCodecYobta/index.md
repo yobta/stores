@@ -67,7 +67,7 @@ This will return an array that contains the decoded map and any additional value
 Here is an example of how to use the `mapCodecYobta` object:
 
 ```ts
-import { mapCodecYobta } from './mapCodecYobta'
+import { mapCodecYobta } from '@yobta/stores'
 
 const map = new Map([
   [1, 'a'],
