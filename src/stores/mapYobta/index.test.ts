@@ -9,6 +9,7 @@ it('returns store object', () => {
     omit: expect.any(Function),
     onReady: expect.any(Function),
     onIdle: expect.any(Function),
+    onBeforeUpdate: expect.any(Function),
   })
 })
 

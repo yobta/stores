@@ -2,7 +2,6 @@ import {
   storeYobta,
   YobtaStorePlugin,
   YobtaStateSetter,
-  YobtaObserver,
   YobtaPubsubSubscriber,
 } from '../../index.js'
 
@@ -17,9 +16,14 @@ export type YobtaMachineStore<
 > = {
   last(): keyof States
   next: YobtaStateSetter<keyof States, Overloads>
-  observe(observer: YobtaObserver<keyof States, Overloads>): VoidFunction
-  onReady(handler: YobtaPubsubSubscriber<keyof States, never>): VoidFunction
-  onIdle(handler: YobtaPubsubSubscriber<keyof States, never>): VoidFunction
+  observe(
+    observer: YobtaPubsubSubscriber<[keyof States, ...Overloads]>,
+  ): VoidFunction
+  onReady(subscriber: YobtaPubsubSubscriber<[keyof States]>): VoidFunction
+  onIdle(subscriber: YobtaPubsubSubscriber<[keyof States]>): VoidFunction
+  onBeforeUpdate(
+    subscriber: YobtaPubsubSubscriber<[keyof States]>,
+  ): VoidFunction
 }
 
 interface YobtaMachineStoreFactory {
@@ -50,7 +54,7 @@ export const machineYobta: YobtaMachineStoreFactory =
     initialState: keyof States,
     ...plugins: YobtaStorePlugin<keyof States, Overloads>[]
   ) => {
-    let { last, next, observe, onReady, onIdle } = storeYobta<
+    let { last, next, observe, onReady, onIdle, onBeforeUpdate } = storeYobta<
       keyof States,
       Overloads
     >(initialState, ...plugins)
@@ -60,6 +64,7 @@ export const machineYobta: YobtaMachineStoreFactory =
         let availableTranstions: (keyof States)[] = transitions[last()]
         if (availableTranstions.includes(state)) next(state, ...overloads)
       },
+      onBeforeUpdate,
       observe,
       onReady,
       onIdle,

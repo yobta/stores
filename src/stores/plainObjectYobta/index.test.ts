@@ -16,6 +16,7 @@ it('returns a store object', () => {
     observe: expect.any(Function),
     onReady: expect.any(Function),
     onIdle: expect.any(Function),
+    onBeforeUpdate: expect.any(Function),
     omit: expect.any(Function),
   })
 })

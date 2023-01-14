@@ -1,15 +1,17 @@
-import { YobtaObserver } from '../../util/observableYobta/index.js'
 import { YobtaPubsubSubscriber } from '../../util/pubSubYobta/index.js'
 import { storeYobta, YobtaStorePlugin } from '../storeYobta/index.js'
 
 export type YobtaStackStore<Item, Overloads extends any[] = any[]> = {
   add(member: Item, ...overloads: any[]): boolean
   last(): Item
-  observe(observer: YobtaObserver<ReadonlySet<Item>, Overloads>): VoidFunction
-  onReady(
-    handler: YobtaPubsubSubscriber<ReadonlySet<Item>, never>,
+  observe(
+    observer: YobtaPubsubSubscriber<[ReadonlySet<Item>, ...Overloads]>,
   ): VoidFunction
-  onIdle(handler: YobtaPubsubSubscriber<ReadonlySet<Item>, never>): VoidFunction
+  onBeforeUpdate(
+    subcriber: YobtaPubsubSubscriber<[ReadonlySet<Item>]>,
+  ): VoidFunction
+  onReady(subcriber: YobtaPubsubSubscriber<[ReadonlySet<Item>]>): VoidFunction
+  onIdle(subcriber: YobtaPubsubSubscriber<[ReadonlySet<Item>]>): VoidFunction
   remove(member: Item, ...overloads: any[]): boolean
   size(): number
 }
@@ -34,7 +36,7 @@ export const stackYobta: YobtaStackStoreFactory = <
   initialState?: Set<Item> | Item[],
   ...plugins: YobtaStorePlugin<ReadonlySet<Item>, Overloads>[]
 ) => {
-  let { last, observe, next, onReady, onIdle } = storeYobta<
+  let { last, observe, next, onReady, onIdle, onBeforeUpdate } = storeYobta<
     ReadonlySet<Item>,
     Overloads
   >(new Set(initialState), ...plugins)
@@ -53,6 +55,7 @@ export const stackYobta: YobtaStackStoreFactory = <
       return first
     },
     observe,
+    onBeforeUpdate,
     onReady,
     onIdle,
     remove(item: Item, ...overloads: Overloads) {

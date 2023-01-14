@@ -4,7 +4,6 @@ import {
   OptionalKey,
   diffMapYobta,
   YobtaStateGetter,
-  YobtaObserver,
   YobtaPubsubSubscriber,
 } from '../../index.js'
 
@@ -56,9 +55,12 @@ export type YobtaMapStore<
   ): YobtaMapAssigned<PlainState>
   last: YobtaStateGetter<YobtaReadonlyMapState<PlainState>>
   observe(
-    observer: YobtaObserver<
-      YobtaReadonlyMapState<PlainState>,
-      [YobtaMapChanges<PlainState>, ...Overloads]
+    observer: YobtaPubsubSubscriber<
+      [
+        YobtaReadonlyMapState<PlainState>,
+        YobtaMapChanges<PlainState>,
+        ...Overloads,
+      ]
     >,
   ): VoidFunction
   omit(
@@ -66,13 +68,15 @@ export type YobtaMapStore<
     ...overloads: Overloads
   ): YobtaOmittedKeysSet<PlainState>
   onReady(
-    handler: YobtaPubsubSubscriber<YobtaReadonlyMapState<PlainState>, never>,
+    subscriber: YobtaPubsubSubscriber<[YobtaReadonlyMapState<PlainState>]>,
   ): VoidFunction
   onIdle(
-    handler: YobtaPubsubSubscriber<YobtaReadonlyMapState<PlainState>, never>,
+    subscriber: YobtaPubsubSubscriber<[YobtaReadonlyMapState<PlainState>]>,
+  ): VoidFunction
+  onBeforeUpdate(
+    subscriber: YobtaPubsubSubscriber<[YobtaReadonlyMapState<PlainState>]>,
   ): VoidFunction
 }
-
 interface YobtaMapStoreFactory {
   <PlainState extends YobtaAnyPlainObject, Overloads extends any[] = any[]>(
     initialState: PlainState,
@@ -104,7 +108,7 @@ export const mapYobta: YobtaMapStoreFactory = <
   let initialState: YobtaMapState<PlainState> = new Map(
     Object.entries(plainState),
   )
-  let { next, last, observe, onReady, onIdle } = storeYobta<
+  let { next, last, observe, onReady, onIdle, onBeforeUpdate } = storeYobta<
     YobtaMapState<PlainState>,
     [YobtaMapChanges<PlainState>, ...Overloads]
   >(initialState, ...plugins)
@@ -135,6 +139,7 @@ export const mapYobta: YobtaMapStoreFactory = <
       if (changes.size) next(state, changes, ...overloads)
       return changes
     },
+    onBeforeUpdate,
     onReady,
     onIdle,
   }

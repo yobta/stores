@@ -11,6 +11,7 @@ it('creates store', () => {
     observe: expect.any(Function),
     onReady: expect.any(Function),
     onIdle: expect.any(Function),
+    onBeforeUpdate: expect.any(Function),
   })
 })
 
