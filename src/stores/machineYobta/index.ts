@@ -2,7 +2,9 @@ import {
   storeYobta,
   YobtaStorePlugin,
   YobtaStateSetter,
-  YobtaPubsubSubscriber,
+  YobtaReadyEvent,
+  YobtaIdleEvent,
+  YobtaTransitionEvent,
 } from '../../index.js'
 
 // #region Types
@@ -17,12 +19,15 @@ export type YobtaMachineStore<
   last(): keyof States
   next: YobtaStateSetter<keyof States, Overloads>
   observe(
-    observer: YobtaPubsubSubscriber<[keyof States, ...Overloads]>,
+    observer: (state: keyof States, ...overloads: Overloads) => void,
   ): VoidFunction
-  onReady(subscriber: YobtaPubsubSubscriber<[keyof States]>): VoidFunction
-  onIdle(subscriber: YobtaPubsubSubscriber<[keyof States]>): VoidFunction
-  onBeforeUpdate(
-    subscriber: YobtaPubsubSubscriber<[keyof States]>,
+  on(
+    topic: YobtaReadyEvent | YobtaIdleEvent,
+    subscriber: (state: keyof States) => void,
+  ): VoidFunction
+  on(
+    topic: YobtaTransitionEvent,
+    subscriber: (lastState: keyof States, nextState: keyof States) => void,
   ): VoidFunction
 }
 
@@ -54,19 +59,17 @@ export const machineYobta: YobtaMachineStoreFactory =
     initialState: keyof States,
     ...plugins: YobtaStorePlugin<keyof States, Overloads>[]
   ) => {
-    let { last, next, observe, onReady, onIdle, onBeforeUpdate } = storeYobta<
-      keyof States,
-      Overloads
-    >(initialState, ...plugins)
+    let { last, next, observe, on } = storeYobta<keyof States, Overloads>(
+      initialState,
+      ...plugins,
+    )
     return {
       last,
       next(state: keyof States, ...overloads: Overloads) {
         let availableTranstions: (keyof States)[] = transitions[last()]
         if (availableTranstions.includes(state)) next(state, ...overloads)
       },
-      onBeforeUpdate,
       observe,
-      onReady,
-      onIdle,
+      on,
     }
   }

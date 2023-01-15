@@ -12,7 +12,7 @@ export const YOBTA_BEFORE = 'before'
 export type YobtaReadyEvent = typeof YOBTA_READY
 export type YobtaIdleEvent = typeof YOBTA_IDLE
 export type YobtaNextEvent = typeof YOBTA_NEXT
-export type YobtaTrnsitionsEvent = typeof YOBTA_BEFORE
+export type YobtaTransitionEvent = typeof YOBTA_BEFORE
 export type YobtaStoreEvent = YobtaReadyEvent | YobtaIdleEvent | YobtaNextEvent
 export type YobtaStoreSubscriberEvent = YobtaReadyEvent | YobtaIdleEvent
 export type YobtaStoreMiddleware<State, Overloads extends any[]> = (
@@ -44,12 +44,18 @@ export type YobtaStore<State, Overloads extends any[] = any[]> = {
   last: YobtaStateGetter<State>
   next: YobtaStateSetter<State, Overloads>
   observe(
-    observer: YobtaPubsubSubscriber<[Readonly<State>, ...Overloads]>,
+    observer: (state: Readonly<State>, ...overloads: Overloads) => void,
   ): VoidFunction
-  onReady(handler: YobtaPubsubSubscriber<[Readonly<State>]>): VoidFunction
-  onIdle(handler: YobtaPubsubSubscriber<[Readonly<State>]>): VoidFunction
-  onBeforeUpdate(
-    handler: YobtaPubsubSubscriber<[Readonly<State>]>,
+  on(
+    topic: YobtaReadyEvent | YobtaIdleEvent,
+    subscriber: (state: Readonly<State>) => void,
+  ): VoidFunction
+  on(
+    topic: YobtaTransitionEvent,
+    subscriber: (
+      lastState: Readonly<State>,
+      nextState: Readonly<State>,
+    ) => void,
   ): VoidFunction
 }
 interface YobtaStoreFactory {
@@ -59,7 +65,7 @@ interface YobtaStoreFactory {
   ): YobtaStore<State, Overloads>
 }
 type Topics<State, Overloads extends any[]> = {
-  [YOBTA_BEFORE]: [Readonly<State>]
+  [YOBTA_BEFORE]: [Readonly<State>, Readonly<State>]
   [YOBTA_IDLE]: [Readonly<State>]
   [YOBTA_NEXT]: [Readonly<State>, ...Overloads]
   [YOBTA_READY]: [Readonly<State>]
@@ -80,13 +86,17 @@ export const storeYobta: YobtaStoreFactory = <
   ...plugins: YobtaStorePlugin<State, Overloads>[]
 ) => {
   let state: State = initialState
-  let { publish, subscribe, getSize } = pubSubYobta<Topics<State, Overloads>>()
+  let {
+    publish: p,
+    subscribe: on,
+    getSize: s,
+  } = pubSubYobta<Topics<State, Overloads>>()
   let next: YobtaStateSetter<State, Overloads> = (
     nextState: State,
     ...overloads
   ): void => {
     state = transition(YOBTA_NEXT, nextState, ...overloads)
-    publish(YOBTA_NEXT, state, ...overloads)
+    p(YOBTA_NEXT, state, ...overloads)
   }
   let last: YobtaStateGetter<State> = () => state
   let middleware = composeMiddleware<State, Overloads>({
@@ -101,7 +111,7 @@ export const storeYobta: YobtaStoreFactory = <
     ...overloads: any
   ): State => {
     let nextState = middleware[topic](updatedState, ...overloads)
-    publish(YOBTA_BEFORE, nextState)
+    p(YOBTA_BEFORE, state, nextState)
     return nextState
   }
   return {
@@ -110,24 +120,19 @@ export const storeYobta: YobtaStoreFactory = <
     observe: (
       observer: YobtaPubsubSubscriber<[Readonly<State>, ...Overloads]>,
     ) => {
-      if (getSize(YOBTA_NEXT) === 0) {
+      if (s(YOBTA_NEXT) === 0) {
         state = transition(YOBTA_READY, state)
-        publish(YOBTA_READY, state)
+        p(YOBTA_READY, state)
       }
-      let unsubscribe = subscribe(YOBTA_NEXT, observer)
+      let unsubscribe = on(YOBTA_NEXT, observer)
       return () => {
         unsubscribe()
-        if (getSize(YOBTA_NEXT) === 0) {
+        if (s(YOBTA_NEXT) === 0) {
           state = transition(YOBTA_IDLE, state)
-          publish(YOBTA_IDLE, state)
+          p(YOBTA_IDLE, state)
         }
       }
     },
-    onReady: (cb: YobtaPubsubSubscriber<[Readonly<State>]>) =>
-      subscribe(YOBTA_READY, cb),
-    onIdle: (cb: YobtaPubsubSubscriber<[Readonly<State>]>) =>
-      subscribe(YOBTA_IDLE, cb),
-    onBeforeUpdate: (cb: YobtaPubsubSubscriber<[Readonly<State>]>) =>
-      subscribe(YOBTA_BEFORE, cb),
+    on,
   }
 }

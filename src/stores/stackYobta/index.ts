@@ -1,17 +1,28 @@
-import { YobtaPubsubSubscriber } from '../../util/pubSubYobta/index.js'
-import { storeYobta, YobtaStorePlugin } from '../storeYobta/index.js'
+import {
+  storeYobta,
+  YobtaIdleEvent,
+  YobtaReadyEvent,
+  YobtaStorePlugin,
+  YobtaTransitionEvent,
+} from '../storeYobta/index.js'
 
 export type YobtaStackStore<Item, Overloads extends any[] = any[]> = {
   add(member: Item, ...overloads: any[]): boolean
   last(): Item
   observe(
-    observer: YobtaPubsubSubscriber<[ReadonlySet<Item>, ...Overloads]>,
+    observer: (state: ReadonlySet<Item>, ...overloads: Overloads) => void,
   ): VoidFunction
-  onBeforeUpdate(
-    subcriber: YobtaPubsubSubscriber<[ReadonlySet<Item>]>,
+  on(
+    topic: YobtaReadyEvent | YobtaIdleEvent,
+    subscriber: (state: ReadonlySet<Item>) => void,
   ): VoidFunction
-  onReady(subcriber: YobtaPubsubSubscriber<[ReadonlySet<Item>]>): VoidFunction
-  onIdle(subcriber: YobtaPubsubSubscriber<[ReadonlySet<Item>]>): VoidFunction
+  on(
+    topic: YobtaTransitionEvent,
+    subscriber: (
+      lastState: ReadonlySet<Item>,
+      nextState: ReadonlySet<Item>,
+    ) => void,
+  ): VoidFunction
   remove(member: Item, ...overloads: any[]): boolean
   size(): number
 }
@@ -36,10 +47,10 @@ export const stackYobta: YobtaStackStoreFactory = <
   initialState?: Set<Item> | Item[],
   ...plugins: YobtaStorePlugin<ReadonlySet<Item>, Overloads>[]
 ) => {
-  let { last, observe, next, onReady, onIdle, onBeforeUpdate } = storeYobta<
-    ReadonlySet<Item>,
-    Overloads
-  >(new Set(initialState), ...plugins)
+  let { last, observe, next, on } = storeYobta<ReadonlySet<Item>, Overloads>(
+    new Set(initialState),
+    ...plugins,
+  )
   return {
     add(item: Item, ...overloads: Overloads) {
       let state = last()
@@ -55,9 +66,7 @@ export const stackYobta: YobtaStackStoreFactory = <
       return first
     },
     observe,
-    onBeforeUpdate,
-    onReady,
-    onIdle,
+    on,
     remove(item: Item, ...overloads: Overloads) {
       let state = new Set(last())
       let result = state.delete(item)
