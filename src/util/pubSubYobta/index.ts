@@ -1,25 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
 
-export type YobtaPubsubSubscriber<Data, Overloads extends any[] = any[]> = (
-  data: Data,
-  ...overloads: Overloads
-) => void
+export type YobtaPubsubSubscriber<Args extends any[]> = (...args: Args) => void
 type BaseTopics = {
-  [key: string]: any
-  [key: symbol]: any
+  [key: string]: any[]
+  [key: symbol]: any[]
 }
 
 interface PubSubFactory {
-  <Topics extends BaseTopics, Overloads extends any[] = any[]>(): {
-    subscribe: <Topic extends keyof Topics>(
-      topic: keyof Topics,
-      subscriber: YobtaPubsubSubscriber<Topics[Topic], Overloads>,
-    ) => VoidFunction
+  <Topics extends BaseTopics>(): {
+    getSize: <Topic extends keyof Topics>(topic: Topic) => number
     publish: <Topic extends keyof Topics>(
       topic: Topic,
-      data: Topics[Topic],
-      ...overloads: Overloads
+      ...args: Topics[Topic]
     ) => void
+    subscribe: <Topic extends keyof Topics>(
+      topic: Topic,
+      subscriber: YobtaPubsubSubscriber<Topics[Topic]>,
+    ) => VoidFunction
   }
 }
 
@@ -33,27 +30,19 @@ interface PubSubFactory {
  * unsubscribe()
  * @documentation {@link https://github.com/yobta/stores/tree/master/src/util/pubSubYobta/index.md}
  */
-export const pubSubYobta: PubSubFactory = <
-  Topics extends BaseTopics,
-  Overloads extends any[] = any[],
->() => {
-  let subscribers = {} as Record<
-    keyof Topics,
-    Set<YobtaPubsubSubscriber<any, Overloads>>
-  >
+export const pubSubYobta: PubSubFactory = <Topics extends BaseTopics>() => {
+  let subscribers = {} as Record<keyof Topics, Set<YobtaPubsubSubscriber<any>>>
   return {
-    publish(topic: keyof Topics, data: any, ...overloads: Overloads) {
+    getSize: topic => subscribers[topic]?.size || 0,
+    publish(topic: keyof Topics, ...args: Topics[keyof Topics]) {
       let current = subscribers[topic]
       if (current) {
         current.forEach(notify => {
-          notify(data, ...overloads)
+          notify(...args)
         })
       }
     },
-    subscribe(
-      topic: keyof Topics,
-      subscriber: YobtaPubsubSubscriber<any, Overloads>,
-    ) {
+    subscribe(topic: keyof Topics, subscriber: YobtaPubsubSubscriber<any>) {
       let current = subscribers[topic] || new Set()
       current.add(subscriber)
       subscribers[topic] = current

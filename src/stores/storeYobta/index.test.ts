@@ -7,6 +7,7 @@ import {
   YOBTA_READY,
   YobtaStoreEvent,
   YobtaStoreMiddleware,
+  YOBTA_BEFORE,
 } from './index.js'
 
 const pluginMock = vi.fn()
@@ -51,8 +52,7 @@ it('returnes a store object', () => {
     last: expect.any(Function),
     next: expect.any(Function),
     observe: expect.any(Function),
-    onReady: expect.any(Function),
-    onIdle: expect.any(Function),
+    on: expect.any(Function),
   })
 })
 
@@ -101,6 +101,15 @@ it('Triggers YOBTA_IDLE event on plugin when last observer is removed', () => {
   expect(observerMock).toHaveBeenCalledTimes(0)
   expect(pluginMock).toHaveBeenCalledTimes(1)
   expect(handlersSpy[YOBTA_IDLE]).toHaveBeenCalledWith(1)
+})
+
+it('allows observers to read last state', () => {
+  let store = storeYobta(1)
+  let unsubscribe = store.observe(state => {
+    expect(state).toBe(2)
+  })
+  store.next(2)
+  unsubscribe()
 })
 
 it('Does not trigger YOBTA_IDLE event on plugin when observers are present', () => {
@@ -190,19 +199,19 @@ it('Compose middlewares', () => {
 it('subscribes to ready event', () => {
   let store = storeYobta(1)
   let readyMock = vi.fn()
-  let unsubscribe = store.onReady(readyMock)
+  let unsubscribe = store.on(YOBTA_READY, readyMock)
   let unobserve = store.observe(vi.fn())
   expect(readyMock).toHaveBeenCalledTimes(1)
   expect(readyMock).toHaveBeenCalledWith(1)
-  unobserve()
   unsubscribe()
+  unobserve()
   expect(readyMock).toHaveBeenCalledTimes(1)
 })
 
 it('subscribes to idle event', () => {
   let store = storeYobta(1)
   let idleMock = vi.fn()
-  let unsubscribe = store.onIdle(idleMock)
+  let unsubscribe = store.on(YOBTA_IDLE, idleMock)
   let unobserve = store.observe(vi.fn())
   expect(idleMock).toHaveBeenCalledTimes(0)
   unobserve()
@@ -211,14 +220,75 @@ it('subscribes to idle event', () => {
   expect(idleMock).toHaveBeenCalledWith(1)
 })
 
-it('unloks next after transitions', () => {
+it('emits beforeUpdate on ready when state is not changed by the middleware', () => {
   let store = storeYobta(1)
-  store.onReady(() => {
-    expect(
-      Promise.resolve().then(() => {
-        store.next(3)
-      }),
-    ).resolves.not.toThrow()
+  let transitionMock = vi.fn()
+  let unsubscribe = store.on(YOBTA_BEFORE, transitionMock)
+  let unobserve = store.observe(vi.fn())
+  expect(transitionMock).toHaveBeenCalledTimes(1)
+  expect(transitionMock).toHaveBeenCalledWith(1)
+  unobserve()
+  unsubscribe()
+})
+
+it('emits beforeUpdate on ready when state is changed by the middleware', () => {
+  let store = storeYobta(1, ({ addMiddleware }) => {
+    addMiddleware(YOBTA_READY, state => state + 1)
   })
-  store.observe(vi.fn())()
+  let transitionMock = vi.fn()
+  let unsubscribe = store.on(YOBTA_BEFORE, transitionMock)
+  let unobserve = store.observe(vi.fn())
+  expect(transitionMock).toHaveBeenCalledTimes(1)
+  expect(transitionMock).toHaveBeenCalledWith(2)
+  unobserve()
+  unsubscribe()
+})
+
+it('emits beforeUpdate on ready when state is not changed by next', () => {
+  let store = storeYobta(1)
+  let transitionMock = vi.fn()
+  let unsubscribe = store.on(YOBTA_BEFORE, transitionMock)
+  store.next(1)
+  expect(transitionMock).toHaveBeenCalledTimes(1)
+  expect(transitionMock).toHaveBeenCalledWith(1)
+  unsubscribe()
+})
+it('emits beforeUpdate on ready when state is changed by next', () => {
+  let store = storeYobta(1)
+  let transitionMock = vi.fn()
+  let unsubscribe = store.on(YOBTA_BEFORE, transitionMock)
+  store.next(2)
+  expect(transitionMock).toHaveBeenCalledTimes(1)
+  expect(transitionMock).toHaveBeenCalledWith(2)
+  unsubscribe()
+})
+
+it('emits beforeUpdate on idle when state is not changed by the middleware', () => {
+  let store = storeYobta(1)
+  let transitionMock = vi.fn()
+  let unsubscribe = store.on(YOBTA_BEFORE, transitionMock)
+  let unobserve = store.observe(vi.fn())
+  expect(transitionMock).toHaveBeenCalledTimes(1)
+  expect(transitionMock).toHaveBeenCalledWith(1)
+  unobserve()
+  unsubscribe()
+  expect(transitionMock).toHaveBeenCalledTimes(2)
+  expect(transitionMock).toHaveBeenCalledWith(1)
+})
+
+it('emits beforeUpdate on idle when state is changed by the middleware', () => {
+  let store = storeYobta(1, ({ addMiddleware }) => {
+    addMiddleware(YOBTA_IDLE, state => {
+      return state + 1
+    })
+  })
+  let transitionMock = vi.fn()
+  let unsubscribe = store.on(YOBTA_BEFORE, transitionMock)
+  let unobserve = store.observe(vi.fn())
+  expect(transitionMock).toHaveBeenCalledTimes(1)
+  expect(transitionMock).toHaveBeenCalledWith(1)
+  unobserve()
+  unsubscribe()
+  expect(transitionMock).toHaveBeenCalledTimes(2)
+  expect(transitionMock).toHaveBeenCalledWith(2)
 })

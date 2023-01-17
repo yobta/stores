@@ -4,8 +4,10 @@ import {
   OptionalKey,
   diffMapYobta,
   YobtaStateGetter,
-  YobtaObserver,
   YobtaPubsubSubscriber,
+  YobtaReadyEvent,
+  YobtaIdleEvent,
+  YobtaTransitionEvent,
 } from '../../index.js'
 
 // #region Types
@@ -56,23 +58,30 @@ export type YobtaMapStore<
   ): YobtaMapAssigned<PlainState>
   last: YobtaStateGetter<YobtaReadonlyMapState<PlainState>>
   observe(
-    observer: YobtaObserver<
-      YobtaReadonlyMapState<PlainState>,
-      [YobtaMapChanges<PlainState>, ...Overloads]
+    observer: YobtaPubsubSubscriber<
+      [
+        YobtaReadonlyMapState<PlainState>,
+        YobtaMapChanges<PlainState>,
+        ...Overloads,
+      ]
     >,
   ): VoidFunction
+  // observe(
+  //   observer: (
+  //     state: YobtaReadonlyMapState<PlainState>,
+  //     changes: YobtaMapChanges<PlainState>,
+  //     ...overloads: Overloads
+  //   ) => void,
+  // ): VoidFunction
   omit(
     keys: OptionalKey<PlainState>[],
     ...overloads: Overloads
   ): YobtaOmittedKeysSet<PlainState>
-  onReady(
-    handler: YobtaPubsubSubscriber<YobtaReadonlyMapState<PlainState>, never>,
-  ): VoidFunction
-  onIdle(
-    handler: YobtaPubsubSubscriber<YobtaReadonlyMapState<PlainState>, never>,
+  on(
+    topic: YobtaReadyEvent | YobtaIdleEvent | YobtaTransitionEvent,
+    subscriber: (state: YobtaReadonlyMapState<PlainState>) => void,
   ): VoidFunction
 }
-
 interface YobtaMapStoreFactory {
   <PlainState extends YobtaAnyPlainObject, Overloads extends any[] = any[]>(
     initialState: PlainState,
@@ -104,7 +113,7 @@ export const mapYobta: YobtaMapStoreFactory = <
   let initialState: YobtaMapState<PlainState> = new Map(
     Object.entries(plainState),
   )
-  let { next, last, observe, onReady, onIdle } = storeYobta<
+  let { next, last, observe, on } = storeYobta<
     YobtaMapState<PlainState>,
     [YobtaMapChanges<PlainState>, ...Overloads]
   >(initialState, ...plugins)
@@ -135,7 +144,6 @@ export const mapYobta: YobtaMapStoreFactory = <
       if (changes.size) next(state, changes, ...overloads)
       return changes
     },
-    onReady,
-    onIdle,
+    on,
   }
 }

@@ -3,9 +3,11 @@ import {
   YobtaStorePlugin,
   diffObjectYobta,
   YobtaStateGetter,
-  YobtaObserver,
   YobtaWritablePartial,
   YobtaPubsubSubscriber,
+  YobtaIdleEvent,
+  YobtaReadyEvent,
+  YobtaTransitionEvent,
 } from '../../index.js'
 
 // #region Types
@@ -37,14 +39,27 @@ export type YobtaPlainObjectStore<
   ): YobtaWritablePartial<State>
   last: YobtaStateGetter<State>
   observe(
-    observer: YobtaObserver<State, ChangesWithOverloads<State, Overloads>>,
+    observer: YobtaPubsubSubscriber<
+      [Readonly<State>, ...ChangesWithOverloads<State, Overloads>]
+    >,
   ): VoidFunction
+  // oberve(
+  //   observer: (
+  //     state: Readonly<State>,
+  //     changes:
+  //       | Readonly<YobtaWritablePartial<State>>
+  //       | readonly OptionalKey<State>[],
+  //     ...overloads: Overloads
+  //   ) => void,
+  // ): VoidFunction
   omit(
     keys: OptionalKey<State>[],
     ...overloads: Overloads
   ): OptionalKey<State>[]
-  onReady(handler: YobtaPubsubSubscriber<Readonly<State>, never>): VoidFunction
-  onIdle(handler: YobtaPubsubSubscriber<Readonly<State>, never>): VoidFunction
+  on(
+    topic: YobtaReadyEvent | YobtaIdleEvent | YobtaTransitionEvent,
+    subscriber: (state: Readonly<State>) => void,
+  ): VoidFunction
 }
 interface YobtaPlainObjectStoreFactory {
   <State extends AnyPlainObject, Overloads extends any[] = any[]>(
@@ -77,7 +92,7 @@ export const plainObjectYobta: YobtaPlainObjectStoreFactory = <
     ChangesWithOverloads<State, Overloads>
   >[]
 ) => {
-  let { next, last, observe, onReady, onIdle } = storeYobta<
+  let { next, last, observe, on } = storeYobta<
     State,
     ChangesWithOverloads<State, Overloads>
   >(initialState, ...listeners)
@@ -101,7 +116,6 @@ export const plainObjectYobta: YobtaPlainObjectStoreFactory = <
       if (changes.length) next(state, changes, ...overloads)
       return changes
     },
-    onReady,
-    onIdle,
+    on,
   }
 }

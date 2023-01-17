@@ -118,7 +118,7 @@
     {
       "name": "all",
       "path": "./lib/index.js",
-      "limit": "1497 B"
+      "limit": "1576 B"
     },
     {
       "name": "useYobta",
@@ -160,31 +160,31 @@
       "name": "machineYobta",
       "path": "./lib/index.js",
       "import": "{ machineYobta }",
-      "limit": "553 B"
+      "limit": "537 B"
     },
     {
       "name": "mapYobta",
       "path": "./lib/index.js",
       "import": "{ mapYobta }",
-      "limit": "670 B"
+      "limit": "649 B"
     },
     {
       "name": "plainObjectYobta",
       "path": "./lib/index.js",
       "import": "{ plainObjectYobta }",
-      "limit": "652 B"
+      "limit": "632 B"
     },
     {
       "name": "stackYobta",
       "path": "./lib/index.js",
       "import": "{ stackYobta }",
-      "limit": "620 B"
+      "limit": "601 B"
     },
     {
       "name": "storeYobta",
       "path": "./lib/index.js",
       "import": "{ storeYobta }",
-      "limit": "496 B"
+      "limit": "483 B"
     },
     {
       "name": "codecYobta",
@@ -226,13 +226,25 @@
       "name": "pubSubYobta",
       "path": "./lib/index.js",
       "import": "{ pubSubYobta }",
-      "limit": "116 B"
+      "limit": "153 B"
     },
     {
       "name": "setCodecYobta",
       "path": "./lib/index.js",
       "import": "{ setCodecYobta }",
       "limit": "116 B"
+    },
+    {
+      "name": "storeEffectYobta",
+      "path": "./lib/index.js",
+      "import": "{ storeEffectYobta }",
+      "limit": "74 B"
+    },
+    {
+      "name": "transitionEffectYobta",
+      "path": "./lib/index.js",
+      "import": "{ transitionEffectYobta }",
+      "limit": "57 B"
     }
   ]
 }
