@@ -7,9 +7,9 @@ import {
 type AnyStore<State> = Pick<YobtaStore<State>, 'on'>
 
 interface StoreEffectYobta {
-  <Store extends AnyStore<State>, State>(
-    store: Store,
-    effect: (state: Parameters<Parameters<Store['on']>[1]>[0]) => VoidFunction,
+  <State>(
+    store: AnyStore<State>,
+    effect: (state: State) => VoidFunction,
   ): VoidFunction
 }
 
