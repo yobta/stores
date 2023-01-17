@@ -47,15 +47,8 @@ export type YobtaStore<State, Overloads extends any[] = any[]> = {
     observer: (state: Readonly<State>, ...overloads: Overloads) => void,
   ): VoidFunction
   on(
-    topic: YobtaReadyEvent | YobtaIdleEvent,
+    topic: YobtaReadyEvent | YobtaIdleEvent | YobtaTransitionEvent,
     subscriber: (state: Readonly<State>) => void,
-  ): VoidFunction
-  on(
-    topic: YobtaTransitionEvent,
-    subscriber: (
-      lastState: Readonly<State>,
-      nextState: Readonly<State>,
-    ) => void,
   ): VoidFunction
 }
 interface YobtaStoreFactory {
@@ -65,7 +58,7 @@ interface YobtaStoreFactory {
   ): YobtaStore<State, Overloads>
 }
 type Topics<State, Overloads extends any[]> = {
-  [YOBTA_BEFORE]: [Readonly<State>, Readonly<State>]
+  [YOBTA_BEFORE]: [Readonly<State>]
   [YOBTA_IDLE]: [Readonly<State>]
   [YOBTA_NEXT]: [Readonly<State>, ...Overloads]
   [YOBTA_READY]: [Readonly<State>]
@@ -111,7 +104,7 @@ export const storeYobta: YobtaStoreFactory = <
     ...overloads: any
   ): State => {
     let nextState = middleware[topic](updatedState, ...overloads)
-    p(YOBTA_BEFORE, state, nextState)
+    p(YOBTA_BEFORE, nextState)
     return nextState
   }
   return {

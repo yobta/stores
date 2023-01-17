@@ -66,6 +66,10 @@ const machine = machineYobta(transitions)<Overloads>('IDLE')
 machine.next('LOADING', { attempt: 2 })
 ```
 
+## Side Effects
+
+Please see the [Transition Utility](../../util/transitionEffectYobta/index.md) documentation.
+
 ## Plugins
 
 The Machine store supports plugins in the same way that other stores do. For more information, see the [Plugins documentation](../../plugins/index.md).

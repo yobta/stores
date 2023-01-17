@@ -78,15 +78,8 @@ export type YobtaMapStore<
     ...overloads: Overloads
   ): YobtaOmittedKeysSet<PlainState>
   on(
-    topic: YobtaReadyEvent | YobtaIdleEvent,
+    topic: YobtaReadyEvent | YobtaIdleEvent | YobtaTransitionEvent,
     subscriber: (state: YobtaReadonlyMapState<PlainState>) => void,
-  ): VoidFunction
-  on(
-    topic: YobtaTransitionEvent,
-    subscriber: (
-      lastState: YobtaReadonlyMapState<PlainState>,
-      nextState: YobtaReadonlyMapState<PlainState>,
-    ) => void,
   ): VoidFunction
 }
 interface YobtaMapStoreFactory {

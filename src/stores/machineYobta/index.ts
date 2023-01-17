@@ -22,12 +22,8 @@ export type YobtaMachineStore<
     observer: (state: keyof States, ...overloads: Overloads) => void,
   ): VoidFunction
   on(
-    topic: YobtaReadyEvent | YobtaIdleEvent,
+    topic: YobtaReadyEvent | YobtaIdleEvent | YobtaTransitionEvent,
     subscriber: (state: keyof States) => void,
-  ): VoidFunction
-  on(
-    topic: YobtaTransitionEvent,
-    subscriber: (lastState: keyof States, nextState: keyof States) => void,
   ): VoidFunction
 }
 

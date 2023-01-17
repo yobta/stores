@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.1.5
+
+Revert store.on
+Add store effect utility
+Add transition effect ultility
+
 ## 0.1.4
 
 Update the stores api:

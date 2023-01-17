@@ -57,15 +57,8 @@ export type YobtaPlainObjectStore<
     ...overloads: Overloads
   ): OptionalKey<State>[]
   on(
-    topic: YobtaReadyEvent | YobtaIdleEvent,
+    topic: YobtaReadyEvent | YobtaIdleEvent | YobtaTransitionEvent,
     subscriber: (state: Readonly<State>) => void,
-  ): VoidFunction
-  on(
-    topic: YobtaTransitionEvent,
-    subscriber: (
-      lastState: Readonly<State>,
-      nextState: Readonly<State>,
-    ) => void,
   ): VoidFunction
 }
 interface YobtaPlainObjectStoreFactory {

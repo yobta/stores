@@ -13,15 +13,8 @@ export type YobtaStackStore<Item, Overloads extends any[] = any[]> = {
     observer: (state: ReadonlySet<Item>, ...overloads: Overloads) => void,
   ): VoidFunction
   on(
-    topic: YobtaReadyEvent | YobtaIdleEvent,
+    topic: YobtaReadyEvent | YobtaIdleEvent | YobtaTransitionEvent,
     subscriber: (state: ReadonlySet<Item>) => void,
-  ): VoidFunction
-  on(
-    topic: YobtaTransitionEvent,
-    subscriber: (
-      lastState: ReadonlySet<Item>,
-      nextState: ReadonlySet<Item>,
-    ) => void,
   ): VoidFunction
   remove(member: Item, ...overloads: any[]): boolean
   size(): number
