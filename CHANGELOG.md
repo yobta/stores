@@ -2,11 +2,19 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## 0.1.5
+## 0.1.7
+
+Fix effect utilities types
+
+## 0.1.6
 
 Revert store.on
 Add store effect utility
 Add transition effect ultility
+
+## 0.1.5
+
+Publishing failed
 
 ## 0.1.4
 
