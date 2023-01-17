@@ -7,6 +7,5 @@ it('returns a partial of the store', () => {
   expect(readable).toEqual({
     last: expect.any(Function),
     observe: expect.any(Function),
-    on: expect.any(Function),
   })
 })
