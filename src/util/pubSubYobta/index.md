@@ -25,9 +25,9 @@ It is important to unsubscribe, when you are done using it, to avoid any potenti
 ## Typing the Topics
 
 ```ts
-interface Topics {
-  foo: string
-  bar: number
+type Topics = {
+  foo: string[]
+  bar: number[]
 }
 
 const pubSub = pubSubYobta<Topics>()
@@ -39,20 +39,4 @@ pubSub.publish('foo', 1) // Not OK
 pubSub.publish('bar', 'foo') // Not OK
 ```
 
-In this example, we have defined an interface `Topics` that describes the types of data that can be associated with each topic. When creating an instance of the pubSubYobta utility, we pass in this interface as a generic type. This allows TypeScript to check that the topic and data types match, and provides better type checking at compile-time.
-
-## Typing the Overloads
-
-```ts
-interface Topics {
-  foo: string
-}
-type Overloads = string[]
-
-const pubSub = pubSubYobta<Topics, Overloads>()
-
-pubSub.publish('foo', 'bar', 'overload') //OK
-pubSub.publish('foo', 'bar', 1) // Not OK
-```
-
-In this example, we have defined a type `Overloads` that describes the types of additional data that can be passed with each topic. Similar to the `Topics`, when creating an instance of the `pubSubYobta` utility, we pass this type as a second generic type.
+In this example, we have defined a type `Topics` that describes the types of data that can be associated with each topic. When creating an instance of the pubSubYobta utility, we pass in this type as a generic. This allows TypeScript to check that the topic and data types match, and provides better type checking at compile-time.
