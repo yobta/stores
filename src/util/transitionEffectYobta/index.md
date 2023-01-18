@@ -10,7 +10,7 @@ const store = machineYobta({
   fetching: ['idle', 'error'],
   error: ['idle', 'fetching'],
 })('idle')
-const retryCount = 0
+let retryCount = 0
 const unsubscribe = transitionEffectYobta(store, 'fetching', () => {
   if (store.last() === 'error') {
     retryCount = retryCount + 1
