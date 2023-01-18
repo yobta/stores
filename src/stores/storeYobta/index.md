@@ -72,14 +72,14 @@ console.log(store.last()) // Check the store value
 
 ## Subscribing to Store Events
 
-Each store has three methods called `onBeforeUpdate`, `onReady` `onIdle` which allows you to subscribe to store lifecycle events. Subscribers receive the current store value before.
+Each store has `on` method which allows you to subscribe to store lifecycle events. Subscribers receive the current store value before.
 
 ### Before Update
 
 Fires when a new state was entered, but before the state's entry action was executed.
 
 ```js
-const unsubscribe = store.onBeforeUpdate(state => {
+const unsubscribe = store.on('before', state => {
   console.log(`The state will be upated to: ${state}`)
 })
 
@@ -92,7 +92,7 @@ unsubscribe()
 Fires after a first observer was added to the store.
 
 ```js
-const unsubscribe = store.onReady(state => {
+const unsubscribe = store.on('ready', state => {
   console.log(`Ready with: ${state}`)
 })
 
@@ -105,7 +105,7 @@ unsubscribe()
 Fires after a last observer was removed form the store.
 
 ```js
-const unsubscribe = store.onIdle(state => {
+const unsubscribe = store.on('idle', state => {
   console.log(`Idle with: ${state}`)
 })
 
