@@ -121,6 +121,17 @@
       "limit": "1680 B"
     },
     {
+      "name": "react",
+      "path": "./lib/adapters/react/index.js",
+      "limit": "2959 B"
+    },
+    {
+      "name": "hookYobta",
+      "path": "./lib/adapters/react/index.js",
+      "import": "{ hookYobta }",
+      "limit": "2950 B"
+    },
+    {
       "name": "useYobta",
       "path": "./lib/adapters/react/index.js",
       "import": "{ useYobta }",

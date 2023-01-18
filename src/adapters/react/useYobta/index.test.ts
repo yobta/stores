@@ -1,11 +1,11 @@
 import { renderHook, act } from '@testing-library/react'
 
-import { storeYobta } from '../../stores/storeYobta/index.js'
+import { storeYobta } from '../../../stores/storeYobta/index.js'
 import { useYobta } from './index.js'
 
 const unsubscribeMock = vi.fn()
 
-vi.mock('../../stores/storeYobta/index.js', () => ({
+vi.mock('../../../stores/storeYobta/index.js', () => ({
   storeYobta(initialState: any) {
     let state = initialState
     let observers: Set<() => void> = new Set()

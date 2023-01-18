@@ -6,7 +6,7 @@ import { YOBTA_IDLE, YobtaStorePlugin } from '../../stores/storeYobta/index.js'
  * const store = storeYobta('initial state', lazyPluginYobta),
  * @documentation {@link https://github.com/yobta/stores/tree/master/src/plugins/lazyPluginYobta/index.md}.
  */
-export const lazyPluginYobta: YobtaStorePlugin<any, any[]> = ({
+export const lazyPluginYobta: YobtaStorePlugin<any, never> = ({
   addMiddleware,
   initialState,
 }) => {
