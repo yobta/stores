@@ -118,7 +118,7 @@
     {
       "name": "all",
       "path": "./lib/index.js",
-      "limit": "1590 B"
+      "limit": "1680 B"
     },
     {
       "name": "useYobta",
@@ -167,6 +167,12 @@
       "path": "./lib/index.js",
       "import": "{ mapYobta }",
       "limit": "649 B"
+    },
+    {
+      "name": "onlineYobta",
+      "path": "./lib/index.js",
+      "import": "{ onlineYobta }",
+      "limit": "625 B"
     },
     {
       "name": "plainObjectYobta",
@@ -232,7 +238,7 @@
       "name": "readableYobta",
       "path": "./lib/index.js",
       "import": "{ readableYobta }",
-      "limit": "31 B"
+      "limit": "36 B"
     },
     {
       "name": "setCodecYobta",

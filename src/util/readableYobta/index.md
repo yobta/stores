@@ -2,7 +2,7 @@
 
 # Readable Store Utility
 
-Creates a read-only version of the store that can only be accessed using the `last` and `observe` methods and cannot be modified externally.
+Creates a read-only version of the store that can only be accessed using the `last`, `observe` and `on` methods and cannot be modified externally.
 
 ```js
 import { storeYobta, readableYobta } from '@yobta/stores'
