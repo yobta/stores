@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.1.10
+
+Hook Factory
+
 ## 0.1.9
 
 Online store

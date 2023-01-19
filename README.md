@@ -40,7 +40,8 @@ The following sections provide documentation on different parts of Yobta Stores:
 
 ### Adapters
 
-- [React](src/adapters/react/index.md) - A store hook for React.
+- [Using with React](src/adapters/react/useYobta/index.md) - A store hook for React.
+- [Hook Factory](src/adapters/react/hookYobta/index.md) - Makes React hooks from stores.
 
 ### Utilities
 
