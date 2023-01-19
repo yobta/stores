@@ -72,7 +72,7 @@ console.log(store.last()) // Check the store value
 
 ## Subscribing to Store Events
 
-Each store has `on` method which allows you to subscribe to store lifecycle events. Subscribers receive the current store value before.
+Each store has `on` method which allows you to subscribe to store [lifecycle events](../../plugins/index.md#store-events). Subscribers receive the current store value before.
 
 ### Before Update
 
