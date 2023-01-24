@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.1.11
+
+Improve pubsub typings
+
 ## 0.1.10
 
 Hook Factory
