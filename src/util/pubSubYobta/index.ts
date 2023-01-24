@@ -9,13 +9,19 @@ type BaseTopics = {
 interface PubSubFactory {
   <Topics extends BaseTopics>(): {
     getSize: <Topic extends keyof Topics>(topic: Topic) => number
-    publish: <Topic extends keyof Topics>(
+    publish: <
+      Topic extends keyof Topics,
+      Args extends Topics[Topic] = Topics[Topic],
+    >(
       topic: Topic,
-      ...args: Topics[Topic]
+      ...args: Args
     ) => void
-    subscribe: <Topic extends keyof Topics>(
+    subscribe: <
+      Topic extends keyof Topics,
+      Args extends Topics[Topic] = Topics[Topic],
+    >(
       topic: Topic,
-      subscriber: YobtaPubsubSubscriber<Topics[Topic]>,
+      subscriber: YobtaPubsubSubscriber<Args>,
     ) => VoidFunction
   }
 }
