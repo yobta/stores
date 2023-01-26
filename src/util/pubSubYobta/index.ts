@@ -23,6 +23,10 @@ interface PubSubFactory {
       topic: Topic,
       subscriber: YobtaPubsubSubscriber<Args>,
     ) => VoidFunction
+    unsubscribe: <Topic extends keyof Topics>(
+      topic: Topic,
+      subscriber: YobtaPubsubSubscriber<any>,
+    ) => void
   }
 }
 
@@ -55,6 +59,9 @@ export const pubSubYobta: PubSubFactory = <Topics extends BaseTopics>() => {
       return () => {
         current.delete(subscriber)
       }
+    },
+    unsubscribe(topic, subscriber) {
+      subscribers[topic]?.delete(subscriber)
     },
   }
 }

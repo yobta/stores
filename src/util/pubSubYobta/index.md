@@ -22,6 +22,14 @@ In the above example, we imported the `pubSubYobta` utility and created an insta
 
 It is important to unsubscribe, when you are done using it, to avoid any potential memory leaks or performance issues.
 
+You can also unsubscribe by passing the topic and the subscriber function to the unsubscribe method as shown in the second example:
+
+```js
+const subscriber = console.log
+pubSub.subscribe('foo', subscriber)
+pubSub.unsubscribe('foo', subscriber)
+```
+
 ## Typing the Topics
 
 ```ts

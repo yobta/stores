@@ -118,7 +118,7 @@
     {
       "name": "all",
       "path": "./lib/index.js",
-      "limit": "1680 B"
+      "limit": "1698 B"
     },
     {
       "name": "react",
@@ -171,37 +171,37 @@
       "name": "machineYobta",
       "path": "./lib/index.js",
       "import": "{ machineYobta }",
-      "limit": "537 B"
+      "limit": "556 B"
     },
     {
       "name": "mapYobta",
       "path": "./lib/index.js",
       "import": "{ mapYobta }",
-      "limit": "649 B"
+      "limit": "668 B"
     },
     {
       "name": "onlineYobta",
       "path": "./lib/index.js",
       "import": "{ onlineYobta }",
-      "limit": "625 B"
+      "limit": "639 B"
     },
     {
       "name": "plainObjectYobta",
       "path": "./lib/index.js",
       "import": "{ plainObjectYobta }",
-      "limit": "632 B"
+      "limit": "647 B"
     },
     {
       "name": "stackYobta",
       "path": "./lib/index.js",
       "import": "{ stackYobta }",
-      "limit": "601 B"
+      "limit": "617 B"
     },
     {
       "name": "storeYobta",
       "path": "./lib/index.js",
       "import": "{ storeYobta }",
-      "limit": "483 B"
+      "limit": "500 B"
     },
     {
       "name": "codecYobta",
@@ -243,7 +243,7 @@
       "name": "pubSubYobta",
       "path": "./lib/index.js",
       "import": "{ pubSubYobta }",
-      "limit": "153 B"
+      "limit": "172 B"
     },
     {
       "name": "readableYobta",

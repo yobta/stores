@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.1.12
+
+Add unsubscribe method to pubsub utility
+
 ## 0.1.11
 
 Improve pubsub typings
