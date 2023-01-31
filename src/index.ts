@@ -1,3 +1,4 @@
+export * from './stores/derrivedYobta/index.js'
 export * from './stores/machineYobta/index.js'
 export * from './stores/mapYobta/index.js'
 export * from './stores/onlineYobta/index.js'

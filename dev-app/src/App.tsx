@@ -1,60 +1,43 @@
 import { useState } from 'react'
 import './App.css'
 
-import {
-  broadcastChannelPluginYobta,
-  localStoragePluginYobta,
-  mapCodecYobta,
-  mapYobta,
-  observableYobta,
-  sessionStoragePluginYobta,
-} from '../../src'
-import { useObservable } from '../../src/adapters/react'
+import { storeYobta, derrivedYobta } from '../../src'
+import { useYobta } from '../../src/adapters/react'
+import { useEffect } from 'react'
 
-const mapStore = mapYobta<{ a?: number }>(
-  {},
-  localStoragePluginYobta({ channel: 'counter', codec: mapCodecYobta }),
-)
-
-const stringStore = observableYobta(
-  '',
-  sessionStoragePluginYobta({ channel: 'test' }),
-)
-
-const plainStore = observableYobta(
-  {},
-  broadcastChannelPluginYobta({ channel: 'plain' }),
-)
+const store = storeYobta(0)
+const added = derrivedYobta(value => value + 1, store)
+const subtracted = derrivedYobta(value => value - 1, store)
+const total = derrivedYobta((v1, v2) => v1 + v2, added, subtracted)
 
 const up = () => {
-  mapStore.assign({ a: (mapStore.last().get('a') || 0) + 1 })
+  let next = store.last() + 1
+  store.next(next)
 }
-const down = () => mapStore.omit(['a'])
+const down = () => {
+  let next = store.last() - 1
+  store.next(next)
+}
 
 function App() {
-  const count = useObservable(mapStore)
-  const plain = useObservable(plainStore)
-  console.log('plain: ', plain)
-  const str = useObservable(stringStore)
-
+  const addedCount = useYobta(added)
+  const subtractedCount = useYobta(subtracted)
+  const totalValue = useYobta(total)
+  useEffect(() => {
+    console.log('rendered')
+  })
   return (
     <div className="App">
-      count: {count.get('a') || 0}
+      {/* count: {count} */}
       <br />
+      add 1: {addedCount}
+      <br />
+      subtract 1: {subtractedCount}
+      <br />
+      total: {totalValue}
+      <hr />
       <button onClick={down}>Down</button>
       <button onClick={up}>Up</button>
-      <input
-        value={str}
-        onChange={event => stringStore.next(event.target.value)}
-      />
-      <hr />
-      <button
-        onClick={() => {
-          plainStore.next({ a: Date.now() })
-        }}
-      >
-        piu
-      </button>
     </div>
   )
 }
