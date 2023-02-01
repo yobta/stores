@@ -8,7 +8,7 @@ const store = storeYobta(0)
 const added = derrivedYobta(value => value + 1, store)
 const subtracted = derrivedYobta(value => value - 1, store)
 const total = derrivedYobta((v1, v2) => v1 + v2, added, subtracted)
-// const total = derrivedYobta(v1 => v1, added)
+const edge = derrivedYobta(v => v + v, total)
 
 const up = () => {
   let next = store.last() + 1
@@ -24,8 +24,9 @@ function App() {
   const addedCount = useYobta(added)
   const subtractedCount = useYobta(subtracted)
   const totalValue = useYobta(total)
+  const edgeValue = useYobta(edge)
   useEffect(() => {
-    return total.observe(next => {
+    return edge.observe(next => {
       console.log('next:', next)
     })
   }, [])
@@ -38,6 +39,8 @@ function App() {
       subtract 1: {subtractedCount}
       <br />
       total: {totalValue}
+      <hr />
+      edge: {edgeValue}
       <hr />
       <button onClick={down}>Down</button>
       <button onClick={up}>Up</button>
