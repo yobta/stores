@@ -38,12 +38,11 @@ export const jemCutterYobta: YobtaJemCutter = <S>(
   consumer: YobtaGemConsumer<S>,
   next?: YobtaGemProducer<any>,
 ) => {
-  let unsubscribe = producer(state => {
-    consumer(state)
-    propagate(next)
-  })
   let item: State<any> = [producer, consumer, next]
   store.add(item)
+  let unsubscribe = producer(() => {
+    propagate(producer)
+  })
   return () => {
     unsubscribe()
     store.delete(item)
