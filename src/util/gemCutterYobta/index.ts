@@ -6,14 +6,13 @@ interface YobtaJemCutter {
   <S>(
     producer: YobtaGemProducer<S>,
     consumer: YobtaGemConsumer<S>,
-    next?: YobtaGemProducer<any>,
+    next: Symbol,
   ): VoidFunction
+  (producer: Symbol, consumer: YobtaGemConsumer<any>): VoidFunction
 }
-type State<S> = [
-  YobtaGemProducer<S>,
-  YobtaGemConsumer<S>,
-  YobtaGemProducer<any> | undefined,
-]
+type State<S> =
+  | [YobtaGemProducer<S>, YobtaGemConsumer<S>, Symbol]
+  | [Symbol, YobtaGemConsumer<S>]
 type Store<S> = Set<State<S>>
 
 const store: Store<any> = new Set()
@@ -33,18 +32,19 @@ const propagate = (target?: YobtaGemProducer<any>): void => {
   }
 }
 
-export const jemCutterYobta: YobtaJemCutter = <S>(
-  producer: YobtaGemProducer<S>,
-  consumer: YobtaGemConsumer<S>,
-  next?: YobtaGemProducer<any>,
-) => {
-  let item: State<any> = [producer, consumer, next]
+export const jemCutterYobta: YobtaJemCutter = (producer, consumer, next) => {
+  let item: State<any> = next
+    ? [producer, consumer, next]
+    : [producer, consumer]
   store.add(item)
-  let unsubscribe = producer(() => {
-    propagate(producer)
-  })
+  let unsubscribe: VoidFunction | undefined
+  if (typeof producer === 'function') {
+    unsubscribe = producer(() => {
+      propagate(producer)
+    })
+  }
   return () => {
-    unsubscribe()
+    if (unsubscribe) unsubscribe()
     store.delete(item)
   }
 }
