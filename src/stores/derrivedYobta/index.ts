@@ -42,17 +42,16 @@ const getStates = <Stores extends AnyStore[]>(stores: Stores): States<Stores> =>
 
 export const derrivedYobta: YobtaDerrived = (callback, ...stores) => {
   let getState = (): any => callback(...getStates(stores))
-  let { last, on, next } = storeYobta(getState())
+  let { last, on, next, observe } = storeYobta(getState())
   let derrive = (): void => {
     next(getState())
   }
-  let id = Symbol()
   return {
     last,
     observe(observer) {
       let unsubcribe = [
-        ...stores.map(store => jemCutterYobta(store.observe, derrive, id)),
-        jemCutterYobta(id, () => {
+        ...stores.map(store => jemCutterYobta(store.observe, derrive, observe)),
+        jemCutterYobta(observe, () => {
           observer(last())
         }),
       ]
