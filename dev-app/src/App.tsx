@@ -32,15 +32,15 @@ function App() {
   }, [])
   return (
     <div className="App">
-      count: {count}
+      count: {count} | {store.last()}
       <br />
-      add 1: {addedCount}
+      add 1: {addedCount} | {added.last()}
       <br />
-      subtract 1: {subtractedCount}
+      subtract 1: {subtractedCount} | {subtracted.last()}
       <br />
-      total: {totalValue}
+      total: {totalValue} | {total.last()}
       <hr />
-      edge: {edgeValue}
+      edge: {edgeValue} | {edge.last()}
       <hr />
       <button onClick={down}>Down</button>
       <button onClick={up}>Up</button>
