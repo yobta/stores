@@ -17,17 +17,24 @@ type Store<S> = Set<State<S>>
 
 const store: Store<any> = new Set()
 
-const propagate = (target: YobtaGemProducer<any>): void => {
-  let consumers = new Set<VoidFunction>()
-  let nextProducers = new Set<YobtaGemProducer<any>>()
+const collect = (
+  acc: Set<VoidFunction>,
+  target: VoidFunction,
+): Set<VoidFunction> => {
   for (let [producer, consumer, next] of store) {
     if (producer === target) {
-      consumers.add(consumer as VoidFunction)
-      if (next) nextProducers.add(next)
+      acc.add(consumer as VoidFunction)
+      if (next) return collect(acc, next)
     }
   }
-  for (let consumer of consumers) consumer()
-  for (let producer of nextProducers) propagate(producer)
+  return acc
+}
+
+const propagate = (target: VoidFunction): void => {
+  let callbacks = collect(new Set(), target)
+  for (let callback of callbacks) {
+    callback()
+  }
 }
 
 export const jemCutterYobta: YobtaJemCutter = (producer, consumer, next) => {
