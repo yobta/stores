@@ -6,32 +6,31 @@ interface YobtaJemCutter {
   <S>(
     producer: YobtaGemProducer<S>,
     consumer: YobtaGemConsumer<S>,
-    next: VoidFunction,
+    next?: VoidFunction,
   ): VoidFunction
-  (producer: VoidFunction, consumer: YobtaGemConsumer<any>): VoidFunction
 }
-type State<S> =
-  | [YobtaGemProducer<S> | VoidFunction, YobtaGemConsumer<S>, VoidFunction]
-  | [VoidFunction, YobtaGemConsumer<any>]
+type State<S> = [
+  YobtaGemProducer<S>,
+  YobtaGemConsumer<S>,
+  VoidFunction | undefined,
+]
 type Store<S> = Set<State<S>>
 
 const store: Store<any> = new Set()
 
-const collect = (
-  acc: Set<VoidFunction>,
-  target: VoidFunction,
-): Set<VoidFunction> => {
-  for (let [producer, consumer, next] of store) {
+const propagate = (target: YobtaGemProducer<any>): void => {
+  let callbacks = new Set<VoidFunction>()
+  for (let [producer, consumer] of store) {
     if (producer === target) {
-      acc.add(consumer as VoidFunction)
-      if (next) return collect(acc, next)
+      callbacks.add(consumer as VoidFunction)
     }
   }
-  return acc
-}
-
-const propagate = (target: VoidFunction): void => {
-  let callbacks = collect(new Set(), target)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  for (let [_, consumer, next] of store) {
+    if (next && callbacks.has(consumer as VoidFunction)) {
+      callbacks.add(next)
+    }
+  }
   for (let callback of callbacks) {
     callback()
   }
@@ -41,11 +40,9 @@ export const jemCutterYobta: YobtaJemCutter = (producer, consumer, next) => {
   let item: State<any> = [producer, consumer, next]
   store.add(item)
   let unsubscribe: VoidFunction | undefined
-  if (next) {
-    unsubscribe = producer(() => {
-      propagate(producer)
-    })
-  }
+  unsubscribe = producer(() => {
+    propagate(producer)
+  })
   return () => {
     if (unsubscribe) unsubscribe()
     store.delete(item)

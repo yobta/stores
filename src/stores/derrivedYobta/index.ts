@@ -53,8 +53,7 @@ export const derrivedYobta: YobtaDerrived = (callback, ...stores) => {
         observer(last())
       }
       let unsubcribe = [
-        ...stores.map(store => jemCutterYobta(store.observe, derrive, derrive)),
-        jemCutterYobta(derrive, notify),
+        ...stores.map(store => jemCutterYobta(store.observe, derrive, notify)),
       ]
       return () => {
         unsubcribe.forEach(u => {
