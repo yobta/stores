@@ -38,7 +38,7 @@ function App() {
       <br />
       subtract 1: {subtractedCount} | {subtracted.last()}
       <br />
-      total: {totalValue} | {total.last()}
+      {/* total: {totalValue} | {total.last()} */}
       <hr />
       edge: {edgeValue} | {edge.last()}
       <hr />

@@ -47,7 +47,7 @@ export type YobtaStore<State, Overloads extends any[] = any[]> = {
   next: YobtaStateSetter<State, Overloads>
   observe(
     observer: YobtaStoreObserver<State, Overloads>,
-    callback?: VoidFunction,
+    ...callbacks: VoidFunction[]
   ): VoidFunction
   on(
     topic: YobtaReadyEvent | YobtaIdleEvent | YobtaTransitionEvent,
@@ -67,7 +67,7 @@ type Topics<State> = {
 }
 type YobtaStackItem<State, Overloads extends any[]> = [
   YobtaStoreObserver<State, Overloads>,
-  VoidFunction | undefined,
+  VoidFunction[],
 ]
 // #endregion
 
@@ -85,7 +85,7 @@ export const storeYobta: YobtaStoreFactory = <
   ...plugins: YobtaStorePlugin<State, Overloads>[]
 ) => {
   let state: State = initialState
-  let { publish: p, subscribe: on, getSize: s } = pubSubYobta<Topics<State>>()
+  let { publish: p, subscribe: on } = pubSubYobta<Topics<State>>()
   let stack = new Set<YobtaStackItem<State, Overloads>>()
   let next: YobtaStateSetter<State, Overloads> = (
     nextState: State,
@@ -94,9 +94,11 @@ export const storeYobta: YobtaStoreFactory = <
     state = transition(YOBTA_NEXT, nextState, ...overloads)
     let observers = new Set<YobtaObserver<State, Overloads>>()
     let callbacks = new Set<VoidFunction>()
-    stack.forEach(([observer, callback]) => {
+    stack.forEach(([observer, callbackArray]) => {
       observers.add(observer)
-      if (callback) callbacks.add(callback)
+      callbackArray.forEach(callback => {
+        callbacks.add(callback)
+      })
     })
     observers.forEach(observer => {
       observer(state, ...overloads)
@@ -126,13 +128,13 @@ export const storeYobta: YobtaStoreFactory = <
     next,
     observe: (
       observer: YobtaStoreObserver<State, Overloads>,
-      callback?: VoidFunction,
+      ...callbacks: VoidFunction[]
     ) => {
       if (stack.size === 0) {
         state = transition(YOBTA_READY, state)
         p(YOBTA_READY, state)
       }
-      let item: YobtaStackItem<State, Overloads> = [observer, callback]
+      let item: YobtaStackItem<State, Overloads> = [observer, callbacks]
       stack.add(item)
       return () => {
         stack.delete(item)

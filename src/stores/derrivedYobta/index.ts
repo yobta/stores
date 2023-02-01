@@ -1,4 +1,3 @@
-import { observableYobta } from '../../util/observableYobta/index.js'
 import { YobtaReadable } from '../../util/readableYobta/index.js'
 import {
   storeYobta,
@@ -11,7 +10,7 @@ type AnyStore<State = any> = {
   last(): State
   observe(
     observer: (state: State) => void,
-    callback?: VoidFunction,
+    ...callbacks: VoidFunction[]
   ): VoidFunction
 }
 type YobtaState<SomeStore> = SomeStore extends {
@@ -32,7 +31,7 @@ interface YobtaDerrived {
     last(): DerrivedState
     observe(
       observer: (state: DerrivedState) => void,
-      callback?: VoidFunction,
+      ...callbacks: VoidFunction[]
     ): VoidFunction
     on(
       topic: YobtaReadyEvent | YobtaIdleEvent | YobtaTransitionEvent,
@@ -56,9 +55,9 @@ export const derrivedYobta: YobtaDerrived = (acc, ...stores) => {
   }
   return {
     last,
-    observe(observer, callback) {
+    observe(observer, ...callbacks) {
       let unsubcribe = [
-        ...stores.map(store => store.observe(collect, callback || derrive)),
+        ...stores.map(store => store.observe(collect, derrive, ...callbacks)),
         observe(observer),
       ]
       return () => {
