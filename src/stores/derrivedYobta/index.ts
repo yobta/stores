@@ -1,3 +1,4 @@
+import { observableYobta } from '../../util/observableYobta/index.js'
 import { YobtaReadable } from '../../util/readableYobta/index.js'
 import {
   storeYobta,
@@ -30,7 +31,8 @@ interface YobtaDerrived {
   ): {
     last(): DerrivedState
     observe(
-      observer: (state: DerrivedState, ...overloads: never) => void,
+      observer: (state: DerrivedState) => void,
+      callback?: VoidFunction,
     ): VoidFunction
     on(
       topic: YobtaReadyEvent | YobtaIdleEvent | YobtaTransitionEvent,
@@ -42,20 +44,22 @@ interface YobtaDerrived {
 const getStates = <Stores extends AnyStore[]>(stores: Stores): States<Stores> =>
   stores.map(store => store.last()) as States<Stores>
 
-export const derrivedYobta: YobtaDerrived = (callback, ...stores) => {
-  let getState = (): any => callback(...getStates(stores))
-  let { last, on, next } = storeYobta(getState())
+export const derrivedYobta: YobtaDerrived = (acc, ...stores) => {
+  let getState = (): any => acc(...getStates(stores))
+  let state = getState()
+  let { last, on, next, observe } = storeYobta(state)
+  let collect = (): void => {
+    state = getState()
+  }
   let derrive = (): void => {
-    next(getState())
+    next(state)
   }
   return {
     last,
-    observe(observer) {
-      let notify = (): void => {
-        observer(last())
-      }
+    observe(observer, callback) {
       let unsubcribe = [
-        ...stores.map(({ observe }) => observe(derrive, notify)),
+        ...stores.map(store => store.observe(collect, callback || derrive)),
+        observe(observer),
       ]
       return () => {
         unsubcribe.forEach(u => {

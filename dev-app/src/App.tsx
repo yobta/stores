@@ -10,10 +10,6 @@ const subtracted = derrivedYobta(value => value - 1, store)
 const total = derrivedYobta((v1, v2) => v1 + v2, added, subtracted)
 // const total = derrivedYobta(v1 => v1, added)
 
-total.on(YOBTA_BEFORE, next => {
-  console.log('total before', next)
-})
-
 const up = () => {
   let next = store.last() + 1
   store.next(next)
@@ -29,8 +25,10 @@ function App() {
   const subtractedCount = useYobta(subtracted)
   const totalValue = useYobta(total)
   useEffect(() => {
-    console.log('rendered')
-  })
+    return total.observe(next => {
+      console.log('next:', next)
+    })
+  }, [])
   return (
     <div className="App">
       count: {count}
