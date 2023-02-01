@@ -60,8 +60,8 @@ interface YobtaStoreFactory {
     ...plugins: YobtaStorePlugin<State, Overloads>[]
   ): YobtaStore<State, Overloads>
 }
-type Topics<State> = {
-  [YOBTA_BEFORE]: [Readonly<State>]
+type Topics<State, Overloads extends any[]> = {
+  [YOBTA_BEFORE]: [Readonly<State>, ...Overloads]
   [YOBTA_IDLE]: [Readonly<State>]
   [YOBTA_READY]: [Readonly<State>]
 }
@@ -81,7 +81,7 @@ export const storeYobta: YobtaStoreFactory = <
   ...plugins: YobtaStorePlugin<State, Overloads>[]
 ) => {
   let state: State = initialState
-  let { publish: p, subscribe: on } = pubSubYobta<Topics<State>>()
+  let { publish: p, subscribe: on } = pubSubYobta<Topics<State, Overloads>>()
   let observers = gemCutterYobta<State, Overloads>()
   let next: YobtaStateSetter<State, Overloads> = (
     nextState: State,
@@ -103,7 +103,7 @@ export const storeYobta: YobtaStoreFactory = <
     ...overloads: any
   ): State => {
     let nextState = middleware[topic](updatedState, ...overloads)
-    p(YOBTA_BEFORE, nextState)
+    p(YOBTA_BEFORE, nextState, ...overloads)
     return nextState
   }
   return {
