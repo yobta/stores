@@ -40,24 +40,22 @@ interface YobtaDerrived {
   }
 }
 
-const getStates = <Stores extends AnyStore[]>(stores: Stores): States<Stores> =>
-  stores.map(store => store.last()) as States<Stores>
-
 export const derrivedYobta: YobtaDerrived = (acc, ...stores) => {
-  let getState = (): any => acc(...getStates(stores))
+  let getState = (): any =>
+    acc(...(stores.map(({ last }) => last()) as States<typeof stores>))
   let state = getState()
   let { last, on, next, observe } = storeYobta(state)
-  let collect = (): void => {
+  let debounce = (): void => {
     state = getState()
   }
-  let derrive = (): void => {
+  let update = (): void => {
     next(state)
   }
   return {
     last,
     observe(observer, ...callbacks) {
       let unsubcribe = [
-        ...stores.map(store => store.observe(collect, derrive, ...callbacks)),
+        ...stores.map(store => store.observe(debounce, update, ...callbacks)),
         observe(observer),
       ]
       return () => {

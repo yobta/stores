@@ -1,4 +1,4 @@
-import { YobtaObserver } from '../../util/observableYobta/index.js'
+import { gemCutterYobta } from '../../util/gemCutterYobta/index.js'
 import { pubSubYobta } from '../../util/pubSubYobta/index.js'
 import { composeMiddleware } from './middleware.js'
 
@@ -65,10 +65,6 @@ type Topics<State> = {
   [YOBTA_IDLE]: [Readonly<State>]
   [YOBTA_READY]: [Readonly<State>]
 }
-type YobtaStackItem<State, Overloads extends any[]> = [
-  YobtaStoreObserver<State, Overloads>,
-  VoidFunction[],
-]
 // #endregion
 
 /**
@@ -86,26 +82,13 @@ export const storeYobta: YobtaStoreFactory = <
 ) => {
   let state: State = initialState
   let { publish: p, subscribe: on } = pubSubYobta<Topics<State>>()
-  let stack = new Set<YobtaStackItem<State, Overloads>>()
+  let observers = gemCutterYobta<State, Overloads>()
   let next: YobtaStateSetter<State, Overloads> = (
     nextState: State,
     ...overloads
   ): void => {
     state = transition(YOBTA_NEXT, nextState, ...overloads)
-    let observers = new Set<YobtaObserver<State, Overloads>>()
-    let callbacks = new Set<VoidFunction>()
-    stack.forEach(([observer, callbackArray]) => {
-      observers.add(observer)
-      callbackArray.forEach(callback => {
-        callbacks.add(callback)
-      })
-    })
-    observers.forEach(observer => {
-      observer(state, ...overloads)
-    })
-    callbacks.forEach(callback => {
-      callback()
-    })
+    observers.next(state, ...overloads)
   }
   let last: YobtaStateGetter<State> = () => state
   let middleware = composeMiddleware<State, Overloads>({
@@ -130,15 +113,14 @@ export const storeYobta: YobtaStoreFactory = <
       observer: YobtaStoreObserver<State, Overloads>,
       ...callbacks: VoidFunction[]
     ) => {
-      if (stack.size === 0) {
+      if (observers.size === 0) {
         state = transition(YOBTA_READY, state)
         p(YOBTA_READY, state)
       }
-      let item: YobtaStackItem<State, Overloads> = [observer, callbacks]
-      stack.add(item)
+      let remove = observers.observe(observer, ...callbacks)
       return () => {
-        stack.delete(item)
-        if (stack.size === 0) {
+        remove()
+        if (observers.size === 0) {
           state = transition(YOBTA_IDLE, state)
           p(YOBTA_IDLE, state)
         }
