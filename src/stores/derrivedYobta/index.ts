@@ -6,6 +6,7 @@ import {
   YobtaTransitionEvent,
 } from '../storeYobta/index.js'
 
+// #region Types
 type AnyStore<State = any> = {
   last(): State
   observe(
@@ -39,17 +40,15 @@ interface YobtaDerrived {
     ): VoidFunction
   }
 }
+// #endregion
 
 export const derrivedYobta: YobtaDerrived = (acc, ...stores) => {
   let getState = (): any =>
     acc(...(stores.map(({ last }) => last()) as States<typeof stores>))
-  let state = getState()
-  let { last, on, next, observe } = storeYobta(state)
-  let debounce = (): void => {
-    state = getState()
-  }
+  let { last, on, next, observe } = storeYobta(getState())
+  let debounce = (): void => {}
   let update = (): void => {
-    next(state)
+    next(getState())
   }
   return {
     last,
