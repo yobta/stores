@@ -1,17 +1,18 @@
 import { useState } from 'react'
 import './App.css'
 
-import { storeYobta, derrivedYobta } from '../../src'
+import { storeYobta, derrivedYobta, YOBTA_NEXT, YOBTA_BEFORE } from '../../src'
 import { useYobta } from '../../src/adapters/react'
 import { useEffect } from 'react'
 
 const store = storeYobta(0)
 const added = derrivedYobta(value => value + 1, store)
-const subtracted = derrivedYobta(value => value - 1, store)
-const total = derrivedYobta((v1, v2) => v1 + v2, added, subtracted)
+// const subtracted = derrivedYobta(value => value - 1, store)
+// const total = derrivedYobta((v1, v2) => v1 + v2, added, subtracted)
+const total = derrivedYobta(v1 => v1, added)
 
-total.observe(value => {
-  console.log('total', value)
+total.on(YOBTA_BEFORE, next => {
+  console.log('total before', next)
 })
 
 const up = () => {
@@ -26,7 +27,7 @@ const down = () => {
 function App() {
   const count = useYobta(store)
   const addedCount = useYobta(added)
-  const subtractedCount = useYobta(subtracted)
+  // const subtractedCount = useYobta(subtracted)
   const totalValue = useYobta(total)
   useEffect(() => {
     console.log('rendered')
@@ -37,7 +38,7 @@ function App() {
       <br />
       add 1: {addedCount}
       <br />
-      subtract 1: {subtractedCount}
+      {/* subtract 1: {subtractedCount} */}
       <br />
       total: {totalValue}
       <hr />
