@@ -1,4 +1,3 @@
-import { jemCutterYobta } from '../../util/gemCutterYobta/index.js'
 import { YobtaReadable } from '../../util/readableYobta/index.js'
 import {
   storeYobta,
@@ -9,7 +8,10 @@ import {
 
 type AnyStore<State = any> = {
   last(): State
-  observe(observer: (state: State) => void): VoidFunction
+  observe(
+    observer: (state: State) => void,
+    callback?: VoidFunction,
+  ): VoidFunction
 }
 type YobtaState<SomeStore> = SomeStore extends {
   last(): infer Value
@@ -53,7 +55,7 @@ export const derrivedYobta: YobtaDerrived = (callback, ...stores) => {
         observer(last())
       }
       let unsubcribe = [
-        ...stores.map(store => jemCutterYobta(store.observe, derrive, notify)),
+        ...stores.map(({ observe }) => observe(derrive, notify)),
       ]
       return () => {
         unsubcribe.forEach(u => {

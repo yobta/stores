@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import './App.css'
 
 import { storeYobta, derrivedYobta, YOBTA_NEXT, YOBTA_BEFORE } from '../../src'

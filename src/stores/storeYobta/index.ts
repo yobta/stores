@@ -1,7 +1,5 @@
-import {
-  pubSubYobta,
-  YobtaPubsubSubscriber,
-} from '../../util/pubSubYobta/index.js'
+import { YobtaObserver } from '../../util/observableYobta/index.js'
+import { pubSubYobta } from '../../util/pubSubYobta/index.js'
 import { composeMiddleware } from './middleware.js'
 
 // #region Types
@@ -40,11 +38,16 @@ export type YobtaStateSetter<State, Overloads extends any[]> = (
   action: State,
   ...overloads: Overloads
 ) => void
+export type YobtaStoreObserver<State, Overloads extends any[]> = (
+  state: Readonly<State>,
+  ...overloads: Overloads
+) => void
 export type YobtaStore<State, Overloads extends any[] = any[]> = {
   last: YobtaStateGetter<State>
   next: YobtaStateSetter<State, Overloads>
   observe(
-    observer: (state: Readonly<State>, ...overloads: Overloads) => void,
+    observer: YobtaStoreObserver<State, Overloads>,
+    callback?: VoidFunction,
   ): VoidFunction
   on(
     topic: YobtaReadyEvent | YobtaIdleEvent | YobtaTransitionEvent,
@@ -57,12 +60,15 @@ interface YobtaStoreFactory {
     ...plugins: YobtaStorePlugin<State, Overloads>[]
   ): YobtaStore<State, Overloads>
 }
-type Topics<State, Overloads extends any[]> = {
+type Topics<State> = {
   [YOBTA_BEFORE]: [Readonly<State>]
   [YOBTA_IDLE]: [Readonly<State>]
-  [YOBTA_NEXT]: [Readonly<State>, ...Overloads]
   [YOBTA_READY]: [Readonly<State>]
 }
+type YobtaStackItem<State, Overloads extends any[]> = [
+  YobtaStoreObserver<State, Overloads>,
+  VoidFunction | undefined,
+]
 // #endregion
 
 /**
@@ -79,17 +85,25 @@ export const storeYobta: YobtaStoreFactory = <
   ...plugins: YobtaStorePlugin<State, Overloads>[]
 ) => {
   let state: State = initialState
-  let {
-    publish: p,
-    subscribe: on,
-    getSize: s,
-  } = pubSubYobta<Topics<State, Overloads>>()
+  let { publish: p, subscribe: on, getSize: s } = pubSubYobta<Topics<State>>()
+  let stack = new Set<YobtaStackItem<State, Overloads>>()
   let next: YobtaStateSetter<State, Overloads> = (
     nextState: State,
     ...overloads
   ): void => {
     state = transition(YOBTA_NEXT, nextState, ...overloads)
-    p(YOBTA_NEXT, state, ...overloads)
+    let observers = new Set<YobtaObserver<State, Overloads>>()
+    let callbacks = new Set<VoidFunction>()
+    stack.forEach(([observer, callback]) => {
+      observers.add(observer)
+      if (callback) callbacks.add(callback)
+    })
+    observers.forEach(observer => {
+      observer(state, ...overloads)
+    })
+    callbacks.forEach(callback => {
+      callback()
+    })
   }
   let last: YobtaStateGetter<State> = () => state
   let middleware = composeMiddleware<State, Overloads>({
@@ -111,16 +125,18 @@ export const storeYobta: YobtaStoreFactory = <
     last,
     next,
     observe: (
-      observer: YobtaPubsubSubscriber<[Readonly<State>, ...Overloads]>,
+      observer: YobtaStoreObserver<State, Overloads>,
+      callback?: VoidFunction,
     ) => {
-      if (s(YOBTA_NEXT) === 0) {
+      if (stack.size === 0) {
         state = transition(YOBTA_READY, state)
         p(YOBTA_READY, state)
       }
-      let unsubscribe = on(YOBTA_NEXT, observer)
+      let item: YobtaStackItem<State, Overloads> = [observer, callback]
+      stack.add(item)
       return () => {
-        unsubscribe()
-        if (s(YOBTA_NEXT) === 0) {
+        stack.delete(item)
+        if (stack.size === 0) {
           state = transition(YOBTA_IDLE, state)
           p(YOBTA_IDLE, state)
         }
