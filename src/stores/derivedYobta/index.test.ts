@@ -275,7 +275,9 @@ test('prevents diamond dependency problem 5', () => {
 
   firstName.next('Montgomery')
   expect(displayName.last()).toBe('Montgomery')
-  expect(events).toBe('full short display short full display short display ')
+  expect(events).toBe(
+    'full short display short full display short full display ',
+  )
 })
 
 test('prevents diamond dependency problem 6', () => {
