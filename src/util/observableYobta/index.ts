@@ -1,20 +1,33 @@
-export type YobtaObservable<Item, Overloads extends any[]> = {
-  next(item: Item, ...overloads: Overloads): void
-  observe(observer: YobtaObserver<Item, Overloads>): VoidFunction
-  size: number
-}
-
-export type YobtaObserver<Item, Overloads extends any[]> = (
-  item: Item,
-  ...overloads: Overloads
-) => void
-
+// #region typings
 interface YobtaObservableFactory {
-  <Item extends any, Overloads extends any[] = any[]>(): YobtaObservable<
+  <Item extends any = any, Overloads extends any[] = any[]>(): YobtaObservable<
     Item,
     Overloads
   >
 }
+
+export type YobtaObservable<
+  Item extends any = any,
+  Overloads extends any[] = any[],
+> = {
+  next(item: Item, ...overloads: Overloads): void
+  observe(
+    observer: YobtaObserver<Item, Overloads>,
+    ...callbacks: YobtaObserver<Item, Overloads>[]
+  ): VoidFunction
+  size: number
+}
+
+export type YobtaObserver<
+  Item extends any = any,
+  Overloads extends any[] = any[],
+> = (item: Item, ...overloads: Overloads) => void
+
+type YobtaStackItem<Item extends any = any, Overloads extends any[] = any[]> = [
+  YobtaObserver<Item, Overloads>,
+  YobtaObserver<Item, Overloads>[],
+]
+// #endregion
 
 /**
  * Creates an observable object.
@@ -26,20 +39,40 @@ interface YobtaObservableFactory {
  * unsubscribe()
  * @documentation {@link https://github.com/yobta/stores/tree/master/src/util/observableYobta/index.md}
  */
-export const observableYobta: YobtaObservableFactory = () => {
-  let observers = new Set<YobtaObserver<any, any>>()
+export const observableYobta: YobtaObservableFactory = <
+  Item extends any,
+  Overloads extends any[] = any[],
+>() => {
+  let heap = new Set<YobtaStackItem<Item, Overloads>>()
   return {
-    next(item, ...overloads) {
+    get size() {
+      return heap.size
+    },
+    next(item: Item, ...overloads: Overloads) {
+      let observers = new Set<YobtaObserver<Item, Overloads>>()
+      let callbacks = new Set<YobtaObserver<Item, Overloads>>()
+      heap.forEach(([observer, callbackArray]) => {
+        observers.add(observer)
+        callbackArray.forEach(callback => {
+          callbacks.add(callback)
+        })
+      })
       observers.forEach(observer => {
         observer(item, ...overloads)
       })
+      callbacks.forEach(callback => {
+        callback(item, ...overloads)
+      })
     },
-    observe(observer) {
-      observers.add(observer)
-      return () => observers.delete(observer)
-    },
-    get size() {
-      return observers.size
+    observe(
+      observer: YobtaObserver<Item, Overloads>,
+      ...callbacks: YobtaObserver<Item, Overloads>[]
+    ) {
+      let item: YobtaStackItem<Item, Overloads> = [observer, callbacks]
+      heap.add(item)
+      return () => {
+        heap.delete(item)
+      }
     },
   }
 }

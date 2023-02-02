@@ -1,9 +1,20 @@
-import { YobtaStore } from '../../stores/storeYobta/index.js'
+import {
+  YobtaIdleEvent,
+  YobtaReadyEvent,
+  YobtaStateGetter,
+  YobtaTransitionEvent,
+} from '../../stores/storeYobta/index.js'
 
-export type YobtaReadable<State, Overloads extends any[] = any[]> = Pick<
-  YobtaStore<State, Overloads>,
-  'last' | 'observe' | 'on'
->
+export type YobtaReadable<State, Overloads extends any[] = any[]> = {
+  last: YobtaStateGetter<State>
+  observe(
+    observer: (state: Readonly<State>, ...overloads: Overloads) => void,
+  ): VoidFunction
+  on(
+    topic: YobtaReadyEvent | YobtaIdleEvent | YobtaTransitionEvent,
+    subscriber: (state: Readonly<State>) => void,
+  ): VoidFunction
+}
 
 interface ReadableUtility {
   <State, Overloads extends any[] = any[]>(

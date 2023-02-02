@@ -28,6 +28,7 @@ The following sections provide documentation on different parts of Yobta Stores:
 - [Online](src/stores/onlineYobta/index.md) - Tracks the browser's connectivity state.
 - [Plain Object](src/stores/plainObjectYobta/index.md) - An observable plain object.
 - [Stack](src/stores/stackYobta/index.md) - An observable stack object.
+- [derived](src/stores/derivedYobta/index.md) - Aggregates data from one or multiple stores.
 
 ### Plugins
 

@@ -1,45 +1,78 @@
-import { observableYobta, YobtaObserver } from './index.js'
+import { observableYobta } from './index.js'
 
-it('should create an observable object', () => {
-  let observable = observableYobta<string>()
-  expect(observable).toEqual({
+it('returns jemCutter object', () => {
+  expect(observableYobta()).toEqual({
     next: expect.any(Function),
     observe: expect.any(Function),
-    size: 0,
+    size: expect.any(Number),
   })
 })
 
-it('should allow observers to be added and removed', () => {
-  let observable = observableYobta<string>()
-  let observer: YobtaObserver<string, any> = vi.fn()
-  let unsubscribe = observable.observe(observer)
-
-  expect(observer).not.toHaveBeenCalled()
-
-  observable.next('hello')
-  expect(observer).toHaveBeenCalledWith('hello')
-
-  unsubscribe()
-  observable.next('world')
-  expect(observer).toHaveBeenCalledTimes(1)
+it('calls observer with state and overloads', () => {
+  let observer = vi.fn()
+  let gemCutter = observableYobta()
+  gemCutter.observe(observer)
+  gemCutter.next('state', 'overload')
+  expect(observer).toBeCalledWith('state', 'overload')
 })
 
-it('should pass along any additional arguments to the observer', () => {
-  let observable = observableYobta<string>()
-  let observer: YobtaObserver<string, any> = vi.fn()
-  let unsubscribe = observable.observe(observer)
-
-  observable.next('hello', 1, 2, 3)
-  expect(observer).toHaveBeenCalledWith('hello', 1, 2, 3)
-  unsubscribe()
+it('does not call observer after remove', () => {
+  let observer = vi.fn()
+  let gemCutter = observableYobta()
+  let remove = gemCutter.observe(observer)
+  remove()
+  gemCutter.next('state', 'overload')
+  expect(observer).not.toBeCalled()
 })
 
-it('should return the number of observers', () => {
-  let observable = observableYobta<string>()
-  let observer: YobtaObserver<string, any> = vi.fn()
-  let unsubscribe = observable.observe(observer)
+it('deduplicates observers', () => {
+  let observer = vi.fn()
+  let gemCutter = observableYobta()
+  gemCutter.observe(observer)
+  gemCutter.observe(observer)
+  gemCutter.next('state', 'overload')
+  expect(observer).toBeCalledTimes(1)
+})
 
-  expect(observable.size).toBe(1)
-  unsubscribe()
-  expect(observable.size).toBe(0)
+it('calls callbacks after observers', () => {
+  let observer = vi.fn()
+  let gemCutter = observableYobta()
+  gemCutter.observe(state => observer(state), observer)
+  gemCutter.observe(state => observer(state), observer)
+  gemCutter.next('state')
+  expect(observer.mock.calls).toEqual([['state'], ['state'], ['state']])
+  expect(observer).toBeCalledTimes(3)
+})
+
+it('deduplicates callbacks', () => {
+  let observer = vi.fn()
+  let callback = vi.fn()
+  let gemCutter = observableYobta()
+  gemCutter.observe(observer, callback, callback)
+  gemCutter.observe(observer, callback)
+  gemCutter.next('state')
+  expect(callback).toBeCalledTimes(1)
+})
+
+it('does not call callbacks after remove', () => {
+  let observer = vi.fn()
+  let callback = vi.fn()
+  let gemCutter = observableYobta()
+  let remove = gemCutter.observe(observer, callback)
+  remove()
+  gemCutter.next('state')
+  expect(callback).not.toBeCalled()
+})
+
+it('returns correct size', () => {
+  let observer = vi.fn()
+  let gemCutter = observableYobta()
+  let remove1 = gemCutter.observe(observer)
+  expect(gemCutter.size).toBe(1)
+  let remove2 = gemCutter.observe(observer)
+  expect(gemCutter.size).toBe(2)
+  remove1()
+  expect(gemCutter.size).toBe(1)
+  remove2()
+  expect(gemCutter.size).toBe(0)
 })

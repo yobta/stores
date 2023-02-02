@@ -167,10 +167,10 @@ it('Has unique observers', () => {
   expect(observerMock).toHaveBeenCalledTimes(1)
   terminate1()
   store.next(2)
-  expect(observerMock).toHaveBeenCalledTimes(1)
+  expect(observerMock).toHaveBeenCalledTimes(2)
   terminate2()
   store.next(3)
-  expect(observerMock).toHaveBeenCalledTimes(1)
+  expect(observerMock).toHaveBeenCalledTimes(2)
 })
 
 it('Compose middlewares', () => {
