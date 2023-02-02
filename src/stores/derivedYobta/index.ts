@@ -33,7 +33,6 @@ export const derivedYobta: Yobtaderived = (acc, ...stores) => {
   let getState = (): any =>
     acc(...(stores.map(({ last }) => last()) as States<typeof stores>))
   let { last, on, next, observe } = storeYobta<any, never>(getState())
-  let debounce = (): void => {}
   let update = (): void => {
     next(getState())
   }
@@ -41,7 +40,7 @@ export const derivedYobta: Yobtaderived = (acc, ...stores) => {
     last,
     observe(observer: YobtaObserver<any, never>, ...callbacks) {
       let unsubcribe = [
-        ...stores.map(store => store.observe(debounce, update, ...callbacks)),
+        ...stores.map(store => store.observe(() => {}, update, ...callbacks)),
         observe(observer),
       ]
       return () => {

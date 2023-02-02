@@ -46,7 +46,7 @@ export type YobtaStore<State, Overloads extends any[] = any[]> = {
   next: YobtaStateSetter<State, Overloads>
   observe(
     observer: YobtaObserver<State, Overloads>,
-    ...callbacks: VoidFunction[]
+    ...callbacks: YobtaObserver<State, Overloads>[]
   ): VoidFunction
   on(
     topic: YobtaReadyEvent | YobtaIdleEvent | YobtaTransitionEvent,
@@ -67,8 +67,8 @@ type Topics<State, Overloads extends any[]> = {
 export type YobtaAnyStore<State = any> = {
   last(): State
   observe(
-    observer: (state: State) => void,
-    ...callbacks: VoidFunction[]
+    observer: YobtaObserver<any, any>,
+    ...callbacks: YobtaObserver<any, any>[]
   ): VoidFunction
 }
 export type YobtaState<SomeStore> = SomeStore extends {
@@ -122,7 +122,7 @@ export const storeYobta: YobtaStoreFactory = <
     next,
     observe: (
       observer: YobtaObserver<State, Overloads>,
-      ...callbacks: VoidFunction[]
+      ...callbacks: YobtaObserver<State, Overloads>[]
     ) => {
       if (dispatcher.size === 0) {
         state = transition(YOBTA_READY, state)
