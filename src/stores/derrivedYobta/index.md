@@ -1,3 +1,5 @@
+&larr; [Home](../../../README.md)
+
 # Derrived Store
 
 Aggregates data from one or multiple stores into a single, read-only store.
