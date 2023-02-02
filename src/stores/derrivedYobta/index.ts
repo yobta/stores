@@ -25,7 +25,7 @@ type States<Stores extends AnyStore[]> = {
     : YobtaState<Stores[Key]>
 }
 interface YobtaDerrived {
-  <DerrivedState extends any, Stores extends AnyStore[]>(
+  <DerrivedState extends any = any, Stores extends AnyStore[] = AnyStore[]>(
     callback: (...states: States<Stores>) => DerrivedState,
     ...stores: Stores
   ): {
