@@ -26,6 +26,10 @@ Online store
 
 Readable store utility
 
+## 0.1.8
+
+Improve multiple inheritance solution
+
 ## 0.1.7
 
 Fix effect utilities types
