@@ -5,6 +5,7 @@ coverage/
 **/types.ts
 **/errors.ts
 **/*.test.ts
+**/*.md
 tsconfig.json
 test/
 docs/
