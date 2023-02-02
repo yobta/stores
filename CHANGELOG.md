@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.1.14
+
+Improve multiple inheritance solution
+
 ## 0.1.13
 
 derived store
@@ -25,10 +29,6 @@ Online store
 ## 0.1.8
 
 Readable store utility
-
-## 0.1.8
-
-Improve multiple inheritance solution
 
 ## 0.1.7
 
