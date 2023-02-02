@@ -1,6 +1,6 @@
 &larr; [Home](../../../README.md)
 
-# derived Store
+# Derived Store
 
 Aggregates data from one or multiple stores into a single, read-only store.
 
