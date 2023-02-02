@@ -23,7 +23,7 @@ export type YobtaObserver<
   Overloads extends any[] = any[],
 > = (item: Item, ...overloads: Overloads) => void
 
-type YobtaStackItem<Item extends any = any, Overloads extends any[] = any[]> = [
+type YobtaHeapItem<Item extends any = any, Overloads extends any[] = any[]> = [
   YobtaObserver<Item, Overloads>,
   YobtaObserver<Item, Overloads>[],
 ]
@@ -43,7 +43,7 @@ export const observableYobta: YobtaObservableFactory = <
   Item extends any,
   Overloads extends any[] = any[],
 >() => {
-  let heap = new Set<YobtaStackItem<Item, Overloads>>()
+  let heap = new Set<YobtaHeapItem<Item, Overloads>>()
   return {
     get size() {
       return heap.size
@@ -68,7 +68,7 @@ export const observableYobta: YobtaObservableFactory = <
       observer: YobtaObserver<Item, Overloads>,
       ...callbacks: YobtaObserver<Item, Overloads>[]
     ) {
-      let item: YobtaStackItem<Item, Overloads> = [observer, callbacks]
+      let item: YobtaHeapItem<Item, Overloads> = [observer, callbacks]
       heap.add(item)
       return () => {
         heap.delete(item)
