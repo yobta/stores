@@ -1,15 +1,15 @@
 import './App.css'
 
-import { storeYobta, derrivedYobta, YOBTA_NEXT, YOBTA_BEFORE } from '../../src'
+import { storeYobta, derivedYobta, YOBTA_NEXT, YOBTA_BEFORE } from '../../src'
 import { useYobta } from '../../src/adapters/react'
 import { useEffect } from 'react'
 import { useRef } from 'react'
 
 const store = storeYobta(0)
-const added = derrivedYobta(value => value + 1, store)
-const subtracted = derrivedYobta(value => value - 1, store)
-const total = derrivedYobta((v1, v2) => v1 + v2, added, subtracted)
-const edge = derrivedYobta(v => v + v, total)
+const added = derivedYobta(value => value + 1, store)
+const subtracted = derivedYobta(value => value - 1, store)
+const total = derivedYobta((v1, v2) => v1 + v2, added, subtracted)
+const edge = derivedYobta(v => v + v, total)
 
 const up = () => {
   let next = store.last() + 1
