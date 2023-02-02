@@ -64,6 +64,18 @@ type Topics<State, Overloads extends any[]> = {
   [YOBTA_IDLE]: [Readonly<State>]
   [YOBTA_READY]: [Readonly<State>]
 }
+export type YobtaAnyStore<State = any> = {
+  last(): State
+  observe(
+    observer: (state: State) => void,
+    ...callbacks: VoidFunction[]
+  ): VoidFunction
+}
+export type YobtaState<SomeStore> = SomeStore extends {
+  last(): infer Value
+}
+  ? Value
+  : any
 // #endregion
 
 /**

@@ -1,6 +1,22 @@
 import { derrivedYobta } from '.'
 import { storeYobta } from '../storeYobta/index.js'
 
+test('return type', () => {
+  let store = storeYobta(1)
+  let derrived = derrivedYobta(state => state + 1, store)
+  expect(derrived).toMatchObject({
+    last: expect.any(Function),
+    observe: expect.any(Function),
+    on: expect.any(Function),
+  })
+})
+
+test('initial state', () => {
+  let store = storeYobta(1)
+  let derrived = derrivedYobta(state => state + 1, store)
+  expect(derrived.last()).toBe(2)
+})
+
 test('edge', () => {
   let store = storeYobta(1)
   let derrived = derrivedYobta(state => state + 1, store)

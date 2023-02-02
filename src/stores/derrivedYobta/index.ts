@@ -1,58 +1,45 @@
+import { YobtaObserver } from '../../util/observableYobta/index.js'
 import { YobtaReadable } from '../../util/readableYobta/index.js'
-import {
-  storeYobta,
-  YobtaIdleEvent,
-  YobtaReadyEvent,
-  YobtaTransitionEvent,
-} from '../storeYobta/index.js'
+import { storeYobta, YobtaAnyStore, YobtaState } from '../storeYobta/index.js'
 
 // #region Types
-type AnyStore<State = any> = {
-  last(): State
-  observe(
-    observer: (state: State) => void,
-    ...callbacks: VoidFunction[]
-  ): VoidFunction
-}
-type YobtaState<SomeStore> = SomeStore extends {
-  last(): infer Value
-}
-  ? Value
-  : any
-type States<Stores extends AnyStore[]> = {
+
+type States<Stores extends YobtaAnyStore[]> = {
   [Key in keyof Stores]: Stores[Key] extends YobtaReadable<infer State>
     ? State
     : YobtaState<Stores[Key]>
 }
 interface YobtaDerrived {
-  <DerrivedState extends any = any, Stores extends AnyStore[] = AnyStore[]>(
+  <
+    DerrivedState extends any = any,
+    Stores extends YobtaAnyStore[] = YobtaAnyStore[],
+  >(
     callback: (...states: States<Stores>) => DerrivedState,
     ...stores: Stores
-  ): {
-    last(): DerrivedState
-    observe(
-      observer: (state: DerrivedState) => void,
-      ...callbacks: VoidFunction[]
-    ): VoidFunction
-    on(
-      topic: YobtaReadyEvent | YobtaIdleEvent | YobtaTransitionEvent,
-      subscriber: (state: Readonly<DerrivedState>) => void,
-    ): VoidFunction
-  }
+  ): YobtaReadable<DerrivedState, never>
 }
 // #endregion
 
+/**
+ * Aggregates data from one or multiple stores into a single, read-only store.
+ *
+ * @example
+ * const store1 = storeYobta(1)
+ * const store2 = storeYobta(1)
+ * const derrived = derrivedYobta((state1, state2) => state1 + state2, store1, store2)
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/stores/derrivedYobta/index.md}
+ */
 export const derrivedYobta: YobtaDerrived = (acc, ...stores) => {
   let getState = (): any =>
     acc(...(stores.map(({ last }) => last()) as States<typeof stores>))
-  let { last, on, next, observe } = storeYobta(getState())
+  let { last, on, next, observe } = storeYobta<any, never>(getState())
   let debounce = (): void => {}
   let update = (): void => {
     next(getState())
   }
   return {
     last,
-    observe(observer, ...callbacks) {
+    observe(observer: YobtaObserver<any, never>, ...callbacks) {
       let unsubcribe = [
         ...stores.map(store => store.observe(debounce, update, ...callbacks)),
         observe(observer),
