@@ -52,3 +52,13 @@ const observable = observableYobta<number, string[]>() // The value type is numb
 observable.next(1, ['overload1', 'overload2']) // OK
 observable.next(1, 2) // Not OK
 ```
+
+## Callbacks
+
+The `observe` method of `observableYobta` allows you to subscribe to updates on the observable object. The `observer` argument is a callback that will be called each time next is called on the observable. The `callbacks` argument is an optional array of additional callbacks that will be called after the `observer` callback has been called.
+
+The `observe` method returns a function that can be called to unsubscribe from updates.
+
+Internally, the `observableYobta` object uses a set `heap` to keep track of the `observer` and `callbacks` arguments passed to the `observe` method. The `next` method iterates over `heap` to call all registered observers and callbacks in the order they were added. It executes all the observers followed by all the callbacks. The `next` method also uses sets to de-duplicate observers and callbacks to ensure that each callback is only called once.
+
+The `observableYobta` is used internally by [derived](../../stores/derivedYobta/index.md) stores to solve the [multiple inheritance](https://en.wikipedia.org/wiki/Multiple_inheritance) problem.
