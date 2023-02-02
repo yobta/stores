@@ -1,4 +1,7 @@
-import { gemCutterYobta } from '../../util/gemCutterYobta/index.js'
+import {
+  observableYobta,
+  YobtaObserver,
+} from '../../util/observableYobta/index.js'
 import { pubSubYobta } from '../../util/pubSubYobta/index.js'
 import { composeMiddleware } from './middleware.js'
 
@@ -38,15 +41,11 @@ export type YobtaStateSetter<State, Overloads extends any[]> = (
   action: State,
   ...overloads: Overloads
 ) => void
-export type YobtaStoreObserver<State, Overloads extends any[]> = (
-  state: Readonly<State>,
-  ...overloads: Overloads
-) => void
 export type YobtaStore<State, Overloads extends any[] = any[]> = {
   last: YobtaStateGetter<State>
   next: YobtaStateSetter<State, Overloads>
   observe(
-    observer: YobtaStoreObserver<State, Overloads>,
+    observer: YobtaObserver<State, Overloads>,
     ...callbacks: VoidFunction[]
   ): VoidFunction
   on(
@@ -82,13 +81,13 @@ export const storeYobta: YobtaStoreFactory = <
 ) => {
   let state: State = initialState
   let { publish: p, subscribe: on } = pubSubYobta<Topics<State, Overloads>>()
-  let observers = gemCutterYobta<State, Overloads>()
+  let dispatcher = observableYobta<State, Overloads>()
   let next: YobtaStateSetter<State, Overloads> = (
     nextState: State,
     ...overloads
   ): void => {
     state = transition(YOBTA_NEXT, nextState, ...overloads)
-    observers.next(state, ...overloads)
+    dispatcher.next(state, ...overloads)
   }
   let last: YobtaStateGetter<State> = () => state
   let middleware = composeMiddleware<State, Overloads>({
@@ -110,17 +109,17 @@ export const storeYobta: YobtaStoreFactory = <
     last,
     next,
     observe: (
-      observer: YobtaStoreObserver<State, Overloads>,
+      observer: YobtaObserver<State, Overloads>,
       ...callbacks: VoidFunction[]
     ) => {
-      if (observers.size === 0) {
+      if (dispatcher.size === 0) {
         state = transition(YOBTA_READY, state)
         p(YOBTA_READY, state)
       }
-      let remove = observers.observe(observer, ...callbacks)
+      let remove = dispatcher.observe(observer, ...callbacks)
       return () => {
         remove()
-        if (observers.size === 0) {
+        if (dispatcher.size === 0) {
           state = transition(YOBTA_IDLE, state)
           p(YOBTA_IDLE, state)
         }
