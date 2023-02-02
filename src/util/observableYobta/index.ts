@@ -27,7 +27,6 @@ type YobtaHeapItem<
   Item extends any = any,
   Overloads extends any[] = any[],
 > = YobtaObserver<Item, Overloads>[]
-
 // #endregion
 
 /**
