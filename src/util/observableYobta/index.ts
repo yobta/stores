@@ -23,10 +23,11 @@ export type YobtaObserver<
   Overloads extends any[] = any[],
 > = (item: Item, ...overloads: Overloads) => void
 
-type YobtaHeapItem<Item extends any = any, Overloads extends any[] = any[]> = [
-  YobtaObserver<Item, Overloads>,
-  YobtaObserver<Item, Overloads>[],
-]
+type YobtaHeapItem<
+  Item extends any = any,
+  Overloads extends any[] = any[],
+> = YobtaObserver<Item, Overloads>[]
+
 // #endregion
 
 /**
@@ -49,30 +50,19 @@ export const observableYobta: YobtaObservableFactory = <
       return heap.size
     },
     next(item: Item, ...overloads: Overloads) {
-      let observers = new Set<YobtaObserver<Item, Overloads>>()
-      let callbacks = new Set<YobtaObserver<Item, Overloads>>()
-      heap.forEach(([observer, callbackArray]) => {
-        observers.add(observer)
-        callbackArray.forEach(callback => {
-          callbacks.add(callback)
+      let sortMap = new Map<YobtaObserver<Item, Overloads>, number>()
+      heap.forEach(chunk => {
+        chunk.forEach((cb, i) => sortMap.set(cb, i))
+      })
+      ;[...sortMap.entries()]
+        .sort((a, b) => a[1] - b[1])
+        .forEach(([cb]) => {
+          cb(item, ...overloads)
         })
-      })
-      observers.forEach(observer => {
-        observer(item, ...overloads)
-      })
-      callbacks.forEach(callback => {
-        callback(item, ...overloads)
-      })
     },
-    observe(
-      observer: YobtaObserver<Item, Overloads>,
-      ...callbacks: YobtaObserver<Item, Overloads>[]
-    ) {
-      let item: YobtaHeapItem<Item, Overloads> = [observer, callbacks]
-      heap.add(item)
-      return () => {
-        heap.delete(item)
-      }
+    observe(...callbacks: YobtaObserver<Item, Overloads>[]) {
+      heap.add(callbacks)
+      return () => heap.delete(callbacks)
     },
   }
 }
