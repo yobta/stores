@@ -3,7 +3,7 @@ import { storeYobta } from '../storeYobta/index.js'
 
 test('edge', () => {
   let store = storeYobta(1)
-  let derrived = derrivedYobta((state: number) => state + 1, store)
+  let derrived = derrivedYobta(state => state + 1, store)
   let storeObserver = vi.fn()
   let derrivedObserver = vi.fn()
   let unsubscribeStore = store.observe(storeObserver)
