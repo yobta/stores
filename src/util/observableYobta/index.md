@@ -62,3 +62,24 @@ The `observe` method returns a function that can be called to unsubscribe from u
 Internally, the `observableYobta` object uses a set `heap` to keep track of the `observer` and `callbacks` arguments passed to the `observe` method. The `next` method iterates over `heap` to call all registered observers and callbacks in the order they were added. It executes all the observers followed by all the callbacks. The `next` method also uses sets to de-duplicate observers and callbacks to ensure that each callback is only called once.
 
 The `observableYobta` is used internally by [derived](../../stores/derivedYobta/index.md) stores to solve the [multiple inheritance](https://en.wikipedia.org/wiki/Multiple_inheritance) problem.
+
+In the following example the dispatcher will initiate by calling the `observer` once. Then, it will proceed to call `observer1`. Finally, to avoid duplicated calls, the dispatcher will deduplicate and only call the `callback` once.
+
+```js
+const observer = item => console.log('next item is: ', item)
+const observer1 = item => console.log('next item is: ', item)
+const callback = item =>
+  console.log('all observers are called and the item is still: ', item)
+
+const stop1 = observable.observe(observer, callback, callback)
+const stop2 = observable.observe(observer, callback)
+const stop3 = observable.observe(observer1, callback)
+
+observable.next('yobta')
+```
+
+If one `observer` subscription is stopped, it will not impact the order of execution as long as the other observer remains active.
+
+```js
+stop2()
+```
