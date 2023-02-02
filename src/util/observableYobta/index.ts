@@ -13,7 +13,7 @@ export type YobtaObservable<
   next(item: Item, ...overloads: Overloads): void
   observe(
     observer: YobtaObserver<Item, Overloads>,
-    ...callbacks: VoidFunction[]
+    ...callbacks: YobtaObserver<Item, Overloads>[]
   ): VoidFunction
   size: number
 }
@@ -25,7 +25,7 @@ export type YobtaObserver<
 
 type YobtaStackItem<Item extends any = any, Overloads extends any[] = any[]> = [
   YobtaObserver<Item, Overloads>,
-  VoidFunction[],
+  YobtaObserver<Item, Overloads>[],
 ]
 // #endregion
 
@@ -50,7 +50,7 @@ export const observableYobta: YobtaObservableFactory = <
     },
     next(item: Item, ...overloads: Overloads) {
       let observers = new Set<YobtaObserver<Item, Overloads>>()
-      let callbacks = new Set<VoidFunction>()
+      let callbacks = new Set<YobtaObserver<Item, Overloads>>()
       heap.forEach(([observer, callbackArray]) => {
         observers.add(observer)
         callbackArray.forEach(callback => {
@@ -61,12 +61,12 @@ export const observableYobta: YobtaObservableFactory = <
         observer(item, ...overloads)
       })
       callbacks.forEach(callback => {
-        callback()
+        callback(item, ...overloads)
       })
     },
     observe(
       observer: YobtaObserver<Item, Overloads>,
-      ...callbacks: VoidFunction[]
+      ...callbacks: YobtaObserver<Item, Overloads>[]
     ) {
       let item: YobtaStackItem<Item, Overloads> = [observer, callbacks]
       heap.add(item)

@@ -40,7 +40,7 @@ it('calls callbacks after observers', () => {
   gemCutter.observe(state => observer(state), observer)
   gemCutter.observe(state => observer(state), observer)
   gemCutter.next('state')
-  expect(observer.mock.calls).toEqual([['state'], ['state'], []])
+  expect(observer.mock.calls).toEqual([['state'], ['state'], ['state']])
   expect(observer).toBeCalledTimes(3)
 })
 
