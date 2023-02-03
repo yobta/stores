@@ -118,7 +118,7 @@
     {
       "name": "all",
       "path": "./lib/index.js",
-      "limit": "1820 B"
+      "limit": "1828 B"
     },
     {
       "name": "react",
@@ -166,6 +166,12 @@
       "path": "./lib/index.js",
       "import": "{ validationPluginYobta }",
       "limit": "107 B"
+    },
+    {
+      "name": "derivedYobta",
+      "path": "./lib/index.js",
+      "import": "{ derivedYobta }",
+      "limit": "695 B"
     },
     {
       "name": "machineYobta",
