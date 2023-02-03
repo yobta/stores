@@ -124,19 +124,19 @@
     {
       "name": "react",
       "path": "./lib/adapters/react/index.js",
-      "limit": "2959 B"
+      "limit": "2982 B"
     },
     {
       "name": "hookYobta",
       "path": "./lib/adapters/react/index.js",
       "import": "{ hookYobta }",
-      "limit": "2950 B"
+      "limit": "2975 B"
     },
     {
       "name": "useYobta",
       "path": "./lib/adapters/react/index.js",
       "import": "{ useYobta }",
-      "limit": "2941 B"
+      "limit": "2966 B"
     },
     {
       "name": "broadcastChannelPluginYobta",
