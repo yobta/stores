@@ -15,6 +15,13 @@ test('initial state', () => {
   let store = storeYobta(1)
   let derived = derivedYobta(state => state + 1, store)
   expect(derived.last()).toBe(2)
+
+  store.next(2)
+  expect(derived.last()).toBe(2)
+
+  let stop = derived.observe(() => {})
+  expect(derived.last()).toBe(3)
+  stop()
 })
 
 test('edge', () => {
