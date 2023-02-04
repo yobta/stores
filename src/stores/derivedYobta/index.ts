@@ -1,6 +1,11 @@
 import { YobtaObserver } from '../../util/observableYobta/index.js'
 import { YobtaReadable } from '../../util/readableYobta/index.js'
-import { storeYobta, YobtaAnyStore, YobtaState } from '../storeYobta/index.js'
+import {
+  storeYobta,
+  YobtaAnyStore,
+  YobtaState,
+  YOBTA_READY,
+} from '../storeYobta/index.js'
 
 // #region Types
 
@@ -32,7 +37,12 @@ interface Yobtaderived {
 export const derivedYobta: Yobtaderived = (acc, ...stores) => {
   let getState = (): any =>
     acc(...(stores.map(({ last }) => last()) as States<typeof stores>))
-  let { last, on, next, observe } = storeYobta<any, never>(getState())
+  let { last, on, next, observe } = storeYobta<any, never>(
+    getState(),
+    ({ addMiddleware }) => {
+      addMiddleware(YOBTA_READY, getState)
+    },
+  )
   let update = (): void => {
     next(getState())
   }

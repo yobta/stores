@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.1.15
+
+Fix derived initialization
+
 ## 0.1.14
 
 Improve multiple inheritance solution
