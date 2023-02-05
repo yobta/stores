@@ -2,7 +2,7 @@ import {
   YobtaStore,
   YOBTA_IDLE,
   YOBTA_READY,
-} from '../../stores/storeYobta/index.js'
+} from '../../stores/createStore/index.js'
 
 type AnyStore<State> = Pick<YobtaStore<State>, 'on'>
 

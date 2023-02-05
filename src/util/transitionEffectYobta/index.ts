@@ -1,4 +1,4 @@
-import { YobtaStore, YOBTA_BEFORE } from '../../stores/storeYobta/index.js'
+import { YobtaStore, YOBTA_BEFORE } from '../../stores/createStore/index.js'
 
 type AnyStore<State> = Pick<YobtaStore<State>, 'on' | 'last'>
 

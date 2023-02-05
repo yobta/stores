@@ -1,4 +1,4 @@
-import { YOBTA_BEFORE } from '../../stores/storeYobta/index.js'
+import { YOBTA_BEFORE } from '../../stores/createStore/index.js'
 import { transitionEffectYobta } from './index.js'
 
 const onMock = vi.fn()

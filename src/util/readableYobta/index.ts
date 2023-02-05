@@ -3,7 +3,7 @@ import {
   YobtaReadyEvent,
   YobtaStateGetter,
   YobtaTransitionEvent,
-} from '../../stores/storeYobta/index.js'
+} from '../../stores/createStore/index.js'
 
 export type YobtaReadable<State, Overloads extends any[] = any[]> = {
   last: YobtaStateGetter<State>

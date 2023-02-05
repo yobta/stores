@@ -7,7 +7,7 @@ This hook allows a React component to subscribe to changes in a `@yobta/stores`.
 ```ts
 import { useYobta } from '@yobta/stores/react'
 
-const store = storeYobta(0)
+const store = createStore(0)
 const increment = () => {
   const state = store.last() + 1
   store.next(state)

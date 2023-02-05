@@ -6,7 +6,7 @@ Creates an observable store for storing and observing the changes of a value. De
 
 ## Features
 
-The `storeYobta` store has the following features:
+The `createStore` store has the following features:
 
 - Provides a default value when the store is created
 - Allows for the extension of the store with plugins that add middleware to state transitions
@@ -16,12 +16,12 @@ The `storeYobta` store has the following features:
 
 ## Creating a Basic Store
 
-To create a store, you can use the `storeYobta` factory function with just the default state value. For example:
+To create a store, you can use the `createStore` factory function with just the default state value. For example:
 
 ```ts
-import { storeYobta } from '@yobta/stores'
+import { createStore } from '@yobta/stores'
 
-let store = storeYobta(1)
+let store = createStore(1)
 ```
 
 ## Accessing the Store's State
@@ -55,14 +55,14 @@ unsubscribe()
 
 There are a number of [plugins](../../plugins/index.md) available that you can use to extend your stores. You can add any number of plugins to your stores to enhance their functionality.
 
-To extend a store with a plugin, simply pass the plugin as an additional argument to the `storeYobta` factory function when creating the store.
+To extend a store with a plugin, simply pass the plugin as an additional argument to the `createStore` factory function when creating the store.
 
 For example, to extend a store with the [lazy plugin](../../plugins/lazyPluginYobta/index.md) which resets the store to its initial state when the last observer leaves the store, you can do the following:
 
 ```ts
-import { storeYobta, lazyPluginYobta } from '@yobta/stores'
+import { createStore, lazyPluginYobta } from '@yobta/stores'
 
-const store = storeYobta(0, lazyPluginYobta) // Create an enhanced store
+const store = createStore(0, lazyPluginYobta) // Create an enhanced store
 const unobserve = store.observe(console.log) // Add an observer
 store.next(1) // Change the store value
 console.log(store.last()) // Check the store value
@@ -124,7 +124,7 @@ const myPlugin = ({ addMiddleware }) => {
     return state
   })
 }
-const store = storeYobta(0, myPlugin)
+const store = createStore(0, myPlugin)
 store.observe((value, meta) => {
   console.log(`The store has updated to: ${value}. Operation: "${meta.type}"`)
 })
@@ -137,12 +137,12 @@ When using Typescript with `@yobta/stores`, the types of the store's values can 
 
 For the overloads, the types cannot be inferred and are treated as an array of `any` by default. To specify the types of the overloads, you can define the `Oveloads` type.
 
-Here's an example of how to use storeYobta with Typescript:
+Here's an example of how to use createStore with Typescript:
 
 ```ts
 type State = { name?: string }
 type Oveloads = [{ action: string }]
 
-const store = storeYobta<State, Oveloads>({})
+const store = createStore<State, Oveloads>({})
 store.next({ name: 'yobta' }, { action: 'set name' })
 ```

@@ -5,8 +5,8 @@
 Creates a read-only version of the store that can only be accessed using the `last`, `observe` and `on` methods and cannot be modified externally.
 
 ```js
-import { storeYobta, readableYobta } from '@yobta/stores'
+import { createStore, readableYobta } from '@yobta/stores'
 
-const store = storeYobta(0)
+const store = createStore(0)
 export const readOnlyStore = readableYobta(store)
 ```

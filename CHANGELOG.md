@@ -67,7 +67,7 @@ Fix machine store typings
 ## 0.1.1
 
 Breakng changes:
-Rename observableYobte to storeYobta
+Rename observableYobte to createStore
 Remove store init event
 Remove setter from store next method
 Map store becomes mutable

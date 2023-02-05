@@ -1,5 +1,5 @@
 import {
-  storeYobta,
+  createStore,
   YobtaStorePlugin,
   YobtaStateSetter,
   YobtaReadyEvent,
@@ -55,7 +55,7 @@ export const machineYobta: YobtaMachineStoreFactory =
     initialState: keyof States,
     ...plugins: YobtaStorePlugin<keyof States, Overloads>[]
   ) => {
-    let { last, next, observe, on } = storeYobta<keyof States, Overloads>(
+    let { last, next, observe, on } = createStore<keyof States, Overloads>(
       initialState,
       ...plugins,
     )

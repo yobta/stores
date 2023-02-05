@@ -115,4 +115,4 @@ const store = stackYobta(
 
 ## Subscribing to Store Events
 
-The Stack store supports the same events as other stores. For more information, see the [Store documentation](../storeYobta/index.md).
+The Stack store supports the same events as other stores. For more information, see the [Store documentation](../createStore/index.md).

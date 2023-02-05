@@ -81,10 +81,10 @@ export type YobtaState<SomeStore> = SomeStore extends {
 /**
  * Creates an observable store object.
  * @example
- * const store = storeYobta('initial state')
- * @documentation {@link https://github.com/yobta/stores/tree/master/src/stores/storeYobta/index.md}
+ * const store = createStore('initial state')
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/stores/createStore/index.md}
  */
-export const storeYobta: YobtaStoreFactory = <
+export const createStore: YobtaStoreFactory = <
   State,
   Overloads extends any[] = never[],
 >(

@@ -1,4 +1,4 @@
-import { YOBTA_IDLE, YOBTA_READY } from '../../stores/storeYobta/index.js'
+import { YOBTA_IDLE, YOBTA_READY } from '../../stores/createStore/index.js'
 import { storeEffectYobta } from './index.js'
 
 const onMock = vi.fn()

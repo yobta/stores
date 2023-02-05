@@ -7,9 +7,9 @@ A factory function that creates a store plugin that allows for storing and retri
 ## Usage
 
 ```ts
-import { storeYobta, sessionStoragePluginYobta } from '@yobta/stores'
+import { createStore, sessionStoragePluginYobta } from '@yobta/stores'
 
-const store = storeYobta(0, sessionStoragePluginYobta({ channel: 'my-store' }))
+const store = createStore(0, sessionStoragePluginYobta({ channel: 'my-store' }))
 ```
 
 In this example, the `sessionStoragePluginYobta` plugin is added to the store with the channel parameter set to 'my-store'. This will cause the store's state to be stored in session storage under the key 'my-store'. Whenever the store's state changes, the plugin will automatically update the value in session storage.

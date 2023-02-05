@@ -1,5 +1,5 @@
 import {
-  storeYobta,
+  createStore,
   YobtaStorePlugin,
   OptionalKey,
   diffMapYobta,
@@ -113,7 +113,7 @@ export const mapYobta: YobtaMapStoreFactory = <
   let initialState: YobtaMapState<PlainState> = new Map(
     Object.entries(plainState),
   )
-  let { next, last, observe, on } = storeYobta<
+  let { next, last, observe, on } = createStore<
     YobtaMapState<PlainState>,
     [YobtaMapChanges<PlainState>, ...Overloads]
   >(initialState, ...plugins)

@@ -2,7 +2,7 @@ import {
   YOBTA_IDLE,
   YOBTA_NEXT,
   YOBTA_READY,
-} from '../../stores/storeYobta/index.js'
+} from '../../stores/createStore/index.js'
 import { validationPluginYobta } from './index.js'
 
 let mock = vi.fn()

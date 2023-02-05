@@ -11,9 +11,9 @@ Updates are only received by the plugin when the store has subscribers.
 ## Usage
 
 ```ts
-import { storeYobta, broadcastChannelPluginYobta } from '@yobta/stores'
+import { createStore, broadcastChannelPluginYobta } from '@yobta/stores'
 
-const store = storeYobta(
+const store = createStore(
   { count: 0 },
   broadcastChannelPluginYobta({ channel: 'my-store' }),
 )

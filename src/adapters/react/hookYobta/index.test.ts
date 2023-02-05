@@ -1,9 +1,9 @@
 import { renderHook } from '@testing-library/react'
 
-import { storeYobta } from '../../../stores/storeYobta/index.js'
+import { createStore } from '../../../stores/createStore/index.js'
 import { hookYobta } from './index.js'
 
-const store = storeYobta(1)
+const store = createStore(1)
 
 it('returns a function', () => {
   let hook = hookYobta(store)

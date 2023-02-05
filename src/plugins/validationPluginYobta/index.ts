@@ -3,7 +3,7 @@ import {
   YOBTA_IDLE,
   YOBTA_NEXT,
   YOBTA_READY,
-} from '../../stores/storeYobta/index.js'
+} from '../../stores/createStore/index.js'
 
 interface ValidationPluginFactory {
   <State>(validate: (input: any) => State): YobtaStorePlugin<State, never>
@@ -12,7 +12,7 @@ interface ValidationPluginFactory {
 /**
  * A plugin for @yobta/stores that ensures state integrity by validating it during transitions.
  * @example
- * const store = storeYobta(
+ * const store = createStore(
  *  0,
  *  validationPluginYobta(state => Math.max(0, state))
  * ),

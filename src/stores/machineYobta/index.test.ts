@@ -1,4 +1,4 @@
-import { YOBTA_IDLE, YOBTA_READY } from '../storeYobta/index.js'
+import { YOBTA_IDLE, YOBTA_READY } from '../createStore/index.js'
 import { machineYobta } from './index.js'
 
 it('creates store', () => {

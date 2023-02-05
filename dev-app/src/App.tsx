@@ -1,11 +1,11 @@
 import './App.css'
 
-import { storeYobta, derivedYobta, YOBTA_NEXT, YOBTA_BEFORE } from '../../src'
+import { createStore, derivedYobta, YOBTA_NEXT, YOBTA_BEFORE } from '../../src'
 import { useYobta } from '../../src/adapters/react'
 import { useEffect } from 'react'
 import { useRef } from 'react'
 
-const store = storeYobta(0)
+const store = createStore(0)
 const added = derivedYobta(value => value + 1, store)
 const subtracted = derivedYobta(value => value - 1, store)
 const total = derivedYobta((v1, v2) => v1 + v2, added, subtracted)

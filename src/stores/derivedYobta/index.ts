@@ -1,11 +1,11 @@
 import { YobtaObserver } from '../../util/observableYobta/index.js'
 import { YobtaReadable } from '../../util/readableYobta/index.js'
 import {
-  storeYobta,
+  createStore,
   YobtaAnyStore,
   YobtaState,
   YOBTA_READY,
-} from '../storeYobta/index.js'
+} from '../createStore/index.js'
 
 // #region Types
 
@@ -29,15 +29,15 @@ interface Yobtaderived {
  * Aggregates data from one or multiple stores into a single, read-only store.
  *
  * @example
- * const store1 = storeYobta(1)
- * const store2 = storeYobta(1)
+ * const store1 = createStore(1)
+ * const store2 = createStore(1)
  * const derived = derivedYobta((state1, state2) => state1 + state2, store1, store2)
  * @documentation {@link https://github.com/yobta/stores/tree/master/src/stores/derivedYobta/index.md}
  */
 export const derivedYobta: Yobtaderived = (acc, ...stores) => {
   let getState = (): any =>
     acc(...(stores.map(({ last }) => last()) as States<typeof stores>))
-  let { last, on, next, observe } = storeYobta<any, never>(
+  let { last, on, next, observe } = createStore<any, never>(
     getState(),
     ({ addMiddleware }) => {
       addMiddleware(YOBTA_READY, getState)

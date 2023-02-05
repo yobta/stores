@@ -3,7 +3,7 @@ import {
   YOBTA_IDLE,
   YOBTA_NEXT,
   YOBTA_READY,
-} from '../../stores/storeYobta/index.js'
+} from '../../stores/createStore/index.js'
 import { codecYobta } from '../../util/codecYobta/index.js'
 import { broadcastChannelPluginYobta } from './index.js'
 

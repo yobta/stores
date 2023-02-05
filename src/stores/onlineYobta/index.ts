@@ -1,6 +1,6 @@
 import { lazyPluginYobta } from '../../plugins/lazyPluginYobta/index.js'
 import { readableYobta, YobtaReadable } from '../../util/readableYobta/index.js'
-import { storeYobta, YOBTA_IDLE, YOBTA_READY } from '../storeYobta/index.js'
+import { createStore, YOBTA_IDLE, YOBTA_READY } from '../createStore/index.js'
 
 interface YobtaOnlineStoreFactory {
   (): YobtaReadable<boolean | null, never>
@@ -8,7 +8,7 @@ interface YobtaOnlineStoreFactory {
 export type YobtaOnlineStore = ReturnType<YobtaOnlineStoreFactory>
 
 export const onlineYobta: YobtaOnlineStoreFactory = () => {
-  let store = storeYobta(null, lazyPluginYobta, ({ addMiddleware, next }) => {
+  let store = createStore(null, lazyPluginYobta, ({ addMiddleware, next }) => {
     let on: VoidFunction = () => {
       next(true)
     }

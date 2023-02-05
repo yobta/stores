@@ -4,13 +4,13 @@ import {
   act as actServer,
 } from '@testing-library/react-hooks/server'
 
-import { storeYobta } from '../../../stores/storeYobta/index.js'
+import { createStore } from '../../../stores/createStore/index.js'
 import { useYobta } from './index.js'
 
 const unsubscribeMock = vi.fn()
 
-vi.mock('../../../stores/storeYobta/index.js', () => ({
-  storeYobta(initialState: any) {
+vi.mock('../../../stores/createStore/index.js', () => ({
+  createStore(initialState: any) {
     let state = initialState
     let observers: Set<() => void> = new Set()
     return {
@@ -32,10 +32,10 @@ vi.mock('../../../stores/storeYobta/index.js', () => ({
   },
 }))
 
-let store = storeYobta(1)
+let store = createStore(1)
 
 beforeEach(() => {
-  store = storeYobta(1)
+  store = createStore(1)
 })
 
 describe('client', () => {

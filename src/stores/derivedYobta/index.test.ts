@@ -1,8 +1,8 @@
 import { derivedYobta } from './index.js'
-import { storeYobta } from '../storeYobta/index.js'
+import { createStore } from '../createStore/index.js'
 
 test('return type', () => {
-  let store = storeYobta(1)
+  let store = createStore(1)
   let derived = derivedYobta(state => state + 1, store)
   expect(derived).toMatchObject({
     last: expect.any(Function),
@@ -12,7 +12,7 @@ test('return type', () => {
 })
 
 test('initial state', () => {
-  let store = storeYobta(1)
+  let store = createStore(1)
   let derived = derivedYobta(state => state + 1, store)
   expect(derived.last()).toBe(2)
 
@@ -25,7 +25,7 @@ test('initial state', () => {
 })
 
 test('edge', () => {
-  let store = storeYobta(1)
+  let store = createStore(1)
   let derived = derivedYobta(state => state + 1, store)
   let storeObserver = vi.fn()
   let derivedObserver = vi.fn()
@@ -45,7 +45,7 @@ test('edge', () => {
 })
 
 test('triangle', () => {
-  let store = storeYobta(1)
+  let store = createStore(1)
   let derived1 = derivedYobta(state => state + 1, store)
   let derived2 = derivedYobta<number>(
     (s1: number, s2: number) => s1 + s2,
@@ -77,7 +77,7 @@ test('triangle', () => {
 })
 
 test('diamond', () => {
-  let store = storeYobta(1)
+  let store = createStore(1)
   let derived1 = derivedYobta(state => state + 1, store)
   let derived2 = derivedYobta(state => state + 1, store)
   let derived3 = derivedYobta<number>(
@@ -124,7 +124,7 @@ const replacer =
 
 test('prevents diamond dependency problem 1', () => {
   let mock = vi.fn()
-  let store = storeYobta(0)
+  let store = createStore(0)
   let a = derivedYobta(v => `a${v}`, store)
   let b = derivedYobta(replacer('a', 'b'), a)
   let c = derivedYobta(replacer('a', 'c'), a)
@@ -150,7 +150,7 @@ test('prevents diamond dependency problem 1', () => {
 })
 
 test('prevents diamond dependency problem 2', () => {
-  let store = storeYobta(0)
+  let store = createStore(0)
   let mock = vi.fn()
 
   let a = derivedYobta(v => `a${v}`, store)
@@ -172,7 +172,7 @@ test('prevents diamond dependency problem 2', () => {
 })
 
 test('prevents diamond dependency problem 3', () => {
-  let store = storeYobta(0)
+  let store = createStore(0)
   let mock = vi.fn()
 
   let a = derivedYobta($store => `a${$store}`, store)
@@ -199,8 +199,8 @@ test('prevents diamond dependency problem 3', () => {
 })
 
 test('prevents diamond dependency problem 4 (complex)', () => {
-  let store1 = storeYobta<number>(0)
-  let store2 = storeYobta<number>(0)
+  let store1 = createStore<number>(0)
+  let store2 = createStore<number>(0)
 
   let mock1 = vi.fn()
   let mock2 = vi.fn()
@@ -247,8 +247,8 @@ test('prevents diamond dependency problem 4 (complex)', () => {
 
 test('prevents diamond dependency problem 5', () => {
   let events = ''
-  let firstName = storeYobta('John')
-  let lastName = storeYobta('Doe')
+  let firstName = createStore('John')
+  let lastName = createStore('Doe')
   let fullName = derivedYobta(
     (first, last) => {
       events += 'full '
@@ -291,8 +291,8 @@ test('prevents diamond dependency problem 5', () => {
 })
 
 test('prevents diamond dependency problem 6', () => {
-  let store1 = storeYobta<number>(0)
-  let store2 = storeYobta<number>(0)
+  let store1 = createStore<number>(0)
+  let store2 = createStore<number>(0)
   let mock = vi.fn()
 
   let a = derivedYobta(v => `a${v}`, store1)

@@ -9,7 +9,7 @@ import {
   YOBTA_IDLE,
   YOBTA_NEXT,
   YOBTA_READY,
-} from '../../stores/storeYobta/index.js'
+} from '../../stores/createStore/index.js'
 
 interface SessionStoragePluginFactory {
   <State, Codec extends YobtaGenericCodec<State>>(
@@ -25,7 +25,7 @@ interface SessionStoragePluginFactory {
 /**
  * A plugin for @yobta/stores that persists store state in session storage.
  * @example
- * const store = storeYobta(
+ * const store = createStore(
  *  'initial state',
  *  sessionStoragePluginYobta({
  *     channel: 'my-store-yobta',

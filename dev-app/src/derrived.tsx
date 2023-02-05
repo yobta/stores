@@ -6,7 +6,7 @@ import {
   localStoragePluginYobta,
   mapCodecYobta,
   mapYobta,
-  storeYobta,
+  createStore,
   sessionStoragePluginYobta,
 } from '../../src'
 import { useYobta } from '../../src/adapters/react'
@@ -16,12 +16,12 @@ const mapStore = mapYobta<{ a: number }>(
   localStoragePluginYobta({ channel: 'counter', codec: mapCodecYobta }),
 )
 
-const stringStore = storeYobta(
+const stringStore = createStore(
   '',
   sessionStoragePluginYobta({ channel: 'test' }),
 )
 
-const plainStore = storeYobta(
+const plainStore = createStore(
   {},
   broadcastChannelPluginYobta({ channel: 'plain' }),
 )

@@ -137,4 +137,4 @@ The Map store supports plugins in the same way that other stores do. For more in
 
 ## Subscribing to Store Events
 
-The Map store supports the same events as other stores. For more information, see the [Store documentation](../storeYobta/index.md).
+The Map store supports the same events as other stores. For more information, see the [Store documentation](../createStore/index.md).

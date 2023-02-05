@@ -9,7 +9,7 @@ import {
   YOBTA_IDLE,
   YOBTA_NEXT,
   YOBTA_READY,
-} from '../../stores/storeYobta/index.js'
+} from '../../stores/createStore/index.js'
 
 interface StorageListener {
   (event: StorageEvent): void
@@ -33,7 +33,7 @@ interface LocalStorageFactory {
 /**
  * A plugin for @yobta/stores that persists store state in local storage and synchronizes state across multiple browser tabs.
  * @example
- * const store = storeYobta(
+ * const store = createStore(
  *  'initial state',
  *  localStoragePluginYobta({
  *     channel: 'my-store-yobta',

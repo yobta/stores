@@ -7,9 +7,9 @@ A factory function for creating a store plugin that synchronizes the state with 
 ## Usage
 
 ```ts
-import { storeYobta, localStoragePluginYobta } from '@yobta/stores'
+import { createStore, localStoragePluginYobta } from '@yobta/stores'
 
-const store = storeYobta(
+const store = createStore(
   1,
   localStoragePluginYobta({
     channel: 'my-store-yobta',

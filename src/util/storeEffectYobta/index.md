@@ -6,9 +6,9 @@ The callback will be executed when the store is first observed. It should return
 will be invoked when the last observer leaves the store.
 
 ```js
-import { storeYobta, storeEffectYobta } from '@yobta/stores'
+import { createStore, storeEffectYobta } from '@yobta/stores'
 
-const store = storeYobta(null)
+const store = createStore(null)
 const callback = state => {
   let unsubscribe = subscribeToUpdates(state, store.next)
   return unsubscribe

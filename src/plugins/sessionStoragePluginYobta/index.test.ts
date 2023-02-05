@@ -2,7 +2,7 @@ import {
   YOBTA_IDLE,
   YOBTA_NEXT,
   YOBTA_READY,
-} from '../../stores/storeYobta/index.js'
+} from '../../stores/createStore/index.js'
 import { codecYobta, YobtaGenericCodec } from '../../util/codecYobta/index.js'
 import { sessionStoragePluginYobta } from './index.js'
 

@@ -1,10 +1,10 @@
 import {
-  storeYobta,
+  createStore,
   YobtaIdleEvent,
   YobtaReadyEvent,
   YobtaStorePlugin,
   YobtaTransitionEvent,
-} from '../storeYobta/index.js'
+} from '../createStore/index.js'
 
 export type YobtaStackStore<Item, Overloads extends any[] = any[]> = {
   add(member: Item, ...overloads: any[]): boolean
@@ -40,7 +40,7 @@ export const stackYobta: YobtaStackStoreFactory = <
   initialState?: Set<Item> | Item[],
   ...plugins: YobtaStorePlugin<ReadonlySet<Item>, Overloads>[]
 ) => {
-  let { last, observe, next, on } = storeYobta<ReadonlySet<Item>, Overloads>(
+  let { last, observe, next, on } = createStore<ReadonlySet<Item>, Overloads>(
     new Set(initialState),
     ...plugins,
   )

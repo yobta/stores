@@ -1,5 +1,5 @@
 import {
-  storeYobta,
+  createStore,
   YobtaStorePlugin,
   diffObjectYobta,
   YobtaStateGetter,
@@ -92,7 +92,7 @@ export const plainObjectYobta: YobtaPlainObjectStoreFactory = <
     ChangesWithOverloads<State, Overloads>
   >[]
 ) => {
-  let { next, last, observe, on } = storeYobta<
+  let { next, last, observe, on } = createStore<
     State,
     ChangesWithOverloads<State, Overloads>
   >(initialState, ...listeners)

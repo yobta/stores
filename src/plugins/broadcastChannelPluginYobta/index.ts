@@ -9,7 +9,7 @@ import {
   YOBTA_IDLE,
   YOBTA_NEXT,
   YOBTA_READY,
-} from '../../stores/storeYobta/index.js'
+} from '../../stores/createStore/index.js'
 
 interface BroadcastChannelFactory {
   <
@@ -29,7 +29,7 @@ interface BroadcastChannelFactory {
 /**
  * A plugin for @yobta/stores that allows them to receive state updates from other instances of the same store using the browser's BroadcastChannel API.
  * @example
- * const store = storeYobta(
+ * const store = createStore(
  *  'initial state',
  *  broadcastChannelPluginYobta({ channel: 'my-store' })
  * ),

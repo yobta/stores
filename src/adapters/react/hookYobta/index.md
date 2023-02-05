@@ -7,10 +7,10 @@ The `hookYobta` factory is a utility for creating React hooks from stores.
 ## Creating Hooks
 
 ```js
-import { storeYobta } from '@yobta/stores'
+import { createStore } from '@yobta/stores'
 import { hookYobta } from '@yobta/stores/react'
 
-const myStore = storeYobta(1)
+const myStore = createStore(1)
 export const useMyStore = hookYobta(myStore)
 ```
 
