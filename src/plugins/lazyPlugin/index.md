@@ -9,9 +9,9 @@ A plugin for the [@yobta/stores](https://www.npmjs.com/package/@yobta/stores) pa
 To use the Lazy Plugin Yobta, import it into your project and pass it as an argument to the store factory:
 
 ```ts
-import { createStore, lazyPluginYobta } from '@yobta/stores'
+import { createStore, lazyPlugin } from '@yobta/stores'
 
-const store = createStore(0, lazyPluginYobta)
+const store = createStore(0, lazyPlugin)
 ```
 
 Then, you can observe the store using the observe method:

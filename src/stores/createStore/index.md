@@ -57,12 +57,12 @@ There are a number of [plugins](../../plugins/index.md) available that you can u
 
 To extend a store with a plugin, simply pass the plugin as an additional argument to the `createStore` factory function when creating the store.
 
-For example, to extend a store with the [lazy plugin](../../plugins/lazyPluginYobta/index.md) which resets the store to its initial state when the last observer leaves the store, you can do the following:
+For example, to extend a store with the [lazy plugin](../../plugins/lazyPlugin/index.md) which resets the store to its initial state when the last observer leaves the store, you can do the following:
 
 ```ts
-import { createStore, lazyPluginYobta } from '@yobta/stores'
+import { createStore, lazyPlugin } from '@yobta/stores'
 
-const store = createStore(0, lazyPluginYobta) // Create an enhanced store
+const store = createStore(0, lazyPlugin) // Create an enhanced store
 const unobserve = store.observe(console.log) // Add an observer
 store.next(1) // Change the store value
 console.log(store.last()) // Check the store value

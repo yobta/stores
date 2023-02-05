@@ -34,7 +34,7 @@ The following sections provide documentation on different parts of Yobta Stores:
 
 - [About Plugins](src/plugins/index.md) - Basic information about plugins and middleware.
 - [Broadcast Channel](src/plugins/broadcastChannelPlugin/index.md) - Syncs state between browsing contexts.
-- [Lazy](src/plugins/lazyPluginYobta/index.md) - Resets the store to its initial state when idle.
+- [Lazy](src/plugins/lazyPlugin/index.md) - Resets the store to its initial state when idle.
 - [Local Storage](src/plugins/localStoragePluginYobta/index.md) - Persists and replicates state.
 - [Session Storage](src/plugins/sessionStoragePluginYobta/index.md) - Persists the store in one browsing context.
 - [Validation](src/plugins/validationPluginYobta/index.md) - Protects state.
