@@ -31,11 +31,11 @@ interface BroadcastChannelFactory {
  * @example
  * const store = createStore(
  *  'initial state',
- *  broadcastChannelPluginYobta({ channel: 'my-store' })
+ *  broadcastChannelPlugin({ channel: 'my-store' })
  * ),
- * @documentation {@link https://github.com/yobta/stores/tree/master/src/plugins/broadcastChannelPluginYobta/index.md}.
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/plugins/broadcastChannelPlugin/index.md}.
  */
-export const broadcastChannelPluginYobta: BroadcastChannelFactory =
+export const broadcastChannelPlugin: BroadcastChannelFactory =
   ({ channel, codec = codecYobta }) =>
   ({ addMiddleware, next, last }) => {
     let bc: BroadcastChannel | null

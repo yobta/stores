@@ -6,7 +6,7 @@ export * from './stores/createStore/index.js'
 export * from './stores/createPlainObjectStore/index.js'
 export * from './stores/createStackStore/index.js'
 
-export * from './plugins/broadcastChannelPluginYobta/index.js'
+export * from './plugins/broadcastChannelPlugin/index.js'
 export * from './plugins/lazyPluginYobta/index.js'
 export * from './plugins/localStoragePluginYobta/index.js'
 export * from './plugins/sessionStoragePluginYobta/index.js'

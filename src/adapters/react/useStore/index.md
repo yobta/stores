@@ -5,7 +5,7 @@
 This hook allows a React component to subscribe to changes in a `@yobta/stores`. When the state of the store changes, the hook will trigger a re-render of the component to reflect the updated state.
 
 ```ts
-import { useYobta } from '@yobta/stores/react'
+import { useStore } from '@yobta/stores/react'
 
 const store = createStore(0)
 const increment = () => {
@@ -14,7 +14,7 @@ const increment = () => {
 }
 
 function MyComponent() {
-  const state = useYobta(store)
+  const state = useStore(store)
   return <button onClick={increment}>Clicked: {state}</button>
 }
 ```

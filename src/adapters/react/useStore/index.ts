@@ -16,7 +16,7 @@ export type YobtaReactStoreHookOptions<State> = {
 /**
  * A react hook for @yobta/stores
  * @example
- * const state = useYobta(myStore)
+ * const state = useStore(myStore)
  * @documentation {@link https://github.com/yobta/stores/blob/master/src/adapters/react/index.md}.
  */
 export const useYobta: YobtaReactStoreHook = (

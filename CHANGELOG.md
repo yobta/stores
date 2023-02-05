@@ -71,7 +71,7 @@ Rename observableYobte to createStore
 Remove store init event
 Remove setter from store next method
 Map store becomes mutable
-Renamed `useObservable` hook to `useYobta`
+Renamed `useObservable` hook to `useStore`
 Renamed `encoderYobta` to `codecYobta`
 Renames `mapEncoderYobta` to `mapCodecYobta`
 Machine store now takes map of arrays instead of sets

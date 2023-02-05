@@ -6,7 +6,7 @@ import {
   YOBTA_NEXT,
   YOBTA_BEFORE,
 } from '../../src'
-import { useYobta } from '../../src/adapters/react'
+import { useStore } from '../../src/adapters/react'
 import { useEffect } from 'react'
 import { useRef } from 'react'
 

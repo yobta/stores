@@ -5,7 +5,7 @@ import {
 } from '@testing-library/react-hooks/server'
 
 import { createStore } from '../../../stores/createStore/index.js'
-import { useYobta } from './index.js'
+import { useStore } from './index.js'
 
 const unsubscribeMock = vi.fn()
 

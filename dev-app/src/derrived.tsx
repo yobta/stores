@@ -2,14 +2,14 @@ import { useState } from 'react'
 import './App.css'
 
 import {
-  broadcastChannelPluginYobta,
+  broadcastChannelPlugin,
   localStoragePluginYobta,
   mapCodecYobta,
   createMapStore,
   createStore,
   sessionStoragePluginYobta,
 } from '../../src'
-import { useYobta } from '../../src/adapters/react'
+import { useStore } from '../../src/adapters/react'
 
 const mapStore = createMapStore<{ a: number }>(
   { a: 0 },
@@ -21,10 +21,7 @@ const stringStore = createStore(
   sessionStoragePluginYobta({ channel: 'test' }),
 )
 
-const plainStore = createStore(
-  {},
-  broadcastChannelPluginYobta({ channel: 'plain' }),
-)
+const plainStore = createStore({}, broadcastChannelPlugin({ channel: 'plain' }))
 
 const up = () => {
   mapStore.assign({ a: (mapStore.last().get('a') || 0) + 1 })
@@ -32,10 +29,10 @@ const up = () => {
 const down = () => mapStore.omit(['a'])
 
 function App() {
-  const count = useYobta(mapStore)
-  const plain = useYobta(plainStore)
+  const count = useStore(mapStore)
+  const plain = useStore(plainStore)
   console.log('plain: ', plain)
-  const str = useYobta(stringStore)
+  const str = useStore(stringStore)
 
   return (
     <div className="App">
