@@ -2,7 +2,7 @@ import {
   createStore,
   YobtaStorePlugin,
   OptionalKey,
-  diffcreateMapStore,
+  diffMapYobta,
   YobtaStateGetter,
   YobtaPubsubSubscriber,
   YobtaReadyEvent,
@@ -120,7 +120,7 @@ export const createMapStore: YobtaMapStoreFactory = <
   return {
     assign(patch, ...overloads: Overloads) {
       let state = new Map(last())
-      let changes = diffcreateMapStore(
+      let changes = diffMapYobta(
         new Map(Object.entries(patch)),
         state,
       ) as unknown as YobtaMapAssigned<PlainState>

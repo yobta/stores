@@ -80,7 +80,7 @@ Improvements:
 Add observable utility
 Change store to compose middlewares
 Update documentation
-Add diffcreateMapStore utility
+Add diffMapYobta utility
 Add compose utility
 Add diff object utility
 Add on => off to all stores

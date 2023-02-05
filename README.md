@@ -48,7 +48,7 @@ The following sections provide documentation on different parts of Yobta Stores:
 
 - [Codec](src/util/codecYobta/index.md) - Encodes/decodes objects to/from JSON.
 - [Compose](src/util/composeYobta/index.md) - Composes many functions into one.
-- [Map Diff](src/util/diffcreateMapStore/index.md) - Compares Map objects.
+- [Map Diff](src/util/diffMapYobta/index.md) - Compares Map objects.
 - [Object Diff](src/util/diffObjectYobta/index.md) - Compares plain objects.
 - [Map Codec](src/util/mapCodecYobta/index.md) - Encodes/decodes Maps to/from JSON.
 - [Observable](src/util/observableYobta/ind) - Creates an observable object.

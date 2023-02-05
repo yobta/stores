@@ -14,7 +14,7 @@ export * from './plugins/validationPluginYobta/index.js'
 
 export * from './util/codecYobta/index.js'
 export * from './util/composeYobta/index.js'
-export * from './util/diffcreateMapStore/index.js'
+export * from './util/diffMapYobta/index.js'
 export * from './util/diffObjectYobta/index.js'
 export * from './util/mapCodecYobta/index.js'
 export * from './util/observableYobta/index.js'
