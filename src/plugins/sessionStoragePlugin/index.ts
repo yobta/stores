@@ -27,13 +27,13 @@ interface SessionStoragePluginFactory {
  * @example
  * const store = createStore(
  *  'initial state',
- *  sessionStoragePluginYobta({
+ *  sessionStoragePlugin({
  *     channel: 'my-store-yobta',
  *  })
  * ),
- * @documentation {@link https://github.com/yobta/stores/tree/master/src/plugins/sessionStoragePluginYobta/index.md}.
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/plugins/sessionStoragePlugin/index.md}.
  */
-export const sessionStoragePluginYobta: SessionStoragePluginFactory =
+export const sessionStoragePlugin: SessionStoragePluginFactory =
   ({ channel, codec = codecYobta }) =>
   ({ addMiddleware }) => {
     let write = <State>(state: State): State => {
