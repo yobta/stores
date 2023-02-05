@@ -37,7 +37,7 @@ The following sections provide documentation on different parts of Yobta Stores:
 - [Lazy](src/plugins/lazyPlugin/index.md) - Resets the store to its initial state when idle.
 - [Local Storage](src/plugins/localStoragePlugin/index.md) - Persists and replicates state.
 - [Session Storage](src/plugins/sessionStoragePlugin/index.md) - Persists the store in one browsing context.
-- [Validation](src/plugins/validationPluginYobta/index.md) - Protects state.
+- [Validation](src/plugins/validationPlugin/index.md) - Protects state.
 
 ### Adapters
 

@@ -3,7 +3,7 @@ import {
   YOBTA_NEXT,
   YOBTA_READY,
 } from '../../stores/createStore/index.js'
-import { validationPluginYobta } from './index.js'
+import { validationPlugin } from './index.js'
 
 let mock = vi.fn()
 
@@ -20,7 +20,7 @@ const params = {
 }
 
 it('adds middleware', () => {
-  validationPluginYobta(validate)(params)
+  validationPlugin(validate)(params)
   expect(params.addMiddleware).toBeCalledTimes(3)
   expect(params.addMiddleware).toBeCalledWith(YOBTA_READY, expect.any(Function))
   expect(params.addMiddleware).toBeCalledWith(YOBTA_IDLE, expect.any(Function))
@@ -28,7 +28,7 @@ it('adds middleware', () => {
 })
 
 it('validates store events', () => {
-  validationPluginYobta(validate)(params)
+  validationPlugin(validate)(params)
 
   expect(params.addMiddleware.mock.calls[0][1]('ready')).toBe('ready')
   expect(mock).toHaveBeenCalledWith('ready')
@@ -41,7 +41,7 @@ it('validates store events', () => {
 })
 
 it('falls back to initial state if validation fails', () => {
-  validationPluginYobta(validate)(params)
+  validationPlugin(validate)(params)
 
   mock.mockImplementation(() => {
     throw new Error()

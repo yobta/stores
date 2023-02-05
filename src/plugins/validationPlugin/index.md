@@ -9,7 +9,7 @@ The factory function takes a `validate` function as an argument, which should ta
 To use the plugin, you can pass it to the store as an overload when creating the store:
 
 ```js
-import { createStore, validationPluginYobta } from '@yobta/stores'
+import { createStore, validationPlugin } from '@yobta/stores'
 
 const initialState = {
   count: 0,
@@ -22,15 +22,15 @@ const validate = state => {
   return state
 }
 
-const store = createStore(initialState, validationPluginYobta(validate))
+const store = createStore(initialState, validationPlugin(validate))
 ```
 
 In this example, the `validate` function will be called every time the store's state is updated. If the `count` property of the new state is not a number, the plugin will throw an error and the store will revert to its initial state.
 
-You can also use the `validationPluginYobta` factory function to create multiple validation plugins with different validate functions and pass them all to the store as overloads. This can be useful if you want to split up your validation logic into smaller, more reusable chunks.
+You can also use the `validationPlugin` factory function to create multiple validation plugins with different validate functions and pass them all to the store as overloads. This can be useful if you want to split up your validation logic into smaller, more reusable chunks.
 
 ```js
-import { createStore, validationPluginYobta } from '@yobta/stores'
+import { createStore, validationPlugin } from '@yobta/stores'
 
 const initialState = {
   count: 0,
@@ -53,8 +53,8 @@ const validateName = state => {
 
 const store = createStore(
   initialState,
-  validationPluginYobta(validateCount),
-  validationPluginYobta(validateName),
+  validationPlugin(validateCount),
+  validationPlugin(validateName),
 )
 ```
 

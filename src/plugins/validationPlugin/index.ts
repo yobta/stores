@@ -14,11 +14,11 @@ interface ValidationPluginFactory {
  * @example
  * const store = createStore(
  *  0,
- *  validationPluginYobta(state => Math.max(0, state))
+ *  validationPlugin(state => Math.max(0, state))
  * ),
- * @documentation {@link https://github.com/yobta/stores/tree/master/src/plugins/validationPluginYobta/index.md}.
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/plugins/validationPlugin/index.md}.
  */
-export const validationPluginYobta: ValidationPluginFactory =
+export const validationPlugin: ValidationPluginFactory =
   validate =>
   ({ addMiddleware, initialState }) => {
     let validateWithFallBack = (state: any): typeof initialState => {
