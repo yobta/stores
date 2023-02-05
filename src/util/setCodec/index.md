@@ -9,12 +9,12 @@ A utility for encoding and decoding [sets](https://developer.mozilla.org/en-US/d
 Here are a few examples of how to use the Set Codec:
 
 ```ts
-import { setCodecYobta } from '@yobta/stores'
+import { setCodec } from '@yobta/stores'
 
 const numbers = new Set([1, 2])
 const fallback = () => numbers
-const encodedNumbers = setCodecYobta.encode(numbers)
-const [decodedNumbers] = setCodecYobta.decode(encodedNumbers, fallback)
+const encodedNumbers = setCodec.encode(numbers)
+const [decodedNumbers] = setCodec.decode(encodedNumbers, fallback)
 ```
 
 ## Overloads
@@ -25,8 +25,8 @@ You can also pass in additional arguments to the `encode` function, which will b
 const strings = new Set(['one', 'two'])
 const overloads = [1, 2, 3]
 const fallback = () => strings
-const encodedStrings = setCodecYobta.encode(strings, ...overloads)
-const [decodedNumbers, ...decodedOverloads] = setCodecYobta.decode(
+const encodedStrings = setCodec.encode(strings, ...overloads)
+const [decodedNumbers, ...decodedOverloads] = setCodec.decode(
   encodedStrings,
   fallback,
 )

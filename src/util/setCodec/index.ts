@@ -13,11 +13,11 @@ export interface YobtaSetCodec extends YobtaGenericCodec<YobtaJsonSet> {
  * Encodes and decodes Set objects to JSON.
  *
  * @example
- * const encoded = setCodecYobta.encode(new Set(), [...overloads])
- * const [decoded, ...overloads] = setCodecYobta.decode(encoded, fallback)
- * @documentation {@link https://github.com/yobta/stores/tree/master/src/util/setCodecYobta/index.md}
+ * const encoded = setCodec.encode(new Set(), [...overloads])
+ * const [decoded, ...overloads] = setCodec.decode(encoded, fallback)
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/util/setCodec/index.md}
  */
-export const setCodecYobta: YobtaSetCodec = {
+export const setCodec: YobtaSetCodec = {
   encode(item, ...overloads) {
     let entries = item.size ? [...item] : []
     return JSON.stringify([entries, ...overloads])

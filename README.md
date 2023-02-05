@@ -54,7 +54,7 @@ The following sections provide documentation on different parts of Yobta Stores:
 - [Observable](src/util/observableYobta/ind) - Creates an observable object.
 - [PubSub](src/util/pubSubYobta/index.md) - Creates PubSub objects.
 - [Readable Store](src/util/readableYobta/index.md) — Creates a read-only version of the store.
-- [Set Codec](src/util/setCodecYobta/index.md) - Encodes/decodes Sets to/from JSON.
+- [Set Codec](src/util/setCodec/index.md) - Encodes/decodes Sets to/from JSON.
 - [Store Effect Utility](src/util/storeEffectYobta/index.md) — Adds ready/idle callbacks.
 - [Transition Effect Utility](src/util/transitionEffectYobta/index.md) — Add state transition callback.
 
