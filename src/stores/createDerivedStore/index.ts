@@ -1,5 +1,5 @@
-import { YobtaObserver } from '../../util/observableYobta/index.js'
-import { YobtaReadable } from '../../util/readableYobta/index.js'
+import { YobtaObserver } from '../../util/createObservable/index.js'
+import { YobtaReadable } from '../../util/readable/index.js'
 import {
   createStore,
   YobtaAnyStore,

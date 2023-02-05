@@ -1,8 +1,8 @@
 import {
-  observableYobta,
+  createObservable,
   YobtaObserver,
-} from '../../util/observableYobta/index.js'
-import { pubSubYobta } from '../../util/pubSubYobta/index.js'
+} from '../../util/createObservable/index.js'
+import { createPubSub } from '../../util/createPubSub/index.js'
 import { composeMiddleware } from './middleware.js'
 
 // #region Types
@@ -92,8 +92,8 @@ export const createStore: YobtaStoreFactory = <
   ...plugins: YobtaStorePlugin<State, Overloads>[]
 ) => {
   let state: State = initialState
-  let { publish: p, subscribe: on } = pubSubYobta<Topics<State, Overloads>>()
-  let dispatcher = observableYobta<State, Overloads>()
+  let { publish: p, subscribe: on } = createPubSub<Topics<State, Overloads>>()
+  let dispatcher = createObservable<State, Overloads>()
   let next: YobtaStateSetter<State, Overloads> = (
     nextState: State,
     ...overloads

@@ -1,5 +1,5 @@
 import { lazyPlugin } from '../../plugins/lazyPlugin/index.js'
-import { readableYobta, YobtaReadable } from '../../util/readableYobta/index.js'
+import { readable, YobtaReadable } from '../../util/readable/index.js'
 import { createStore, YOBTA_IDLE, YOBTA_READY } from '../createStore/index.js'
 
 interface YobtaOnlineStoreFactory {
@@ -26,5 +26,5 @@ export const createConnectivityStore: YobtaOnlineStoreFactory = () => {
       return null
     })
   })
-  return readableYobta(store)
+  return readable(store)
 }

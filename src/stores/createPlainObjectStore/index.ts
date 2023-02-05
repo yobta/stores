@@ -1,7 +1,7 @@
 import {
   createStore,
   YobtaStorePlugin,
-  diffObjectYobta,
+  diffObject,
   YobtaStateGetter,
   YobtaWritablePartial,
   YobtaPubsubSubscriber,
@@ -98,7 +98,7 @@ export const createPlainObjectStore: YobtaPlainObjectStoreFactory = <
   >(initialState, ...listeners)
   return {
     assign(patch, ...overloads: Overloads) {
-      let diff = diffObjectYobta(patch, last())
+      let diff = diffObject(patch, last())
       if (Object.keys(diff).length) {
         next({ ...last(), ...diff }, diff, ...overloads)
       }

@@ -47,16 +47,16 @@ The following sections provide documentation on different parts of Yobta Stores:
 ### Utilities
 
 - [Codec](src/util/jsonCodec/index.md) - Encodes/decodes objects to/from JSON.
-- [Compose](src/util/composeYobta/index.md) - Composes many functions into one.
-- [Map Diff](src/util/diffMapYobta/index.md) - Compares Map objects.
-- [Object Diff](src/util/diffObjectYobta/index.md) - Compares plain objects.
+- [Compose](src/util/compose/index.md) - Composes many functions into one.
+- [Map Diff](src/util/diffMap/index.md) - Compares Map objects.
+- [Object Diff](src/util/diffObject/index.md) - Compares plain objects.
 - [Map Codec](src/util/mapCodec/index.md) - Encodes/decodes Maps to/from JSON.
-- [Observable](src/util/observableYobta/ind) - Creates an observable object.
-- [PubSub](src/util/pubSubYobta/index.md) - Creates PubSub objects.
-- [Readable Store](src/util/readableYobta/index.md) — Creates a read-only version of the store.
+- [Observable](src/util/observable/ind) - Creates an observable object.
+- [PubSub](src/util/createPubSub/index.md) - Creates PubSub objects.
+- [Readable Store](src/util/readable/index.md) — Creates a read-only version of the store.
 - [Set Codec](src/util/setCodec/index.md) - Encodes/decodes Sets to/from JSON.
-- [Store Effect Utility](src/util/storeEffectYobta/index.md) — Adds ready/idle callbacks.
-- [Transition Effect Utility](src/util/transitionEffectYobta/index.md) — Add state transition callback.
+- [Store Effect Utility](src/util/storeEffect/index.md) — Adds ready/idle callbacks.
+- [Transition Effect Utility](src/util/transitionEffect/index.md) — Add state transition callback.
 
 Kudos:
 

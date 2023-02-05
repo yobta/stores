@@ -68,7 +68,7 @@ machine.next('LOADING', { attempt: 2 })
 
 ## Side Effects
 
-Please see the [Transition Utility](../../util/transitionEffectYobta/index.md) documentation.
+Please see the [Transition Utility](../../util/transitionEffect/index.md) documentation.
 
 ## Plugins
 

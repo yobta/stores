@@ -1,4 +1,4 @@
-import { composeYobta } from '../../util/composeYobta/index.js'
+import { compose } from '../../util/compose/index.js'
 import {
   YobtaStateSetter,
   YobtaStoreMiddleware,
@@ -52,13 +52,13 @@ export const composeMiddleware: MiddlewareFactory = <
     })
   })
   return {
-    ready: composeYobta(
+    ready: compose(
       ...(middlewares.ready as [YobtaStoreMiddleware<State, any[]>]),
     ),
-    idle: composeYobta(
+    idle: compose(
       ...(middlewares.idle as [YobtaStoreMiddleware<State, any[]>]),
     ),
-    next: composeYobta(
+    next: compose(
       ...(middlewares.next as [YobtaStoreMiddleware<State, any[]>]),
     ),
   }
