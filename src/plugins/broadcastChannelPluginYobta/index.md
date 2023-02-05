@@ -32,12 +32,12 @@ The default codec provided by plugin is able to decode simple values such as num
 
 ```ts
 import {
-  mapYobta,
+  createMapStore,
   broadcastChannelPluginYobta,
   mapCodecYobta,
 } from '@yobta/stores'
 
-const store = mapYobta(
+const store = createMapStore(
   { key: 'value' },
   broadcastChannelPluginYobta({
     channel: 'my-map-store-yobta',

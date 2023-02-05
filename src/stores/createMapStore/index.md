@@ -9,9 +9,9 @@ Map store factory creates an observable object that stores value as a JavaScript
 When creating a Map Store, you will need to provide an initial state as a plain object:
 
 ```ts
-import { mapYobta } from '@yobta/stores'
+import { createMapStore } from '@yobta/stores'
 
-const store = mapYobta({
+const store = createMapStore({
   foo: 'bar',
   baz: 123,
 })
@@ -117,12 +117,12 @@ store.observe(observer)
 
 ## Extending the Store with Plugins
 
-To extend the store with a plugin, you can pass the plugin as an argument to the `mapYobta` function when creating the store. The plugin should be an object with a `middleware` method that takes the store's `next` method as an argument and returns a new `next` method.
+To extend the store with a plugin, you can pass the plugin as an argument to the `createMapStore` function when creating the store. The plugin should be an object with a `middleware` method that takes the store's `next` method as an argument and returns a new `next` method.
 
 Here is an example of using the [Local Storage Plugin](../../plugins/localStoragePluginYobta/index.md) plugin, which replicates the store's state to local storage and synchronizes changes between active store instances:
 
 ```ts
-const store = mapYobta(
+const store = createMapStore(
   { key: 'value' },
   localStoragePluginYobta({
     channel: 'my-map-store-yobta',
@@ -131,7 +131,7 @@ const store = mapYobta(
 )
 ```
 
-Note that the `codec` property of the Local Storage plugin is optional. However, when using the plugin with a `mapYobta` store, a `codec` is required to serialize the store's state to JSON. If the state has nested maps, sets, or other types that cannot be easily serialized to JSON, you may need to create your own codec.
+Note that the `codec` property of the Local Storage plugin is optional. However, when using the plugin with a `createMapStore` store, a `codec` is required to serialize the store's state to JSON. If the state has nested maps, sets, or other types that cannot be easily serialized to JSON, you may need to create your own codec.
 
 The Map store supports plugins in the same way that other stores do. For more information, see the [Plugins documentation](../../plugins/index.md).
 

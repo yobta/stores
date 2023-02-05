@@ -6,16 +6,16 @@ A utility that takes in two [`Map`](https://developer.mozilla.org/en-US/docs/Web
 
 ## How to use the utility
 
-To use the `diffMapYobta` utility, you can import it into your project like this:
+To use the `diffcreateMapStore` utility, you can import it into your project like this:
 
 ```ts
-import { diffMapYobta } from '@yobta/stores'
+import { diffcreateMapStore } from '@yobta/stores'
 ```
 
 Then, you can call the function with two `Map` objects as arguments:
 
 ```ts
-let diffMap = diffMapYobta(inputMap, referenceMap)
+let diffMap = diffcreateMapStore(inputMap, referenceMap)
 ```
 
 The function will return a new `Map` object containing the key-value pairs from `inputMap` that are not present in `referenceMap`, or have different values in `referenceMap`.
@@ -39,7 +39,7 @@ let referenceMap = new Map([
 ])
 ```
 
-The output of `diffMapYobta(inputMap, referenceMap)` would be a new `Map` object with the following key-value pairs:
+The output of `diffcreateMapStore(inputMap, referenceMap)` would be a new `Map` object with the following key-value pairs:
 
 ```ts
 {
@@ -65,9 +65,9 @@ let referenceMap = new Map<any, any>([
 ])
 ```
 
-The output of `diffMapYobta(inputMap, referenceMap)` would be an empty `Map` object.
+The output of `diffcreateMapStore(inputMap, referenceMap)` would be an empty `Map` object.
 
-The `diffMapYobta` utility can handle maps with different types of keys and values correctly. For example, given the following `inputMap` and `referenceMap`:
+The `diffcreateMapStore` utility can handle maps with different types of keys and values correctly. For example, given the following `inputMap` and `referenceMap`:
 
 ```ts
 let inputMap = new Map<any, any>([
@@ -82,7 +82,7 @@ let referenceMap = new Map<any, any>([
 ])
 ```
 
-The output of `diffMapYobta(inputMap, referenceMap)` would be a new `Map` object with the following key-value pairs:
+The output of `diffcreateMapStore(inputMap, referenceMap)` would be a new `Map` object with the following key-value pairs:
 
 ```ts
 {

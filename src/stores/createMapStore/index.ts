@@ -2,7 +2,7 @@ import {
   createStore,
   YobtaStorePlugin,
   OptionalKey,
-  diffMapYobta,
+  diffcreateMapStore,
   YobtaStateGetter,
   YobtaPubsubSubscriber,
   YobtaReadyEvent,
@@ -97,13 +97,13 @@ interface YobtaMapStoreFactory {
  * Creates an observable object that stores value as a JavaScript Map object.
  *
  * @example
- * const store = mapYobta({
+ * const store = createMapStore({
  *  foo: 'bar',
  *  baz: 123,
  * })
- * @documentation {@link https://github.com/yobta/stores/tree/master/src/stores/mapYobta/index.md}
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/stores/createMapStore/index.md}
  */
-export const mapYobta: YobtaMapStoreFactory = <
+export const createMapStore: YobtaMapStoreFactory = <
   PlainState extends YobtaAnyPlainObject,
   Overloads extends any[] = any[],
 >(
@@ -120,7 +120,7 @@ export const mapYobta: YobtaMapStoreFactory = <
   return {
     assign(patch, ...overloads: Overloads) {
       let state = new Map(last())
-      let changes = diffMapYobta(
+      let changes = diffcreateMapStore(
         new Map(Object.entries(patch)),
         state,
       ) as unknown as YobtaMapAssigned<PlainState>
