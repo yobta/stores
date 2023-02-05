@@ -6,7 +6,7 @@ Provides encoding and decoding functionality using the [`JSON.stringify`](https:
 
 ## Introduction
 
-The `codecYobta` object has two methods:
+The `jsonCodec` object has two methods:
 
 - `encode`: Encodes an item and any additional overloads as a JSON string.
 - `decode`: Decodes an item from a JSON string, falling back to a provided fallback value if necessary.
@@ -17,7 +17,7 @@ To encode an item, pass it as the first argument to the `encode` method:
 
 ```ts
 const item = { a: 'b' }
-const encoded = codecYobta.encode(item)
+const encoded = jsonCodec.encode(item)
 ```
 
 ## Encoding Item with Overloads
@@ -28,7 +28,7 @@ To encode an item with additional overloads, pass them as additional arguments t
 const item = { a: 'b' }
 const overload1 = { c: 'd' }
 const overload2 = { e: 'f' }
-const encoded = codecYobta.encode(item, overload1, overload2)
+const encoded = jsonCodec.encode(item, overload1, overload2)
 ```
 
 ## Decoding and Fallback
@@ -38,7 +38,7 @@ To decode an item, pass it as the first argument to the `decode` method and a fa
 ```ts
 const item = '{"a":"b"}'
 const fallback = () => 'yobta'
-const decoded = codecYobta.decode(item, fallback)
+const decoded = jsonCodec.decode(item, fallback)
 ```
 
 If the item cannot be decoded, the fallback function will be called and its return value will be used.

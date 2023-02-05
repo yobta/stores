@@ -12,7 +12,7 @@ export * from './plugins/localStoragePlugin/index.js'
 export * from './plugins/sessionStoragePlugin/index.js'
 export * from './plugins/validationPlugin/index.js'
 
-export * from './util/codecYobta/index.js'
+export * from './util/jsonCodec/index.js'
 export * from './util/composeYobta/index.js'
 export * from './util/diffMapYobta/index.js'
 export * from './util/diffObjectYobta/index.js'

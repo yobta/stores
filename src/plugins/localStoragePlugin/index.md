@@ -22,7 +22,7 @@ const store = createStore(
 The plugin factory function accepts an object with the following properties:
 
 - `channel` (string) — The key in localStorage to use for storing the state.
-- `codec` (YobtaCodec, optional) The codec to use for serializing and deserializing the state. Defaults to `codecYobta`.
+- `codec` (YobtaCodec, optional) The codec to use for serializing and deserializing the state. Defaults to `jsonCodec`.
 
 ## Codec
 

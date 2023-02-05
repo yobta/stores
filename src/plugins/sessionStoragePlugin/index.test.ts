@@ -3,7 +3,7 @@ import {
   YOBTA_NEXT,
   YOBTA_READY,
 } from '../../stores/createStore/index.js'
-import { codecYobta, YobtaGenericCodec } from '../../util/codecYobta/index.js'
+import { jsonCodec, YobtaGenericCodec } from '../../util/jsonCodec/index.js'
 import { sessionStoragePlugin } from './index.js'
 
 let defaultItem = JSON.stringify(['stored yobta'])
@@ -21,8 +21,8 @@ vi.stubGlobal('sessionStorage', {
 let encode = vi.fn()
 let decode = vi.fn()
 
-vi.mock('../../util/codecYobta/index.js', () => ({
-  codecYobta: {
+vi.mock('../../util/jsonCodec/index.js', () => ({
+  jsonCodec: {
     encode(state, ...overloads) {
       encode(state)
       return JSON.stringify([state, ...overloads])
@@ -50,7 +50,7 @@ beforeEach(() => {
 })
 
 it('Tests middleware addition for sessionStoragePlugin', () => {
-  sessionStoragePlugin({ channel: 'test', codec: codecYobta })(params)
+  sessionStoragePlugin({ channel: 'test', codec: jsonCodec })(params)
   expect(params.addMiddleware).toBeCalledTimes(3)
   expect(params.addMiddleware).toBeCalledWith(YOBTA_READY, expect.any(Function))
   expect(params.addMiddleware).toBeCalledWith(YOBTA_IDLE, expect.any(Function))
@@ -58,7 +58,7 @@ it('Tests middleware addition for sessionStoragePlugin', () => {
 })
 
 it('Tests that sessionStoragePlugin has no side effects when created', () => {
-  sessionStoragePlugin({ channel: 'test', codec: codecYobta })(params)
+  sessionStoragePlugin({ channel: 'test', codec: jsonCodec })(params)
   expect(getItem).not.toBeCalled()
   expect(setItem).not.toBeCalled()
   expect(encode).not.toBeCalled()
@@ -66,7 +66,7 @@ it('Tests that sessionStoragePlugin has no side effects when created', () => {
 })
 
 it('Tests recovery of state from session storage in sessionStoragePlugin', () => {
-  sessionStoragePlugin({ channel: 'test', codec: codecYobta })(params)
+  sessionStoragePlugin({ channel: 'test', codec: jsonCodec })(params)
   let state = params.addMiddleware.mock.calls[0][1]('ready')
   expect(state).toEqual('stored yobta')
 
@@ -81,7 +81,7 @@ it('Tests recovery of state from session storage in sessionStoragePlugin', () =>
 
 it('Tests default to initial state when no session is stored in sessionStoragePlugin', () => {
   item = null
-  sessionStoragePlugin({ channel: 'test', codec: codecYobta })(params)
+  sessionStoragePlugin({ channel: 'test', codec: jsonCodec })(params)
   let state = params.addMiddleware.mock.calls[0][1]('ready')
   expect(decode).toBeCalledWith(null)
   expect(state).toBe('ready')
@@ -90,7 +90,7 @@ it('Tests default to initial state when no session is stored in sessionStoragePl
 })
 
 it('Tests handling of idle state in sessionStoragePlugin', () => {
-  sessionStoragePlugin({ channel: 'test', codec: codecYobta })(params)
+  sessionStoragePlugin({ channel: 'test', codec: jsonCodec })(params)
   let state = params.addMiddleware.mock.calls[1][1]('idle')
 
   expect(encode).toBeCalledTimes(1)
@@ -105,7 +105,7 @@ it('Tests handling of idle state in sessionStoragePlugin', () => {
 })
 
 it('Tests handling of next state in sessionStoragePlugin', () => {
-  sessionStoragePlugin({ channel: 'test', codec: codecYobta })(params)
+  sessionStoragePlugin({ channel: 'test', codec: jsonCodec })(params)
   let state = params.addMiddleware.mock.calls[1][1]('next')
 
   expect(encode).toBeCalledTimes(1)

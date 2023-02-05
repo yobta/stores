@@ -1,19 +1,19 @@
-import { codecYobta } from './index.js'
+import { jsonCodec } from './index.js'
 
 const last = vi.fn()
 
 it('encodes', () => {
   let value = { a: 'b' }
-  expect(codecYobta.encode(value)).toBe(JSON.stringify([value]))
+  expect(jsonCodec.encode(value)).toBe(JSON.stringify([value]))
 })
 it('decodes', () => {
-  let value = codecYobta.decode('1', last)
+  let value = jsonCodec.decode('1', last)
 
   expect(value).toBe(1)
   expect(last).not.toBeCalled()
 })
 it('falls back', () => {
-  let value = codecYobta.decode(undefined, () => {
+  let value = jsonCodec.decode(undefined, () => {
     last()
     return 'yobta'
   })
@@ -21,7 +21,7 @@ it('falls back', () => {
   expect(value).toEqual(['yobta'])
 })
 it('falls back when null', () => {
-  let value = codecYobta.decode(null, () => {
+  let value = jsonCodec.decode(null, () => {
     last()
     return 'yobta'
   })

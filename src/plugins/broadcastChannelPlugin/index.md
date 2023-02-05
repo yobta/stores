@@ -24,7 +24,7 @@ const store = createStore(
 The plugin factory function accepts an object with the following properties:
 
 - `channel` (string) — The name of the channel.
-- `codec` (YobtaCodec, optional) The codec to use for serializing and deserializing the state. Defaults to `codecYobta`.
+- `codec` (YobtaCodec, optional) The codec to use for serializing and deserializing the state. Defaults to `jsonCodec`.
 
 ## Codec
 

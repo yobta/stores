@@ -1,9 +1,9 @@
 import {
-  codecYobta,
+  jsonCodec,
   YobtaGenericCodec,
   YobtaJsonValue,
   YobtaSimpleCodec,
-} from '../../util/codecYobta/index.js'
+} from '../../util/jsonCodec/index.js'
 import {
   YobtaStorePlugin,
   YOBTA_IDLE,
@@ -42,7 +42,7 @@ interface LocalStorageFactory {
  * @documentation {@link https://github.com/yobta/stores/tree/master/src/plugins/localStoragePlugin/index.md}.
  */
 export const localStoragePlugin: LocalStorageFactory =
-  ({ channel, codec = codecYobta }) =>
+  ({ channel, codec = jsonCodec }) =>
   ({ addMiddleware, next, last }) => {
     let onMessage: StorageListener = ({ key, newValue }) => {
       if (key === channel) {

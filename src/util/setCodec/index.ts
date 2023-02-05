@@ -1,4 +1,4 @@
-import { YobtaGenericCodec, YobtaJsonValue } from '../codecYobta/index.js'
+import { YobtaGenericCodec, YobtaJsonValue } from '../jsonCodec/index.js'
 
 type YobtaJsonSet = Set<YobtaJsonValue>
 export interface YobtaSetCodec extends YobtaGenericCodec<YobtaJsonSet> {

@@ -23,11 +23,11 @@ export interface YobtaSimpleCodec extends YobtaGenericCodec<YobtaJsonValue> {
  * Encodes and decodes simple js datatypes to JSON.
  *
  * @example
- * const encoded = codecYobta.encode(123, [...overloads])
- * const [decoded, ...overloads] = codecYobta.decode(encoded, fallback)
- * @documentation {@link https://github.com/yobta/stores/tree/master/src/util/codecYobta/index.md}
+ * const encoded = jsonCodec.encode(123, [...overloads])
+ * const [decoded, ...overloads] = jsonCodec.decode(encoded, fallback)
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/util/jsonCodec/index.md}
  */
-export const codecYobta: YobtaSimpleCodec = {
+export const jsonCodec: YobtaSimpleCodec = {
   encode(item, ...overloads) {
     return JSON.stringify([item, ...overloads])
   },

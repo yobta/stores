@@ -46,7 +46,7 @@ The following sections provide documentation on different parts of Yobta Stores:
 
 ### Utilities
 
-- [Codec](src/util/codecYobta/index.md) - Encodes/decodes objects to/from JSON.
+- [Codec](src/util/jsonCodec/index.md) - Encodes/decodes objects to/from JSON.
 - [Compose](src/util/composeYobta/index.md) - Composes many functions into one.
 - [Map Diff](src/util/diffMapYobta/index.md) - Compares Map objects.
 - [Object Diff](src/util/diffObjectYobta/index.md) - Compares plain objects.

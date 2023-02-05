@@ -1,9 +1,9 @@
 import {
-  codecYobta,
+  jsonCodec,
   YobtaGenericCodec,
   YobtaJsonValue,
   YobtaSimpleCodec,
-} from '../../util/codecYobta/index.js'
+} from '../../util/jsonCodec/index.js'
 import {
   YobtaStorePlugin,
   YOBTA_IDLE,
@@ -34,7 +34,7 @@ interface SessionStoragePluginFactory {
  * @documentation {@link https://github.com/yobta/stores/tree/master/src/plugins/sessionStoragePlugin/index.md}.
  */
 export const sessionStoragePlugin: SessionStoragePluginFactory =
-  ({ channel, codec = codecYobta }) =>
+  ({ channel, codec = jsonCodec }) =>
   ({ addMiddleware }) => {
     let write = <State>(state: State): State => {
       let encodedMessage = codec.encode(state as any)

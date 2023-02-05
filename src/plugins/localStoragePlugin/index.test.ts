@@ -3,7 +3,7 @@ import {
   YOBTA_NEXT,
   YOBTA_READY,
 } from '../../stores/createStore/index.js'
-import { codecYobta, YobtaGenericCodec } from '../../util/codecYobta/index.js'
+import { jsonCodec, YobtaGenericCodec } from '../../util/jsonCodec/index.js'
 import { localStoragePlugin } from './index.js'
 
 let defaultItem = JSON.stringify(['stored yobta'])
@@ -39,8 +39,8 @@ let encode = vi.fn()
 let decode = vi.fn()
 let fallbackMock = vi.fn()
 
-vi.mock('../../util/codecYobta/index.js', () => ({
-  codecYobta: {
+vi.mock('../../util/jsonCodec/index.js', () => ({
+  jsonCodec: {
     encode(state: any, ...overloads: any[]) {
       let args = [state, ...overloads]
       encode(...args)
@@ -63,7 +63,7 @@ beforeEach(() => {
 })
 
 it('adds middleware to store', () => {
-  localStoragePlugin({ channel: 'test', codec: codecYobta })(params)
+  localStoragePlugin({ channel: 'test', codec: jsonCodec })(params)
   expect(params.addMiddleware).toBeCalledTimes(3)
   expect(params.addMiddleware).toBeCalledWith(YOBTA_READY, expect.any(Function))
   expect(params.addMiddleware).toBeCalledWith(YOBTA_IDLE, expect.any(Function))
@@ -71,7 +71,7 @@ it('adds middleware to store', () => {
 })
 
 it('does not add listeners on initialization', () => {
-  localStoragePlugin({ channel: 'test', codec: codecYobta })(params)
+  localStoragePlugin({ channel: 'test', codec: jsonCodec })(params)
   expect(windowMock.addEventListener).not.toBeCalled()
   expect(windowMock.removeEventListener).not.toBeCalled()
   expect(lsMock.setItem).not.toBeCalled()
@@ -79,7 +79,7 @@ it('does not add listeners on initialization', () => {
 })
 
 it('adds listeners on YOBTA_READY event', () => {
-  localStoragePlugin({ channel: 'test', codec: codecYobta })(params)
+  localStoragePlugin({ channel: 'test', codec: jsonCodec })(params)
 
   params.addMiddleware.mock.calls[0][1]('ready')
 
@@ -88,7 +88,7 @@ it('adds listeners on YOBTA_READY event', () => {
 })
 
 it('decodes stored value on YOBTA_READY event', () => {
-  localStoragePlugin({ channel: 'test', codec: codecYobta })(params)
+  localStoragePlugin({ channel: 'test', codec: jsonCodec })(params)
   let state = params.addMiddleware.mock.calls[0][1]('ready')
 
   expect(decode).toBeCalledTimes(1)
@@ -98,7 +98,7 @@ it('decodes stored value on YOBTA_READY event', () => {
 
 it('returns initial state on YOBTA_READY event when no stored value', () => {
   item = null
-  localStoragePlugin({ channel: 'test', codec: codecYobta })(params)
+  localStoragePlugin({ channel: 'test', codec: jsonCodec })(params)
   let state = params.addMiddleware.mock.calls[0][1]('ready')
 
   expect(state).toBe('ready')
@@ -107,7 +107,7 @@ it('returns initial state on YOBTA_READY event when no stored value', () => {
 })
 
 it('emoves listeners on YOBTA_IDLE event', () => {
-  localStoragePlugin({ channel: 'test', codec: codecYobta })(params)
+  localStoragePlugin({ channel: 'test', codec: jsonCodec })(params)
   let state = params.addMiddleware.mock.calls[1][1]('idle')
 
   expect(encode).toHaveBeenCalledWith('idle')
@@ -120,7 +120,7 @@ it('emoves listeners on YOBTA_IDLE event', () => {
 })
 
 it('encodes and stores state on YOBTA_NEXT event', () => {
-  localStoragePlugin({ channel: 'test', codec: codecYobta })(params)
+  localStoragePlugin({ channel: 'test', codec: jsonCodec })(params)
   let state = params.addMiddleware.mock.calls[2][1]('next', 'overload')
 
   expect(encode).toHaveBeenCalledWith('next', 'overload')
@@ -133,7 +133,7 @@ it('encodes and stores state on YOBTA_NEXT event', () => {
 
 it('handles onMessage event', () => {
   item = null
-  localStoragePlugin({ channel: 'test', codec: codecYobta })(params)
+  localStoragePlugin({ channel: 'test', codec: jsonCodec })(params)
   params.addMiddleware.mock.calls[0][1]('ready')
 
   windowMock.addEventListener.mock.calls[0][1]({
@@ -152,7 +152,7 @@ it('handles onMessage event', () => {
 
 it('ignores onMessage event when channel is incorrect', () => {
   item = null
-  localStoragePlugin({ channel: 'test', codec: codecYobta })(params)
+  localStoragePlugin({ channel: 'test', codec: jsonCodec })(params)
   params.addMiddleware.mock.calls[0][1]('ready')
 
   windowMock.addEventListener.mock.calls[0][1]({

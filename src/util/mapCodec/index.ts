@@ -1,4 +1,4 @@
-import { YobtaGenericCodec, YobtaJsonValue } from '../codecYobta/index.js'
+import { YobtaGenericCodec, YobtaJsonValue } from '../jsonCodec/index.js'
 
 type YobtaJsonMap = Map<YobtaJsonValue, YobtaJsonValue>
 export interface YobtaMapCodec extends YobtaGenericCodec<YobtaJsonMap> {

@@ -1,9 +1,9 @@
 import {
-  codecYobta,
+  jsonCodec,
   YobtaGenericCodec,
   YobtaJsonValue,
   YobtaSimpleCodec,
-} from '../../util/codecYobta/index.js'
+} from '../../util/jsonCodec/index.js'
 import {
   YobtaStorePlugin,
   YOBTA_IDLE,
@@ -36,7 +36,7 @@ interface BroadcastChannelFactory {
  * @documentation {@link https://github.com/yobta/stores/tree/master/src/plugins/broadcastChannelPlugin/index.md}.
  */
 export const broadcastChannelPlugin: BroadcastChannelFactory =
-  ({ channel, codec = codecYobta }) =>
+  ({ channel, codec = jsonCodec }) =>
   ({ addMiddleware, next, last }) => {
     let bc: BroadcastChannel | null
     let shouldMute: boolean
