@@ -1,9 +1,9 @@
-import { plainObjectYobta, YobtaPlainObjectStore } from './index.js'
+import { createPlainObjectStore, YobtaPlainObjectStore } from './index.js'
 
 let store: YobtaPlainObjectStore<{ foo?: string; bar: string; baz?: never }>
 
 beforeEach(() => {
-  store = plainObjectYobta({
+  store = createPlainObjectStore({
     foo: 'foo',
     bar: 'bar',
   })

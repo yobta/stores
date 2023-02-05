@@ -9,9 +9,9 @@ Creates an observable store that holds an immutable value. The store creates a n
 The store factory function requires that you supply a value to be used as the initial state of the store.
 
 ```ts
-import { plainObjectYobta } from '@yobta/stores'
+import { createPlainObjectStore } from '@yobta/stores'
 
-const store = plainObjectYobta({ name: 'John', age: 30 })
+const store = createPlainObjectStore({ name: 'John', age: 30 })
 ```
 
 ## Assigning New Values
@@ -100,7 +100,7 @@ type State = {
   readonly key: string
   optionalKey?: string
 }
-const store = plainObjectYobta<State>({
+const store = createPlainObjectStore<State>({
   key: 'can not be changed or removed',
   optionalKey: 'can be removed',
 })

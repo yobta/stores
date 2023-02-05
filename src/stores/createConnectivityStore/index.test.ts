@@ -1,6 +1,6 @@
 import { vi, expect } from 'vitest'
 
-import { onlineYobta } from './index.js'
+import { createConnectivityStore } from './index.js'
 
 const addEventListener = vi.fn()
 const removeEventListener = vi.fn()
@@ -12,7 +12,7 @@ vi.stubGlobal('window', {
 vi.stubGlobal('navigator', { onLine: true })
 
 it('returns store object', () => {
-  let store = onlineYobta()
+  let store = createConnectivityStore()
   expect(store).toEqual({
     last: expect.any(Function),
     observe: expect.any(Function),
@@ -21,12 +21,12 @@ it('returns store object', () => {
 })
 
 it('is null when has no observers', () => {
-  let store = onlineYobta()
+  let store = createConnectivityStore()
   expect(store.last()).toBeNull()
 })
 
 it('is true when active and navigator is online', () => {
-  let store = onlineYobta()
+  let store = createConnectivityStore()
   let stop = store.observe(() => {})
   expect(store.last()).toBe(true)
   stop()
@@ -34,7 +34,7 @@ it('is true when active and navigator is online', () => {
 })
 
 it('adds/remves window listeners', () => {
-  let store = onlineYobta()
+  let store = createConnectivityStore()
   let stop = store.observe(() => {})
 
   expect(addEventListener).toHaveBeenCalledTimes(2)
@@ -52,7 +52,7 @@ it('adds/remves window listeners', () => {
 
 it('adds event listeners to window', () => {
   let observer = vi.fn()
-  let store = onlineYobta()
+  let store = createConnectivityStore()
   let stop = store.observe(observer)
 
   addEventListener.mock.calls[0][1]()

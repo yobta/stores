@@ -9,9 +9,9 @@ When the store is not active (has no observers), its value is `null`. When the s
 ## Importing
 
 ```js
-import { onlineYobta } from '@yobta/stores'
+import { createConnectivityStore } from '@yobta/stores'
 
-const store = onlineYobta()
+const store = createConnectivityStore()
 ```
 
 ## Observing Changes

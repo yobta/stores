@@ -1,10 +1,10 @@
 export * from './stores/createDerivedStore/index.js'
 export * from './stores/createMachineStore/index.js'
 export * from './stores/createMapStore/index.js'
-export * from './stores/onlineYobta/index.js'
+export * from './stores/createConnectivityStore/index.js'
 export * from './stores/createStore/index.js'
-export * from './stores/plainObjectYobta/index.js'
-export * from './stores/stackYobta/index.js'
+export * from './stores/createPlainObjectStore/index.js'
+export * from './stores/createStackStore/index.js'
 
 export * from './plugins/broadcastChannelPluginYobta/index.js'
 export * from './plugins/lazyPluginYobta/index.js'

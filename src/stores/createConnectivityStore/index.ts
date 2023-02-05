@@ -7,7 +7,7 @@ interface YobtaOnlineStoreFactory {
 }
 export type YobtaOnlineStore = ReturnType<YobtaOnlineStoreFactory>
 
-export const onlineYobta: YobtaOnlineStoreFactory = () => {
+export const createConnectivityStore: YobtaOnlineStoreFactory = () => {
   let store = createStore(null, lazyPluginYobta, ({ addMiddleware, next }) => {
     let on: VoidFunction = () => {
       next(true)

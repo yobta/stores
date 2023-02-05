@@ -76,13 +76,13 @@ interface YobtaPlainObjectStoreFactory {
  * Creates an observable store that holds an immutable value.
  *
  * @example
- * const store = plainObjectYobta({
+ * const store = createPlainObjectStore({
  *  foo: 'bar',
  *  baz: 123,
  * })
- * @documentation {@link https://github.com/yobta/stores/tree/master/src/stores/plainObjectYobta/index.md}
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/stores/createPlainObjectStore/index.md}
  */
-export const plainObjectYobta: YobtaPlainObjectStoreFactory = <
+export const createPlainObjectStore: YobtaPlainObjectStoreFactory = <
   State extends AnyPlainObject,
   Overloads extends any[],
 >(

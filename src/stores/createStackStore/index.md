@@ -9,17 +9,17 @@ The Stack Store is a data structure for storing items in a last-in, first-out (L
 To use the Stack Store in your project, you can import it using the following syntax:
 
 ```ts
-import { stackYobta } from '@yobta/stores'
-const myStack = stackYobta<number>([])
+import { createStackStore } from '@yobta/stores'
+const myStack = createStackStore<number>([])
 ```
 
 ## Creating a Store
 
-To create a new Stack Store, you must provide an initial state when using the `stackYobta` function:
+To create a new Stack Store, you must provide an initial state when using the `createStackStore` function:
 
 ```ts
 const initialState = []
-const myStack = stackYobta<number>(initialState)
+const myStack = createStackStore<number>(initialState)
 ```
 
 ## Adding New Items
@@ -101,10 +101,10 @@ However, there is an edge case to consider when using plugins that utilize the J
 Here is an example of using the [Local Storage Plugin](../../plugins/localStoragePluginYobta/index.md), which replicates the store's state to local storage and synchronizes changes between active store instances:
 
 ```ts
-import { stackYobta, setCodecYobta } from '@yobta/stores'
+import { createStackStore, setCodecYobta } from '@yobta/stores'
 
 const initialState = new Set()
-const store = stackYobta(
+const store = createStackStore(
   initialState,
   localStoragePluginYobta({
     channel: 'my-map-store-yobta',

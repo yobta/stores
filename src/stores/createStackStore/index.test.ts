@@ -1,9 +1,9 @@
-import { stackYobta } from './index.js'
+import { createStackStore } from './index.js'
 
-let stack: ReturnType<typeof stackYobta>
+let stack: ReturnType<typeof createStackStore>
 
 beforeEach(() => {
-  stack = stackYobta(['item1', 'item2'])
+  stack = createStackStore(['item1', 'item2'])
 })
 
 it('returns a store object', () => {

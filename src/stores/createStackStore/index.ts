@@ -30,10 +30,10 @@ interface YobtaStackStoreFactory {
 /**
  * Creates an observable stack store.
  * @example
- * const store = stackYobta([])
- * @documentation {@link https://github.com/yobta/stores/tree/master/src/stores/stackYobta/index.md}
+ * const store = createStackStore([])
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/stores/createStackStore/index.md}
  */
-export const stackYobta: YobtaStackStoreFactory = <
+export const createStackStore: YobtaStackStoreFactory = <
   Item,
   Overloads extends any[],
 >(
