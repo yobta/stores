@@ -8,7 +8,7 @@ export * from './stores/createStackStore/index.js'
 
 export * from './plugins/broadcastChannelPlugin/index.js'
 export * from './plugins/lazyPlugin/index.js'
-export * from './plugins/localStoragePluginYobta/index.js'
+export * from './plugins/localStoragePlugin/index.js'
 export * from './plugins/sessionStoragePluginYobta/index.js'
 export * from './plugins/validationPluginYobta/index.js'
 

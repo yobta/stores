@@ -35,13 +35,13 @@ interface LocalStorageFactory {
  * @example
  * const store = createStore(
  *  'initial state',
- *  localStoragePluginYobta({
+ *  localStoragePlugin({
  *     channel: 'my-store-yobta',
  *  })
  * ),
- * @documentation {@link https://github.com/yobta/stores/tree/master/src/plugins/localStoragePluginYobta/index.md}.
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/plugins/localStoragePlugin/index.md}.
  */
-export const localStoragePluginYobta: LocalStorageFactory =
+export const localStoragePlugin: LocalStorageFactory =
   ({ channel, codec = codecYobta }) =>
   ({ addMiddleware, next, last }) => {
     let onMessage: StorageListener = ({ key, newValue }) => {

@@ -119,12 +119,12 @@ store.observe(observer)
 
 To extend the store with a plugin, you can pass the plugin as an argument to the `createMapStore` function when creating the store. The plugin should be an object with a `middleware` method that takes the store's `next` method as an argument and returns a new `next` method.
 
-Here is an example of using the [Local Storage Plugin](../../plugins/localStoragePluginYobta/index.md) plugin, which replicates the store's state to local storage and synchronizes changes between active store instances:
+Here is an example of using the [Local Storage Plugin](../../plugins/localStoragePlugin/index.md) plugin, which replicates the store's state to local storage and synchronizes changes between active store instances:
 
 ```ts
 const store = createMapStore(
   { key: 'value' },
-  localStoragePluginYobta({
+  localStoragePlugin({
     channel: 'my-map-store-yobta',
     codec: mapCodecYobta,
   }),

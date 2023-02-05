@@ -98,7 +98,7 @@ The store supports plugins in the same way that other stores do. Refer to the [P
 
 However, there is an edge case to consider when using plugins that utilize the JSON codec. The stack store is a [Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set) data structure, and therefore requires a set codec.
 
-Here is an example of using the [Local Storage Plugin](../../plugins/localStoragePluginYobta/index.md), which replicates the store's state to local storage and synchronizes changes between active store instances:
+Here is an example of using the [Local Storage Plugin](../../plugins/localStoragePlugin/index.md), which replicates the store's state to local storage and synchronizes changes between active store instances:
 
 ```ts
 import { createStackStore, setCodecYobta } from '@yobta/stores'
@@ -106,7 +106,7 @@ import { createStackStore, setCodecYobta } from '@yobta/stores'
 const initialState = new Set()
 const store = createStackStore(
   initialState,
-  localStoragePluginYobta({
+  localStoragePlugin({
     channel: 'my-map-store-yobta',
     codec: setCodecYobta,
   }),

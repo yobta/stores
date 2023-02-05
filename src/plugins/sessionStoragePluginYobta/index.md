@@ -21,7 +21,7 @@ The plugin allows for the use of custom codecs. To use a custom codec, pass it a
 ```ts
 import {
   createMapStore,
-  localStoragePluginYobta,
+  localStoragePlugin,
   mapCodecYobta,
 } from '@yobta/stores'
 

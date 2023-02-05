@@ -7,11 +7,11 @@ A factory function for creating a store plugin that synchronizes the state with 
 ## Usage
 
 ```ts
-import { createStore, localStoragePluginYobta } from '@yobta/stores'
+import { createStore, localStoragePlugin } from '@yobta/stores'
 
 const store = createStore(
   1,
-  localStoragePluginYobta({
+  localStoragePlugin({
     channel: 'my-store-yobta',
   }),
 )
@@ -26,18 +26,18 @@ The plugin factory function accepts an object with the following properties:
 
 ## Codec
 
-The default codec provided by YobtaStorePlugin is able to decode simple values such as numbers, strings, and booleans, as well as arrays and plain objects. However, for more complex data structures like maps and sets, a special codec may be required to properly serialize and deserialize the state. This can be done by specifying an codec function as an optional argument when creating the localStoragePluginYobta instance. The codec function should be able to handle the serialization and deserialization of the desired data structure, allowing the store to properly synchronize with localStorage.
+The default codec provided by YobtaStorePlugin is able to decode simple values such as numbers, strings, and booleans, as well as arrays and plain objects. However, for more complex data structures like maps and sets, a special codec may be required to properly serialize and deserialize the state. This can be done by specifying an codec function as an optional argument when creating the localStoragePlugin instance. The codec function should be able to handle the serialization and deserialization of the desired data structure, allowing the store to properly synchronize with localStorage.
 
 ```ts
 import {
   createMapStore,
-  localStoragePluginYobta,
+  localStoragePlugin,
   mapCodecYobta,
 } from '@yobta/stores'
 
 const store = createMapStore(
   { key: 'value' },
-  localStoragePluginYobta({
+  localStoragePlugin({
     channel: 'my-map-store-yobta',
     codec: mapCodecYobta,
   }),

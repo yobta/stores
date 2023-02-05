@@ -48,5 +48,5 @@ const store = createMapStore(
 
 ## See Also
 
-- [Local Storage Plugin](../localStoragePluginYobta/index.md)
+- [Local Storage Plugin](../localStoragePlugin/index.md)
 - [Store Plugins](../index.md)
