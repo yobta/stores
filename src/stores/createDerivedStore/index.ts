@@ -31,10 +31,10 @@ interface Yobtaderived {
  * @example
  * const store1 = createStore(1)
  * const store2 = createStore(1)
- * const derived = derivedYobta((state1, state2) => state1 + state2, store1, store2)
- * @documentation {@link https://github.com/yobta/stores/tree/master/src/stores/derivedYobta/index.md}
+ * const derived = createDerivedStore((state1, state2) => state1 + state2, store1, store2)
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/stores/createDerivedStore/index.md}
  */
-export const derivedYobta: Yobtaderived = (acc, ...stores) => {
+export const createDerivedStore: Yobtaderived = (acc, ...stores) => {
   let getState = (): any =>
     acc(...(stores.map(({ last }) => last()) as States<typeof stores>))
   let { last, on, next, observe } = createStore<any, never>(

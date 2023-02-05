@@ -1,9 +1,9 @@
-import { derivedYobta } from './index.js'
+import { createDerivedStore } from './index.js'
 import { createStore } from '../createStore/index.js'
 
 test('return type', () => {
   let store = createStore(1)
-  let derived = derivedYobta(state => state + 1, store)
+  let derived = createDerivedStore(state => state + 1, store)
   expect(derived).toMatchObject({
     last: expect.any(Function),
     observe: expect.any(Function),
@@ -13,7 +13,7 @@ test('return type', () => {
 
 test('initial state', () => {
   let store = createStore(1)
-  let derived = derivedYobta(state => state + 1, store)
+  let derived = createDerivedStore(state => state + 1, store)
   expect(derived.last()).toBe(2)
 
   store.next(2)
@@ -26,7 +26,7 @@ test('initial state', () => {
 
 test('edge', () => {
   let store = createStore(1)
-  let derived = derivedYobta(state => state + 1, store)
+  let derived = createDerivedStore(state => state + 1, store)
   let storeObserver = vi.fn()
   let derivedObserver = vi.fn()
   let unsubscribeStore = store.observe(storeObserver)
@@ -46,8 +46,8 @@ test('edge', () => {
 
 test('triangle', () => {
   let store = createStore(1)
-  let derived1 = derivedYobta(state => state + 1, store)
-  let derived2 = derivedYobta<number>(
+  let derived1 = createDerivedStore(state => state + 1, store)
+  let derived2 = createDerivedStore<number>(
     (s1: number, s2: number) => s1 + s2,
     derived1,
     store,
@@ -78,9 +78,9 @@ test('triangle', () => {
 
 test('diamond', () => {
   let store = createStore(1)
-  let derived1 = derivedYobta(state => state + 1, store)
-  let derived2 = derivedYobta(state => state + 1, store)
-  let derived3 = derivedYobta<number>(
+  let derived1 = createDerivedStore(state => state + 1, store)
+  let derived2 = createDerivedStore(state => state + 1, store)
+  let derived3 = createDerivedStore<number>(
     (s1: number, s2: number) => s1 + s2,
     derived1,
     derived2,
@@ -125,12 +125,17 @@ const replacer =
 test('prevents diamond dependency problem 1', () => {
   let mock = vi.fn()
   let store = createStore(0)
-  let a = derivedYobta(v => `a${v}`, store)
-  let b = derivedYobta(replacer('a', 'b'), a)
-  let c = derivedYobta(replacer('a', 'c'), a)
-  let d = derivedYobta(replacer('a', 'd'), a)
+  let a = createDerivedStore(v => `a${v}`, store)
+  let b = createDerivedStore(replacer('a', 'b'), a)
+  let c = createDerivedStore(replacer('a', 'c'), a)
+  let d = createDerivedStore(replacer('a', 'd'), a)
 
-  let combined = derivedYobta(($b, $c, $d) => `${$b}-${$c}-${$d}`, b, c, d)
+  let combined = createDerivedStore(
+    ($b, $c, $d) => `${$b}-${$c}-${$d}`,
+    b,
+    c,
+    d,
+  )
 
   let unsubscribe = combined.observe(mock)
   expect(combined.last()).toBe('b0-c0-d0')
@@ -153,13 +158,13 @@ test('prevents diamond dependency problem 2', () => {
   let store = createStore(0)
   let mock = vi.fn()
 
-  let a = derivedYobta(v => `a${v}`, store)
-  let b = derivedYobta(replacer('a', 'b'), a)
-  let c = derivedYobta(replacer('b', 'c'), b)
-  let d = derivedYobta(replacer('c', 'd'), c)
-  let e = derivedYobta(replacer('d', 'e'), d)
+  let a = createDerivedStore(v => `a${v}`, store)
+  let b = createDerivedStore(replacer('a', 'b'), a)
+  let c = createDerivedStore(replacer('b', 'c'), b)
+  let d = createDerivedStore(replacer('c', 'd'), c)
+  let e = createDerivedStore(replacer('d', 'e'), d)
 
-  let combined = derivedYobta((...args) => args.join(''), a, e)
+  let combined = createDerivedStore((...args) => args.join(''), a, e)
   let unsubscribe = combined.observe(mock)
 
   expect(combined.last()).toBe('a0e0')
@@ -175,12 +180,12 @@ test('prevents diamond dependency problem 3', () => {
   let store = createStore(0)
   let mock = vi.fn()
 
-  let a = derivedYobta($store => `a${$store}`, store)
-  let b = derivedYobta(replacer('a', 'b'), a)
-  let c = derivedYobta(replacer('b', 'c'), b)
-  let d = derivedYobta(replacer('c', 'd'), c)
+  let a = createDerivedStore($store => `a${$store}`, store)
+  let b = createDerivedStore(replacer('a', 'b'), a)
+  let c = createDerivedStore(replacer('b', 'c'), b)
+  let d = createDerivedStore(replacer('c', 'd'), c)
 
-  let combined = derivedYobta(
+  let combined = createDerivedStore(
     ($a, $b, $c, $d) => `${$a}${$b}${$c}${$d}`,
     a,
     b,
@@ -210,19 +215,19 @@ test('prevents diamond dependency problem 4 (complex)', () => {
     (...v: (string | number)[]) =>
       `${name}${v.join('')}`
 
-  let a = derivedYobta(fn('a'), store1)
-  let b = derivedYobta(fn('b'), store2)
+  let a = createDerivedStore(fn('a'), store1)
+  let b = createDerivedStore(fn('b'), store2)
 
-  let c = derivedYobta(fn('c'), a, b)
-  let d = derivedYobta(fn('d'), a)
+  let c = createDerivedStore(fn('c'), a, b)
+  let d = createDerivedStore(fn('d'), a)
 
-  let e = derivedYobta(fn('e'), c, d)
+  let e = createDerivedStore(fn('e'), c, d)
 
-  let f = derivedYobta(fn('f'), e)
-  let g = derivedYobta(fn('g'), f)
+  let f = createDerivedStore(fn('f'), e)
+  let g = createDerivedStore(fn('g'), f)
 
-  let combined1 = derivedYobta((...args) => args.join(''), e)
-  let combined2 = derivedYobta((...args) => args.join(''), e, g)
+  let combined1 = createDerivedStore((...args) => args.join(''), e)
+  let combined2 = createDerivedStore((...args) => args.join(''), e, g)
 
   let unsubscribe1 = combined1.observe(mock1)
   let unsubscribe2 = combined2.observe(mock2)
@@ -249,7 +254,7 @@ test('prevents diamond dependency problem 5', () => {
   let events = ''
   let firstName = createStore('John')
   let lastName = createStore('Doe')
-  let fullName = derivedYobta(
+  let fullName = createDerivedStore(
     (first, last) => {
       events += 'full '
       return `${first} ${last}`
@@ -257,11 +262,11 @@ test('prevents diamond dependency problem 5', () => {
     firstName,
     lastName,
   )
-  let isFirstShort = derivedYobta(name => {
+  let isFirstShort = createDerivedStore(name => {
     events += 'short '
     return name.length < 10
   }, firstName)
-  let displayName = derivedYobta(
+  let displayName = createDerivedStore(
     (first, isShort, full) => {
       events += 'display '
       return isShort ? full : first
@@ -295,11 +300,11 @@ test('prevents diamond dependency problem 6', () => {
   let store2 = createStore<number>(0)
   let mock = vi.fn()
 
-  let a = derivedYobta(v => `a${v}`, store1)
-  let b = derivedYobta(v => `b${v}`, store2)
-  let c = derivedYobta(v => v.replace('b', 'c'), b)
+  let a = createDerivedStore(v => `a${v}`, store1)
+  let b = createDerivedStore(v => `b${v}`, store2)
+  let c = createDerivedStore(v => v.replace('b', 'c'), b)
 
-  let combined = derivedYobta(($a, $c) => `${$a}${$c}`, a, c)
+  let combined = createDerivedStore(($a, $c) => `${$a}${$c}`, a, c)
 
   let unsubscribe = combined.observe(mock)
 
