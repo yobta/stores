@@ -73,7 +73,7 @@ Remove setter from store next method
 Map store becomes mutable
 Renamed `useObservable` hook to `useStore`
 Renamed `encoderYobta` to `codecYobta`
-Renames `mapEncoderYobta` to `mapCodecYobta`
+Renames `mapEncoderYobta` to `mapCodec`
 Machine store now takes map of arrays instead of sets
 
 Improvements:

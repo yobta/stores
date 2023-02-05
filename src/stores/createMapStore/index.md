@@ -126,7 +126,7 @@ const store = createMapStore(
   { key: 'value' },
   localStoragePlugin({
     channel: 'my-map-store-yobta',
-    codec: mapCodecYobta,
+    codec: mapCodec,
   }),
 )
 ```

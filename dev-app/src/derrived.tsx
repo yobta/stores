@@ -4,7 +4,7 @@ import './App.css'
 import {
   broadcastChannelPlugin,
   localStoragePlugin,
-  mapCodecYobta,
+  mapCodec,
   createMapStore,
   createStore,
   sessionStoragePlugin,
@@ -13,7 +13,7 @@ import { useStore } from '../../src/adapters/react'
 
 const mapStore = createMapStore<{ a: number }>(
   { a: 0 },
-  localStoragePlugin({ channel: 'counter', codec: mapCodecYobta }),
+  localStoragePlugin({ channel: 'counter', codec: mapCodec }),
 )
 
 const stringStore = createStore('', sessionStoragePlugin({ channel: 'test' }))

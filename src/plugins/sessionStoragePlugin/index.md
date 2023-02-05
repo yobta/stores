@@ -19,17 +19,13 @@ In this example, the `sessionStoragePlugin` plugin is added to the store with th
 The plugin allows for the use of custom codecs. To use a custom codec, pass it as the codec parameter in the plugin configuration object. Here is an example of how to use a custom codec with the plugin:
 
 ```ts
-import {
-  createMapStore,
-  localStoragePlugin,
-  mapCodecYobta,
-} from '@yobta/stores'
+import { createMapStore, localStoragePlugin, mapCodec } from '@yobta/stores'
 
 const store = createMapStore(
   { key: 'value' },
   sessionStoragePlugin({
     channel: 'my-map-store-yobta',
-    codec: mapCodecYobta,
+    codec: mapCodec,
   }),
 )
 ```
