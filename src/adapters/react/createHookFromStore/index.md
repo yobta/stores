@@ -2,16 +2,16 @@
 
 # Creating React Hook
 
-The `hookYobta` factory is a utility for creating React hooks from stores.
+The `createHookFromStore` factory is a utility for creating React hooks from stores.
 
 ## Creating Hooks
 
 ```js
 import { createStore } from '@yobta/stores'
-import { hookYobta } from '@yobta/stores/react'
+import { createHookFromStore } from '@yobta/stores/react'
 
 const myStore = createStore(1)
-export const useMyStore = hookYobta(myStore)
+export const useMyStore = createHookFromStore(myStore)
 ```
 
 ## Using Hooks
