@@ -9,9 +9,9 @@ A factory function for creating observable state machine stores with a given set
 The following code imports the machine factory from the `@yobta/stores` package. It then defines a transition map and creates a new machine instance.
 
 ```ts
-import { machineYobta } from '@yobta/stores'
+import { createMachineStore } from '@yobta/stores'
 
-const createMachine = machineYobta({
+const createMachine = createMachineStore({
   IDLE: ['LOADING'],
   LOADING: ['IDLE', 'ERROR'],
   ERROR: ['LOADING'],
@@ -52,7 +52,7 @@ stopObserving()
 In addition to the state, you can also pass additional arguments to the `next` function when setting the state:
 
 ```ts
-const machine = machineYobta(transitions)('IDLE')
+const machine = createMachineStore(transitions)('IDLE')
 machine.next('LOADING', 'some additional argument')
 ```
 
@@ -62,7 +62,7 @@ Usually the store is able to infer the state from the transitions, but you may w
 
 ```ts
 type Overloads = [{ attempts: number }]
-const machine = machineYobta(transitions)<Overloads>('IDLE')
+const machine = createMachineStore(transitions)<Overloads>('IDLE')
 machine.next('LOADING', { attempt: 2 })
 ```
 

@@ -23,12 +23,12 @@ The following sections provide documentation on different parts of Yobta Stores:
 ### Stores
 
 - [Basic](src/stores/createStore/index.md) - A general observable store for implementing any custom logic you need.
-- [Machine](src/stores/machineYobta/index.md) - A simple observable state machine.
+- [Machine](src/stores/createMachineStore/index.md) - A simple observable state machine.
 - [Map](src/stores/mapYobta/index.md) - An observable Map object.
 - [Online](src/stores/onlineYobta/index.md) - Tracks the browser's connectivity state.
 - [Plain Object](src/stores/plainObjectYobta/index.md) - An observable plain object.
 - [Stack](src/stores/stackYobta/index.md) - An observable stack object.
-- [derived](src/stores/createDerivedStore/index.md) - Aggregates data from one or multiple stores.
+- [Derived](src/stores/createDerivedStore/index.md) - Aggregates data from one or multiple stores.
 
 ### Plugins
 

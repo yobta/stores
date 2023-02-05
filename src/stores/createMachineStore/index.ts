@@ -46,10 +46,10 @@ interface YobtaMachineStoreFactory {
  *  LOADING: ['IDLE', 'ERROR'],
  *  ERROR: ['LOADING'],
  * }
- * const machine = machineYobta(transitions)('IDLE')
- * @documentation {@link https://github.com/yobta/stores/tree/master/src/stores/machineYobta/index.md}
+ * const machine = createMachineStore(transitions)('IDLE')
+ * @documentation {@link https://github.com/yobta/stores/tree/master/src/stores/createMachineStore/index.md}
  */
-export const machineYobta: YobtaMachineStoreFactory =
+export const createMachineStore: YobtaMachineStoreFactory =
   <States extends TransitionMap<States>>(transitions: States) =>
   <Overloads extends any[] = any[]>(
     initialState: keyof States,

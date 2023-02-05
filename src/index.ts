@@ -1,5 +1,5 @@
 export * from './stores/createDerivedStore/index.js'
-export * from './stores/machineYobta/index.js'
+export * from './stores/createMachineStore/index.js'
 export * from './stores/mapYobta/index.js'
 export * from './stores/onlineYobta/index.js'
 export * from './stores/createStore/index.js'

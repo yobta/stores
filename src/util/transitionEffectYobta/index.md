@@ -1,11 +1,11 @@
 # Transition Effect Utility
 
-The utility enables you to execute a callback before the store state transitions to another state. This utility is particularly useful for adding side effects to [state machines](../../stores/machineYobta/index.md).
+The utility enables you to execute a callback before the store state transitions to another state. This utility is particularly useful for adding side effects to [state machines](../../stores/createMachineStore/index.md).
 
 ```js
-import { machineYobta, transitionEffectYobta } from '@yobta/stores'
+import { createMachineStore, transitionEffectYobta } from '@yobta/stores'
 
-const store = machineYobta({
+const store = createMachineStore({
   idle: ['fetching'],
   fetching: ['idle', 'error'],
   error: ['idle', 'fetching'],

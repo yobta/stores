@@ -1,8 +1,8 @@
 import { YOBTA_IDLE, YOBTA_READY } from '../createStore/index.js'
-import { machineYobta } from './index.js'
+import { createMachineStore } from './index.js'
 
 it('creates store', () => {
-  let store = machineYobta({
+  let store = createMachineStore({
     one: ['two'],
     two: ['one'],
   })('one')
@@ -15,7 +15,7 @@ it('creates store', () => {
 })
 
 it('has default state', () => {
-  let store = machineYobta({
+  let store = createMachineStore({
     one: ['two'],
     two: ['one'],
   })('one')
@@ -23,7 +23,7 @@ it('has default state', () => {
 })
 
 it('sets next state', () => {
-  let store = machineYobta({
+  let store = createMachineStore({
     one: ['two'],
     two: ['one'],
   })('one')
@@ -33,7 +33,7 @@ it('sets next state', () => {
 
 it('sends overloads to ubservers', () => {
   let observer = vi.fn()
-  let store = machineYobta({
+  let store = createMachineStore({
     one: ['two'],
     two: ['one'],
   })('one')
@@ -46,7 +46,7 @@ it('sends overloads to ubservers', () => {
 
 it('sends overloads to middleware', () => {
   let middleware = vi.fn()
-  let store = machineYobta({
+  let store = createMachineStore({
     one: ['two'],
     two: ['one'],
   })<[string, number]>('one', ({ addMiddleware }) => {
@@ -61,7 +61,7 @@ it('sends overloads to middleware', () => {
 })
 
 it('ignores unexpected next state', () => {
-  let store = machineYobta({
+  let store = createMachineStore({
     one: ['two'],
     two: ['one'],
   })('one')
@@ -70,7 +70,7 @@ it('ignores unexpected next state', () => {
 })
 
 it('observes changes', () => {
-  let store = machineYobta({
+  let store = createMachineStore({
     one: ['two'],
     two: ['one'],
   })('one')
@@ -85,7 +85,7 @@ it('observes changes', () => {
 })
 
 it('subscribes to ready event', () => {
-  let store = machineYobta({
+  let store = createMachineStore({
     one: ['two'],
     two: ['one'],
   })('one')
@@ -100,7 +100,7 @@ it('subscribes to ready event', () => {
 })
 
 it('subscribes to idle event', () => {
-  let store = machineYobta({
+  let store = createMachineStore({
     one: ['two'],
     two: ['one'],
   })('one')
