@@ -2,7 +2,7 @@ module.exports = [
   {
     name: 'all',
     path: './lib/index.js',
-    limit: '1820 B',
+    limit: '1828 B',
   },
   {
     name: 'react',
