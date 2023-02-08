@@ -1,5 +1,5 @@
-import { YobtaReadable } from '../../../util/readableYobta/index.js'
-import { useYobta, YobtaReactStoreHookOptions } from '../useYobta/index.js'
+import { YobtaReadable } from '../../../util/readable/index.js'
+import { useStore, YobtaReactStoreHookOptions } from '../useStore/index.js'
 
 interface YobtaHookFactory {
   <State, Overloads extends any[] = any[]>(
@@ -8,5 +8,5 @@ interface YobtaHookFactory {
   ): () => State
 }
 
-export const hookYobta: YobtaHookFactory = (store, options) => () =>
-  useYobta(store, options)
+export const createHookFromStore: YobtaHookFactory = (store, options) => () =>
+  useStore(store, options)

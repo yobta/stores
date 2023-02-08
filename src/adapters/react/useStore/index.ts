@@ -19,7 +19,7 @@ export type YobtaReactStoreHookOptions<State> = {
  * const state = useStore(myStore)
  * @documentation {@link https://github.com/yobta/stores/blob/master/src/adapters/react/index.md}.
  */
-export const useYobta: YobtaReactStoreHook = (
+export const useStore: YobtaReactStoreHook = (
   { last, observe },
   { getServerSnapshot } = {},
 ) => useSyncExternalStore(observe, last, getServerSnapshot)

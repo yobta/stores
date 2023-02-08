@@ -40,20 +40,20 @@ beforeEach(() => {
 
 describe('client', () => {
   it('should return last state', () => {
-    let { result } = renderHook(() => useYobta(store))
+    let { result } = renderHook(() => useStore(store))
     expect(result.current).toEqual(1)
   })
   it('should subscribe to store', () => {
-    renderHook(() => useYobta(store))
+    renderHook(() => useStore(store))
     expect(store.observe).toHaveBeenCalledOnce()
   })
   it('should unsubscribe from store', () => {
-    let { unmount } = renderHook(() => useYobta(store))
+    let { unmount } = renderHook(() => useStore(store))
     unmount()
     expect(unsubscribeMock).toHaveBeenCalledOnce()
   })
   it('should handle store updates', () => {
-    let { result, rerender } = renderHook(() => useYobta(store))
+    let { result, rerender } = renderHook(() => useStore(store))
     expect(result.current).toEqual(1)
     act(() => {
       store.next(2)
@@ -65,33 +65,33 @@ describe('client', () => {
 
 describe('server', () => {
   it('requires getServerSnapshot', () => {
-    let { result } = renderHookServer(() => useYobta(store))
+    let { result } = renderHookServer(() => useStore(store))
     expect(result.error).toEqual(expect.any(Error))
   })
   it('returns getServerSnapshot()', () => {
     let { result } = renderHookServer(() =>
-      useYobta(store, { getServerSnapshot: () => 2 }),
+      useStore(store, { getServerSnapshot: () => 2 }),
     )
     expect(result.current).toEqual(2)
   })
   it('does not subscribe', () => {
-    renderHookServer(() => useYobta(store, { getServerSnapshot: () => 2 }))
+    renderHookServer(() => useStore(store, { getServerSnapshot: () => 2 }))
     expect(store.observe).not.toHaveBeenCalled()
   })
   it('does not unsubscribe', () => {
     let { unmount } = renderHookServer(() =>
-      useYobta(store, { getServerSnapshot: () => 2 }),
+      useStore(store, { getServerSnapshot: () => 2 }),
     )
     unmount()
     expect(unsubscribeMock).not.toHaveBeenCalled()
   })
   it('does not call last', () => {
-    renderHookServer(() => useYobta(store, { getServerSnapshot: () => 2 }))
+    renderHookServer(() => useStore(store, { getServerSnapshot: () => 2 }))
     expect(store.last).not.toHaveBeenCalled()
   })
   it('does not handle store updates', () => {
     let { result } = renderHookServer(() =>
-      useYobta(store, { getServerSnapshot: () => 1 }),
+      useStore(store, { getServerSnapshot: () => 1 }),
     )
     expect(result.current).toEqual(1)
     actServer(() => {
