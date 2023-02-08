@@ -1,11 +1,6 @@
 import './App.css'
 
-import {
-  createStore,
-  createDerivedStore,
-  YOBTA_NEXT,
-  YOBTA_BEFORE,
-} from '../../src'
+import { createStore, createDerivedStore } from '../../src'
 import { useStore } from '../../src/adapters/react'
 import { useEffect } from 'react'
 import { useRef } from 'react'
@@ -26,11 +21,11 @@ const down = () => {
 }
 
 function App() {
-  const count = useYobta(store)
-  const addedCount = useYobta(added)
-  const subtractedCount = useYobta(subtracted)
-  const totalValue = useYobta(total, { getServerSnapshot: () => 5 })
-  const edgeValue = useYobta(edge)
+  const count = useStore(store)
+  const addedCount = useStore(added)
+  const subtractedCount = useStore(subtracted)
+  const totalValue = useStore(total, { getServerSnapshot: () => 5 })
+  const edgeValue = useStore(edge)
   const ref = useRef(0)
   useEffect(() => {
     return edge.observe(next => {
