@@ -2,10 +2,11 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## 0.1.15
+## 0.2.1
 
 Fix derived initialization
 Add getServerSnapshot option to the store hook
+Give normal names to functions
 
 ## 0.1.14
 
