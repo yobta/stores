@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## 0.1.15
 
 Fix derived initialization
+Add getServerSnapshot option to the store hook
 
 ## 0.1.14
 

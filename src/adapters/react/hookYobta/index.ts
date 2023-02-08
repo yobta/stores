@@ -1,10 +1,12 @@
 import { YobtaReadable } from '../../../util/readableYobta/index.js'
-import { useYobta } from '../useYobta/index.js'
+import { useYobta, YobtaReactStoreHookOptions } from '../useYobta/index.js'
 
 interface YobtaHookFactory {
   <State, Overloads extends any[] = any[]>(
     store: YobtaReadable<State, Overloads>,
+    options?: YobtaReactStoreHookOptions<State>,
   ): () => State
 }
 
-export const hookYobta: YobtaHookFactory = store => () => useYobta(store)
+export const hookYobta: YobtaHookFactory = (store, options) => () =>
+  useYobta(store, options)

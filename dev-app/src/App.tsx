@@ -24,7 +24,7 @@ function App() {
   const count = useYobta(store)
   const addedCount = useYobta(added)
   const subtractedCount = useYobta(subtracted)
-  const totalValue = useYobta(total)
+  const totalValue = useYobta(total, { getServerSnapshot: () => 5 })
   const edgeValue = useYobta(edge)
   const ref = useRef(0)
   useEffect(() => {
