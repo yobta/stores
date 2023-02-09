@@ -1,2 +1,2 @@
-export * from './hookYobta/index.js'
-export * from './useYobta/index.js'
+export * from './createHookFromStore/index.js'
+export * from './useStore/index.js'

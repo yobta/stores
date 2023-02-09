@@ -2,29 +2,23 @@ import { useState } from 'react'
 import './App.css'
 
 import {
-  broadcastChannelPluginYobta,
-  localStoragePluginYobta,
-  mapCodecYobta,
-  mapYobta,
-  storeYobta,
-  sessionStoragePluginYobta,
+  broadcastChannelPlugin,
+  localStoragePlugin,
+  mapCodec,
+  createMapStore,
+  createStore,
+  sessionStoragePlugin,
 } from '../../src'
-import { useYobta } from '../../src/adapters/react'
+import { useStore } from '../../src/adapters/react'
 
-const mapStore = mapYobta<{ a: number }>(
+const mapStore = createMapStore<{ a: number }>(
   { a: 0 },
-  localStoragePluginYobta({ channel: 'counter', codec: mapCodecYobta }),
+  localStoragePlugin({ channel: 'counter', codec: mapCodec }),
 )
 
-const stringStore = storeYobta(
-  '',
-  sessionStoragePluginYobta({ channel: 'test' }),
-)
+const stringStore = createStore('', sessionStoragePlugin({ channel: 'test' }))
 
-const plainStore = storeYobta(
-  {},
-  broadcastChannelPluginYobta({ channel: 'plain' }),
-)
+const plainStore = createStore({}, broadcastChannelPlugin({ channel: 'plain' }))
 
 const up = () => {
   mapStore.assign({ a: (mapStore.last().get('a') || 0) + 1 })
@@ -32,10 +26,10 @@ const up = () => {
 const down = () => mapStore.omit(['a'])
 
 function App() {
-  const count = useYobta(mapStore)
-  const plain = useYobta(plainStore)
+  const count = useStore(mapStore)
+  const plain = useStore(plainStore)
   console.log('plain: ', plain)
-  const str = useYobta(stringStore)
+  const str = useStore(stringStore)
 
   return (
     <div className="App">

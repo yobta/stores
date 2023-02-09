@@ -6,7 +6,10 @@ coverage/
 **/errors.ts
 **/*.test.ts
 **/*.md
+pnpm-lock.yaml
+README.md
 tsconfig.json
+vitest.config.ts
 test/
 docs/
 dev-app/

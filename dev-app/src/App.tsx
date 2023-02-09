@@ -1,15 +1,15 @@
 import './App.css'
 
-import { storeYobta, derivedYobta, YOBTA_NEXT, YOBTA_BEFORE } from '../../src'
-import { useYobta } from '../../src/adapters/react'
+import { createStore, createDerivedStore } from '../../src'
+import { useStore } from '../../src/adapters/react'
 import { useEffect } from 'react'
 import { useRef } from 'react'
 
-const store = storeYobta(0)
-const added = derivedYobta(value => value + 1, store)
-const subtracted = derivedYobta(value => value - 1, store)
-const total = derivedYobta((v1, v2) => v1 + v2, added, subtracted)
-const edge = derivedYobta(v => v + v, total)
+const store = createStore(0)
+const added = createDerivedStore(value => value + 1, store)
+const subtracted = createDerivedStore(value => value - 1, store)
+const total = createDerivedStore((v1, v2) => v1 + v2, added, subtracted)
+const edge = createDerivedStore(v => v + v, total)
 
 const up = () => {
   let next = store.last() + 1
@@ -21,11 +21,11 @@ const down = () => {
 }
 
 function App() {
-  const count = useYobta(store)
-  const addedCount = useYobta(added)
-  const subtractedCount = useYobta(subtracted)
-  const totalValue = useYobta(total, { getServerSnapshot: () => 5 })
-  const edgeValue = useYobta(edge)
+  const count = useStore(store)
+  const addedCount = useStore(added)
+  const subtractedCount = useStore(subtracted)
+  const totalValue = useStore(total, { getServerSnapshot: () => 5 })
+  const edgeValue = useStore(edge)
   const ref = useRef(0)
   useEffect(() => {
     return edge.observe(next => {

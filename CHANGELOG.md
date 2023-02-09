@@ -2,10 +2,11 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## 0.1.15
+## 0.2.1
 
 Fix derived initialization
 Add getServerSnapshot option to the store hook
+Give normal names to functions
 
 ## 0.1.14
 
@@ -67,20 +68,20 @@ Fix machine store typings
 ## 0.1.1
 
 Breakng changes:
-Rename observableYobte to storeYobta
+Rename observableYobte to createStore
 Remove store init event
 Remove setter from store next method
 Map store becomes mutable
-Renamed `useObservable` hook to `useYobta`
-Renamed `encoderYobta` to `codecYobta`
-Renames `mapEncoderYobta` to `mapCodecYobta`
+Renamed `useObservable` hook to `useStore`
+Renamed `encoderYobta` to `jsonCodec`
+Renames `mapEncoderYobta` to `mapCodec`
 Machine store now takes map of arrays instead of sets
 
 Improvements:
 Add observable utility
 Change store to compose middlewares
 Update documentation
-Add diffMapYobta utility
+Add diffMap utility
 Add compose utility
 Add diff object utility
 Add on => off to all stores

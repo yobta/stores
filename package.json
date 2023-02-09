@@ -1,7 +1,7 @@
 {
   "name": "@yobta/stores",
-  "version": "0.1.14",
-  "description": "An experimental module creatd for an education purpose",
+  "version": "0.2.0",
+  "description": "An experimental module created for an education purpose",
   "keywords": [
     "experiment"
   ],
@@ -15,7 +15,7 @@
   },
   "author": "Sergei Droganov <sergei@droganov.ru>",
   "license": "MIT",
-  "repository": "yobta/stores",
+  "repository": "https://github.com/yobta/stores.git",
   "sideEffects": false,
   "type": "module",
   "types": "./lib/index.d.ts",
@@ -26,13 +26,14 @@
       ]
     }
   },
+  "main": "./lib/index.js",
   "exports": {
     ".": "./lib/index.js",
     "./react": "./lib/adapters/react/index.js",
     "./package.json": "./package.json"
   },
   "engines": {
-    "node": "^14.0.0 || >=16.0.0"
+    "node": "^14.0.0 || ^16.0.0 || >=18.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",
