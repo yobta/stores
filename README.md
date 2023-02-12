@@ -58,6 +58,11 @@ The following sections provide documentation on different parts of Yobta Stores:
 - [Store Effect Utility](src/util/storeEffect/index.md) — Adds ready/idle callbacks.
 - [Transition Effect Utility](src/util/transitionEffect/index.md) — Add state transition callback.
 
+Alternatives:
+[Jotai](https://jotai.org/)
+[Nanostores](https://github.com/nanostores/nanostores/)
+[Recoil](https://recoiljs.org/)
+
 Kudos:
 
 - [`Andrey Sitnik`] — nanostores and the package boilerplate
