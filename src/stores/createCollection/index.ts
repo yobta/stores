@@ -1,6 +1,6 @@
 import { YobtaJsonValue } from '../../util/jsonCodec/index.js'
 import { YobtaReadable } from '../../util/readable/index.js'
-import { createStore } from '../createStore/index.js'
+import { createStore, YobtaStorePlugin } from '../createStore/index.js'
 
 // #region types
 type Id = string | number
@@ -21,14 +21,18 @@ export type InsertOperation<Snapshot extends AnySnapshot> = {
   type: 'insert'
   data: Snapshot
   ref: Id
-  version: number
+  before?: Id
+  committed: number
+  merged: number
 }
 export type UpdateOperation<Snapshot extends AnySnapshot> = {
   id: string
   type: 'update'
   data: PatchWithoutId<Snapshot>
   ref: Id
-  version: number
+  before?: never
+  committed: number
+  merged: number
 }
 type CollectionOperation<
   Snapshot extends AnySnapshot,
@@ -52,14 +56,15 @@ type ItemWithMeta<
 ]
 
 interface CollectionFactory {
-  <Snapshot extends AnySnapshot>(name: string): {
+  <Snapshot extends AnySnapshot>(
+    name: string,
+    ...plugins: YobtaStorePlugin<InternalState<Snapshot>, never>[]
+  ): {
     commit(operation: CollectionOperation<Snapshot>): void
     merge(...operations: CollectionOperation<Snapshot>[]): void
-    // insert(id: Id, snapshot: Snapshot): void
-    // update(id: Id, patch: Patch<Snapshot>): void
     get(id: Id): ResultingSnapshot<Snapshot>
     last(): InternalState<Snapshot>
-  } & YobtaReadable<InternalState<Snapshot>>
+  } & YobtaReadable<InternalState<Snapshot>, never>
 }
 // #endregion
 
@@ -81,9 +86,9 @@ export const applyOperation = <Snapshot extends AnySnapshot>(
   let nextSnapshot = { ...snapshot } as AnySnapshot
   let nextVersions = { ...versions } as Versions<AnySnapshot>
   for (let key in operation.data) {
-    if (operation.version > (versions[key] || 0)) {
+    if (operation.committed > (versions[key] || 0)) {
       nextSnapshot[key] = operation.data[key]
-      nextVersions[key] = operation.version
+      nextVersions[key] = operation.committed
     }
   }
   let nextPendingOperations = pendingOperations.filter(
@@ -100,10 +105,12 @@ export const applyOperation = <Snapshot extends AnySnapshot>(
 export const createCollection: CollectionFactory = <
   Snapshot extends AnySnapshot,
 >(
-  name,
+  name: string,
+  ...plugins: YobtaStorePlugin<InternalState<Snapshot>, never>[]
 ) => {
-  let { last, next, observe, on } = createStore<InternalState<Snapshot>>(
+  let { last, next, observe, on } = createStore<InternalState<Snapshot>, never>(
     new Map(),
+    ...plugins,
   )
   let getState = (): InternalState<Snapshot> => new Map(last())
   let commit = (operation: CollectionOperation<Snapshot>): void => {
