@@ -15,7 +15,6 @@ type PatchWithoutId<Snapshot extends AnySnapshot> = Partial<
 type PatchWithId<Snapshot extends AnySnapshot> = PatchWithoutId<Snapshot> & {
   id: Id
 }
-
 export type InsertOperation<Snapshot extends AnySnapshot> = {
   id: string
   type: 'insert'

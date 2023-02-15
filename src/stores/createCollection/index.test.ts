@@ -527,3 +527,46 @@ describe('get', () => {
     expect(collection.get('item-1')).toEqual({ id: 'item-1', name: 'test 2' })
   })
 })
+describe('consistency', () => {
+  let store1 = createCollection<Snapshot>('test')
+  let store2 = createCollection<Snapshot>('test')
+  let insert1: InsertOperation<Snapshot> = {
+    id: 'op-1',
+    type: 'insert',
+    data: { id: 'item-1', name: 'test' },
+    ref: 'item-1',
+    committed: 1,
+    merged: 1,
+  }
+  let insert2: InsertOperation<Snapshot> = {
+    id: 'op-2',
+    type: 'insert',
+    data: { id: 'item-2', name: 'test' },
+    ref: 'item-2',
+    committed: 2,
+    merged: 2,
+  }
+  let update1: UpdateOperation<Snapshot> = {
+    id: 'op-3',
+    type: 'update',
+    data: { name: 'test 2' },
+    ref: 'item-1',
+    committed: 3,
+    merged: 3,
+  }
+  let update2: UpdateOperation<Snapshot> = {
+    id: 'op-4',
+    type: 'update',
+    data: { name: 'test 3' },
+    ref: 'item-1',
+    committed: 4,
+    merged: 4,
+  }
+
+  it('should be consistent', () => {
+    store1.merge(insert1, insert2, update1, update2)
+    store2.merge(update2, insert1, update1, insert2, update2, insert1)
+    expect(store1.get('item-1')).toEqual(store2.get('item-1'))
+    expect(store1.get('item-2')).toEqual(store2.get('item-2'))
+  })
+})
