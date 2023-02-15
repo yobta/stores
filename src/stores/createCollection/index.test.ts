@@ -3,6 +3,7 @@ import {
   applyOperation,
   InsertOperation,
   UpdateOperation,
+  getOrCreateItem,
 } from '.'
 
 type Snapshot = {
@@ -12,11 +13,9 @@ type Snapshot = {
 
 describe('getOrCreateItem', () => {
   it('should create item if it does not exist', () => {
-    let collection = createCollection<Snapshot>('test')
-    let item = collection.get('item-1')
     let mockState = new Map()
-    expect(item).toBeUndefined()
-    expect(collection.last()).toEqual(mockState)
+    let item = getOrCreateItem(mockState, 'item-1')
+    expect(item).toEqual([{ id: 'item-1' }, { id: 0 }])
   })
   it('should get item if it exists', () => {
     let collection = createCollection<Snapshot>('test')
@@ -25,10 +24,14 @@ describe('getOrCreateItem', () => {
       type: 'insert',
       data: { id: 'item-1', name: 'test' },
       ref: 'item-1',
-      version: 1,
+      committed: 1,
+      merged: 1,
     })
-    let item = collection.get('item-1')
-    expect(item).toEqual({ id: 'item-1', name: 'test' })
+    let item = getOrCreateItem(collection.last(), 'item-1')
+    expect(item).toEqual([
+      { id: 'item-1', name: 'test' },
+      { id: 1, name: 1 },
+    ])
   })
 })
 describe('applyOperation', () => {
@@ -38,7 +41,8 @@ describe('applyOperation', () => {
       type: 'insert',
       data: { id: 'item-1', name: 'test' },
       ref: 'item-1',
-      version: 1,
+      committed: 1,
+      merged: 1,
     })
     expect(item).toEqual([
       { id: 'item-1', name: 'test' },
@@ -56,7 +60,8 @@ describe('applyOperation', () => {
         type: 'update',
         data: { name: 'test2' },
         ref: 'item-1',
-        version: 2,
+        committed: 2,
+        merged: 2,
       },
     )
     expect(item).toEqual([
@@ -74,7 +79,8 @@ describe('applyOperation', () => {
       type: 'update',
       data: { name: 'test2' },
       ref: 'item-1',
-      version: 2,
+      committed: 2,
+      merged: 2,
     })
     expect(item).not.toBe(nextItem)
   })
@@ -88,7 +94,8 @@ describe('applyOperation', () => {
       type: 'update',
       data: { name: 'test2' },
       ref: 'item-1',
-      version: 2,
+      committed: 2,
+      merged: 2,
     })
     expect(item).not.toBe(nextItem)
   })
@@ -98,14 +105,16 @@ describe('applyOperation', () => {
       type: 'update',
       data: { name: 'test2' },
       ref: 'item-1',
-      version: 2,
+      committed: 2,
+      merged: 2,
     }
     let operation2: UpdateOperation<Snapshot> = {
       id: 'op-3',
       type: 'update',
       data: { name: 'test3' },
       ref: 'item-1',
-      version: 3,
+      committed: 3,
+      merged: 3,
     }
     let item = applyOperation(
       [
@@ -131,7 +140,8 @@ describe('merge', () => {
       type: 'insert',
       data: { id: 'item-1', name: 'test' },
       ref: 'item-1',
-      version: 1,
+      committed: 1,
+      merged: 1,
     }
     collection.merge(insertOperation)
     expect(collection.get('item-1')).toEqual({ id: 'item-1', name: 'test' })
@@ -149,14 +159,16 @@ describe('merge', () => {
       type: 'insert',
       data: { id: 'item-1', name: 'test' },
       ref: 'item-1',
-      version: 1,
+      committed: 1,
+      merged: 1,
     }
     let insertOperation2: InsertOperation<Snapshot> = {
       id: 'op-2',
       type: 'insert',
       data: { id: 'item-2', name: 'test' },
       ref: 'item-2',
-      version: 2,
+      committed: 2,
+      merged: 2,
     }
     collection.merge(insertOperation1, insertOperation2)
     expect(collection.get('item-1')).toEqual({ id: 'item-1', name: 'test' })
@@ -179,7 +191,8 @@ describe('merge', () => {
       type: 'update',
       data: { name: 'test 2' },
       ref: 'item-1',
-      version: 1,
+      committed: 1,
+      merged: 1,
     }
     collection.merge(insertOperation)
     expect(collection.get('item-1')).toBeUndefined()
@@ -197,14 +210,16 @@ describe('merge', () => {
       type: 'update',
       data: { name: 'test 2' },
       ref: 'item-1',
-      version: 1,
+      committed: 1,
+      merged: 1,
     }
     let insertOperation2: UpdateOperation<Snapshot> = {
       id: 'op-2',
       type: 'update',
       data: { name: 'test 3' },
       ref: 'item-1',
-      version: 2,
+      committed: 2,
+      merged: 2,
     }
     collection.merge(insertOperation1, insertOperation2)
     expect(collection.get('item-1')).toBeUndefined()
@@ -222,14 +237,16 @@ describe('merge', () => {
       type: 'insert',
       data: { id: 'item-1', name: 'test' },
       ref: 'item-1',
-      version: 1,
+      committed: 1,
+      merged: 1,
     }
     let updateOperation: UpdateOperation<Snapshot> = {
       id: 'op-2',
       type: 'update',
       data: { name: 'test 2' },
       ref: 'item-1',
-      version: 2,
+      committed: 2,
+      merged: 2,
     }
     collection.merge(insertOperation, updateOperation)
     expect(collection.get('item-1')).toEqual({ id: 'item-1', name: 'test 2' })
@@ -247,14 +264,16 @@ describe('merge', () => {
       type: 'insert',
       data: { id: 'item-1', name: 'test' },
       ref: 'item-1',
-      version: 1,
+      committed: 1,
+      merged: 1,
     }
     let updateOperation: UpdateOperation<Snapshot> = {
       id: 'op-2',
       type: 'update',
       data: { name: 'test 2' },
       ref: 'item-1',
-      version: 2,
+      committed: 2,
+      merged: 2,
     }
     collection.merge(updateOperation, insertOperation)
     expect(collection.get('item-1')).toEqual({ id: 'item-1', name: 'test 2' })
@@ -272,14 +291,16 @@ describe('merge', () => {
       type: 'insert',
       data: { id: 'item-1', name: 'test' },
       ref: 'item-1',
-      version: 1,
+      committed: 1,
+      merged: 1,
     }
     let updateOperation: UpdateOperation<Snapshot> = {
       id: 'op-2',
       type: 'update',
       data: { name: 'test 2' },
       ref: 'item-1',
-      version: 2,
+      committed: 2,
+      merged: 2,
     }
     collection.merge(insertOperation, updateOperation, insertOperation)
     expect(collection.get('item-1')).toEqual({ id: 'item-1', name: 'test 2' })
@@ -298,7 +319,8 @@ describe('merge', () => {
       type: 'insert',
       data: { id: 'item-1', name: 'test' },
       ref: 'item-1',
-      version: 1,
+      committed: 1,
+      merged: 1,
     }
     collection.merge(insertOperation)
     expect(collection.last()).not.toBe(state)
@@ -310,7 +332,8 @@ describe('merge', () => {
       type: 'insert',
       data: { id: 'item-1', name: 'test' },
       ref: 'item-1',
-      version: 1,
+      committed: 1,
+      merged: 1,
     }
     collection.commit(insertOperation)
     collection.merge(insertOperation)
@@ -330,7 +353,8 @@ describe('commit', () => {
       type: 'insert',
       data: { id: 'item-1', name: 'test' },
       ref: 'item-1',
-      version: 1,
+      committed: 1,
+      merged: 1,
     }
     collection.commit(insertOperation)
     let mockState = new Map()
@@ -345,7 +369,8 @@ describe('commit', () => {
       type: 'update',
       data: { name: 'test 2' },
       ref: 'item-1',
-      version: 2,
+      committed: 2,
+      merged: 2,
     }
     collection.commit(updateOperation)
     let mockState = new Map()
@@ -360,14 +385,16 @@ describe('commit', () => {
       type: 'insert',
       data: { id: 'item-1', name: 'test' },
       ref: 'item-1',
-      version: 1,
+      committed: 1,
+      merged: 1,
     }
     let updateOperation: UpdateOperation<Snapshot> = {
       id: 'op-2',
       type: 'update',
       data: { name: 'test 2' },
       ref: 'item-1',
-      version: 2,
+      committed: 2,
+      merged: 2,
     }
     collection.commit(insertOperation)
     collection.commit(updateOperation)
@@ -388,14 +415,16 @@ describe('commit', () => {
       type: 'insert',
       data: { id: 'item-1', name: 'test' },
       ref: 'item-1',
-      version: 1,
+      committed: 1,
+      merged: 1,
     }
     let updateOperation: UpdateOperation<Snapshot> = {
       id: 'op-2',
       type: 'update',
       data: { name: 'test 2' },
       ref: 'item-1',
-      version: 2,
+      committed: 2,
+      merged: 2,
     }
     collection.commit(updateOperation)
     collection.commit(insertOperation)
@@ -416,14 +445,16 @@ describe('commit', () => {
       type: 'insert',
       data: { id: 'item-1', name: 'test' },
       ref: 'item-1',
-      version: 1,
+      committed: 1,
+      merged: 1,
     }
     let updateOperation: UpdateOperation<Snapshot> = {
       id: 'op-2',
       type: 'update',
       data: { name: 'test 2' },
       ref: 'item-1',
-      version: 2,
+      committed: 2,
+      merged: 2,
     }
     collection.commit(insertOperation)
     collection.commit(updateOperation)
@@ -447,9 +478,52 @@ describe('commit', () => {
       type: 'insert',
       data: { id: 'item-1', name: 'test' },
       ref: 'item-1',
-      version: 1,
+      committed: 1,
+      merged: 1,
     }
     collection.commit(insertOperation)
     expect(collection.last()).not.toBe(state)
+  })
+})
+describe('get', () => {
+  it('should return undefined if no item with given id', () => {
+    let collection = createCollection<Snapshot>('test')
+    expect(collection.get('item-1')).toBeUndefined()
+  })
+  it('should return item if it exists', () => {
+    let collection = createCollection<Snapshot>('test')
+    let insertOperation: InsertOperation<Snapshot> = {
+      id: 'op-1',
+      type: 'insert',
+      data: { id: 'item-1', name: 'test' },
+      ref: 'item-1',
+      committed: 1,
+      merged: 1,
+    }
+    collection.commit(insertOperation)
+    expect(collection.get('item-1')).toEqual({ id: 'item-1', name: 'test' })
+  })
+  it('should return undefined if update was merged ahead of insert', () => {
+    let collection = createCollection<Snapshot>('test')
+    let insertOperation: InsertOperation<Snapshot> = {
+      id: 'op-1',
+      type: 'insert',
+      data: { id: 'item-1', name: 'test' },
+      ref: 'item-1',
+      committed: 1,
+      merged: 1,
+    }
+    let updateOperation: UpdateOperation<Snapshot> = {
+      id: 'op-2',
+      type: 'update',
+      data: { name: 'test 2' },
+      ref: 'item-1',
+      committed: 2,
+      merged: 2,
+    }
+    collection.commit(updateOperation)
+    expect(collection.get('item-1')).toBeUndefined()
+    collection.commit(insertOperation)
+    expect(collection.get('item-1')).toEqual({ id: 'item-1', name: 'test 2' })
   })
 })
