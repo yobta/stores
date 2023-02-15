@@ -68,7 +68,7 @@ interface CollectionFactory {
 }
 // #endregion
 
-export const getOrCreateItem = <Snapshot extends AnySnapshot>(
+const getOrCreateItem = <Snapshot extends AnySnapshot>(
   state: InternalState<Snapshot>,
   id: Id,
 ): ItemWithMeta<Snapshot> => {
@@ -79,7 +79,7 @@ export const getOrCreateItem = <Snapshot extends AnySnapshot>(
   return item
 }
 
-export const applyOperation = <Snapshot extends AnySnapshot>(
+const applyOperation = <Snapshot extends AnySnapshot>(
   [snapshot, versions, ...pendingOperations]: ItemWithMeta<Snapshot>,
   operation: CollectionOperation<Snapshot>,
 ): ItemWithMeta<Snapshot> => {
@@ -149,4 +149,9 @@ export const createCollection: CollectionFactory = <
     observe,
     on,
   }
+}
+
+export default {
+  applyOperation,
+  getOrCreateItem,
 }

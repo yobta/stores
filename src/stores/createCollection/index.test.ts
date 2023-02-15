@@ -1,10 +1,10 @@
-import {
+import locals, {
   createCollection,
-  applyOperation,
   InsertOperation,
   UpdateOperation,
-  getOrCreateItem,
-} from '.'
+} from './index.js'
+
+const { getOrCreateItem, applyOperation } = locals
 
 type Snapshot = {
   id: string
