@@ -2,7 +2,7 @@ module.exports = [
   {
     name: 'all',
     path: './lib/index.js',
-    limit: '1827 B',
+    limit: '2300 B',
   },
   {
     name: 'react',
@@ -115,6 +115,12 @@ module.exports = [
     limit: '173 B',
   },
   {
+    name: 'createRouter',
+    path: './lib/index.js',
+    import: '{ createRouter }',
+    limit: '518 B',
+  },
+  {
     name: 'diffMap',
     path: './lib/index.js',
     import: '{ diffMap }',
@@ -137,6 +143,12 @@ module.exports = [
     path: './lib/index.js',
     import: '{ mapCodec }',
     limit: '122 B',
+  },
+  {
+    name: 'matchRoute',
+    path: './lib/index.js',
+    import: '{ matchRoute }',
+    limit: '200 B',
   },
   {
     name: 'readable',
