@@ -2,7 +2,7 @@ module.exports = [
   {
     name: 'all',
     path: './lib/index.js',
-    limit: '2300 B',
+    limit: '2321 B',
   },
   {
     name: 'react',
@@ -118,7 +118,7 @@ module.exports = [
     name: 'createRouter',
     path: './lib/index.js',
     import: '{ createRouter }',
-    limit: '518 B',
+    limit: '543 B',
   },
   {
     name: 'diffMap',

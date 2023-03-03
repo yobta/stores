@@ -2,6 +2,7 @@ import { matchRoute } from './index.js'
 
 const matches = [
   ['/user/:id', '/user/123'],
+  ['user/:id', 'user/123'],
   ['/user/:id/:name', '/user/123/name'],
   ['/user/:id/', '/user/:123'],
   ['/user/:id/:name?', '/user/123'],
@@ -10,6 +11,7 @@ const matches = [
 ] as [string, string][]
 
 const mismatches = [
+  ['user/:id', '/user1/123'],
   ['/user/:id', '/user1/123'],
   ['/user/:id', '/user/123/name'],
   ['/user/?:id', '/user/123'],

@@ -135,7 +135,7 @@ describe('create router', () => {
     expect(mockSubscriber).toBeCalledTimes(0)
   })
 
-  it('allow optional params', () => {
+  it('allows optional params', () => {
     let router = createRouter()
     let mockSubscriber = vi.fn()
 
@@ -144,5 +144,27 @@ describe('create router', () => {
     router.publish('/user/123', 'data')
 
     expect(mockSubscriber).toBeCalledTimes(1)
+    expect(mockSubscriber).toBeCalledWith({ id: '123', name: '' }, 'data')
+  })
+
+  it('checks match method', () => {
+    let router = createRouter()
+    router.subscribe('/user/:id', vi.fn())
+
+    expect(router.match('/user/123')).toBe(true)
+    expect(router.match('/user/123/name')).toBe(false)
+  })
+
+  it('publishes to the same subscribers only once', () => {
+    let router = createRouter()
+    let mockSubscriber = vi.fn()
+    router.subscribe('/user/:id', mockSubscriber)
+    router.subscribe('/user/:id', mockSubscriber)
+    router.subscribe('/user/:id', mockSubscriber)
+    router.subscribe('/user/:id', mockSubscriber)
+    router.publish('/user/123', 'data')
+
+    expect(mockSubscriber).toBeCalledTimes(1)
+    expect(mockSubscriber).toBeCalledWith({ id: '123' }, 'data')
   })
 })

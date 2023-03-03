@@ -52,6 +52,7 @@ interface RouterFactory {
       callback: YobtaRouterCallback<ParseUrl<Path>, Data, Overloads>,
     ): VoidFunction
     publish(path: string, data: Data, ...overloads: Overloads): boolean
+    match(path: string): boolean
   }
 }
 // endregion
@@ -136,6 +137,13 @@ export const createRouter: RouterFactory = <
         callback(params!, data, ...overloads)
       })
       return matchedCallbacks.size > 0
+    },
+    match(path) {
+      let result = false
+      matchersMap.forEach(({ convert }) => {
+        result ||= !!convert(path)
+      })
+      return result
     },
   }
 }
