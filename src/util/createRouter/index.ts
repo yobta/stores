@@ -79,7 +79,7 @@ const createConverter =
     if (!names.length) {
       return regex.test(path) ? {} : undefined
     }
-    return prepareInput(path)
+    return path
       .match(regex)
       ?.slice(1)
       .reduce((params, match, index) => {
