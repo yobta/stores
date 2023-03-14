@@ -43,15 +43,6 @@ export type YobtaPlainObjectStore<
       [Readonly<State>, ...ChangesWithOverloads<State, Overloads>]
     >,
   ): VoidFunction
-  // oberve(
-  //   observer: (
-  //     state: Readonly<State>,
-  //     changes:
-  //       | Readonly<YobtaWritablePartial<State>>
-  //       | readonly OptionalKey<State>[],
-  //     ...overloads: Overloads
-  //   ) => void,
-  // ): VoidFunction
   omit(
     keys: OptionalKey<State>[],
     ...overloads: Overloads
