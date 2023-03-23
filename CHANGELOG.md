@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.2.4
+
+Use last as default getServerSnapshot
+
 ## 0.2.2
 
 Fix state getter type
