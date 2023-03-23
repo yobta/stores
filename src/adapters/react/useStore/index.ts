@@ -22,4 +22,4 @@ export type YobtaReactStoreHookOptions<State> = {
 export const useStore: YobtaReactStoreHook = (
   { last, observe },
   { getServerSnapshot } = {},
-) => useSyncExternalStore(observe, last, getServerSnapshot)
+) => useSyncExternalStore(observe, last, getServerSnapshot || last)
