@@ -64,15 +64,15 @@ describe('client', () => {
 })
 
 describe('server', () => {
-  it('requires getServerSnapshot', () => {
+  it('uses last as default getServerSnapshot', () => {
     let { result } = renderHookServer(() => useStore(store))
-    expect(result.error).toEqual(expect.any(Error))
+    expect(result.current).toBe(1)
   })
   it('returns getServerSnapshot()', () => {
     let { result } = renderHookServer(() =>
       useStore(store, { getServerSnapshot: () => 2 }),
     )
-    expect(result.current).toEqual(2)
+    expect(result.current).toBe(2)
   })
   it('does not subscribe', () => {
     renderHookServer(() => useStore(store, { getServerSnapshot: () => 2 }))
