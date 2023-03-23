@@ -1,4 +1,4 @@
-import { useSyncExternalStore } from 'react'
+import { useMemo, useSyncExternalStore } from 'react'
 
 import { YobtaReadable } from '../../../index.js'
 
@@ -22,4 +22,7 @@ export type YobtaReactStoreHookOptions<State> = {
 export const useStore: YobtaReactStoreHook = (
   { last, observe },
   { getServerSnapshot } = {},
-) => useSyncExternalStore(observe, last, getServerSnapshot || last)
+) => {
+  let gerServerState = useMemo(() => getServerSnapshot || last, [])
+  return useSyncExternalStore(observe, last, gerServerState)
+}
