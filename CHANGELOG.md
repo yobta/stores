@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.2.6
+
+Changed plugin's types to allow overloads to avoid conflicting with stores
+
 ## 0.2.5
 
 Memoise getServerSnapshot

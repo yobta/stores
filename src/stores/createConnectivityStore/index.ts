@@ -3,7 +3,7 @@ import { readable, YobtaReadable } from '../../util/readable/index.js'
 import { createStore, YOBTA_IDLE, YOBTA_READY } from '../createStore/index.js'
 
 interface YobtaOnlineStoreFactory {
-  (): YobtaReadable<boolean | null, never>
+  (): YobtaReadable<boolean | null, any>
 }
 export type YobtaOnlineStore = ReturnType<YobtaOnlineStoreFactory>
 
