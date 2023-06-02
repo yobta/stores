@@ -6,7 +6,7 @@ import {
 } from '../../stores/createStore/index.js'
 
 interface ValidationPluginFactory {
-  <State>(validate: (input: any) => State): YobtaStorePlugin<State, never>
+  <State>(validate: (input: any) => State): YobtaStorePlugin<State, any>
 }
 
 /**
