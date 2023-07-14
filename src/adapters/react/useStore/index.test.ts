@@ -68,36 +68,41 @@ describe('server', () => {
     let { result } = renderHookServer(() => useStore(store))
     expect(result.current).toBe(1)
   })
-  it('returns getServerSnapshot()', () => {
-    let { result } = renderHookServer(() =>
-      useStore(store, { getServerSnapshot: () => 2 }),
-    )
+  it('returns serverState', () => {
+    let { result } = renderHookServer(() => useStore(store, { serverState: 2 }))
     expect(result.current).toBe(2)
   })
   it('does not subscribe', () => {
-    renderHookServer(() => useStore(store, { getServerSnapshot: () => 2 }))
+    renderHookServer(() => useStore(store, { serverState: 2 }))
     expect(store.observe).not.toHaveBeenCalled()
   })
   it('does not unsubscribe', () => {
     let { unmount } = renderHookServer(() =>
-      useStore(store, { getServerSnapshot: () => 2 }),
+      useStore(store, { serverState: 2 }),
     )
     unmount()
     expect(unsubscribeMock).not.toHaveBeenCalled()
   })
   it('does not call last', () => {
-    renderHookServer(() => useStore(store, { getServerSnapshot: () => 2 }))
+    renderHookServer(() => useStore(store, { serverState: 2 }))
     expect(store.last).not.toHaveBeenCalled()
   })
   it('does not handle store updates', () => {
-    let { result } = renderHookServer(() =>
-      useStore(store, { getServerSnapshot: () => 1 }),
-    )
+    let { result } = renderHookServer(() => useStore(store, { serverState: 1 }))
     expect(result.current).toEqual(1)
     actServer(() => {
       store.next(2)
     })
     expect(store.last).toHaveBeenCalledTimes(0)
     expect(result.current).toEqual(1)
+  })
+  it('updates state when mounted', () => {
+    renderHook(() => useStore(store, { serverState: 1 }))
+    expect(store.next).toBeCalledWith(1)
+    expect(store.next).toHaveBeenCalledTimes(1)
+  })
+  it('does not update state when rendered on server', () => {
+    renderHookServer(() => useStore(store, { serverState: 1 }))
+    expect(store.next).toHaveBeenCalledTimes(0)
   })
 })

@@ -1,0 +1,58 @@
+name: Test
+'on':
+  push: null
+  pull_request: null
+jobs:
+  full:
+    name: Node.js 18 Full
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 7.5.1
+          run_install: false
+
+      - name: Install dependencies
+        run: make i
+      - name: Build with checks
+        run: make build
+        env:
+          FORCE_COLOR: 2
+          NEXT_TELEMETRY_DISABLED: 1
+  short:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version:
+          - 17
+          - 16
+    name: Node.js ${{ matrix.node-version }} Quick
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+      - name: Install Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 7.5.1
+          run_install: false
+      - name: Install dependencies
+        run: make i
+      - name: Build without checks
+        run: pnpm run build
+        env:
+          FORCE_COLOR: 2
+          NEXT_TELEMETRY_DISABLED: 1

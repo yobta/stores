@@ -1,16 +1,17 @@
-import { useMemo, useSyncExternalStore } from 'react'
+import { useEffect, useMemo, useSyncExternalStore } from 'react'
 
-import { YobtaReadable } from '../../../index.js'
+import { YobtaReadable, YobtaStore } from '../../../index.js'
 
 export interface YobtaReactStoreHook {
   <State = any, Overloads extends any[] = any[]>(
-    store: YobtaReadable<State, Overloads>,
+    store: YobtaStore<State, Overloads> | YobtaReadable<State, Overloads>,
     options?: YobtaReactStoreHookOptions<State>,
+    ...overloads: Overloads
   ): State
 }
 
 export type YobtaReactStoreHookOptions<State> = {
-  getServerSnapshot?: () => State
+  serverState?: State
 }
 
 /**
@@ -20,9 +21,18 @@ export type YobtaReactStoreHookOptions<State> = {
  * @documentation {@link https://github.com/yobta/stores/blob/master/src/adapters/react/index.md}.
  */
 export const useStore: YobtaReactStoreHook = (
-  { last, observe },
-  { getServerSnapshot } = {},
+  store,
+  { serverState } = {},
+  ...overloads
 ) => {
-  let gerServerState = useMemo(() => getServerSnapshot || last, [])
-  return useSyncExternalStore(observe, last, gerServerState)
+  let getServerState = useMemo(
+    () => () => serverState === undefined ? store.last() : serverState,
+    [serverState],
+  )
+  useEffect(() => {
+    if (serverState !== undefined && 'next' in store) {
+      store.next(serverState, ...overloads)
+    }
+  }, [serverState])
+  return useSyncExternalStore(store.observe, store.last, getServerState)
 }
