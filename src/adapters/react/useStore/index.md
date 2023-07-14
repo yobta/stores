@@ -21,9 +21,9 @@ function MyComponent() {
 
 ## Server Rendering
 
-To properly utilize the store hook for server-side rendering, you must supply the `getServerSnapshot` option. Failure to do so will result in a rendering error. For additional information, refer to the [React documentation](https://beta.reactjs.org/reference/react/useSyncExternalStore#adding-support-for-server-rendering).
+To properly utilize the store hook for server-side rendering, you must supply the `serverState` option.
 
 ```js
-const getServerSnapshot = () => 0
-const state = useYobta(store, { getServerSnapshot })
+const serverState = 0
+const state = useYobta(store, { serverState })
 ```
