@@ -7,13 +7,7 @@ env:
 jobs:
   cache-and-install:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version:
-          - 16
-          - 18
-          - 20
-    name: Node.js ${{ matrix.node-version }}
+    name: Check
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -21,12 +15,13 @@ jobs:
       - name: Read .tool-versions
         id: tool-versions
         run: |
+          echo "::set-output name=nodejs_version::$(grep nodejs .tool-versions | cut -d ' ' -f2)"
           echo "::set-output name=pnpm_version::$(grep pnpm .tool-versions | cut -d ' ' -f2)"
 
-      - name: Install Node.js ${{ matrix.node-version }}
+      - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ steps.tool-versions.outputs.nodejs_version }}
 
       - uses: pnpm/action-setup@v3
         name: Install PNPM
