@@ -8,11 +8,11 @@ interface YobtaOnlineStoreFactory {
 export type YobtaOnlineStore = ReturnType<YobtaOnlineStoreFactory>
 
 export const createConnectivityStore: YobtaOnlineStoreFactory = () => {
-  let store = createStore(null, lazyPlugin, ({ addMiddleware, next }) => {
-    let on: VoidFunction = () => {
+  const store = createStore(null, lazyPlugin, ({ addMiddleware, next }) => {
+    const on: VoidFunction = () => {
       next(true)
     }
-    let off: VoidFunction = () => {
+    const off: VoidFunction = () => {
       next(false)
     }
     addMiddleware(YOBTA_READY, () => {

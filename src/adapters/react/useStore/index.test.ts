@@ -12,12 +12,12 @@ const unsubscribeMock = vi.fn()
 vi.mock('../../../stores/createStore/index.js', () => ({
   createStore(initialState: any) {
     let state = initialState
-    let observers: Set<() => void> = new Set()
+    const observers: Set<() => void> = new Set()
     return {
       last: vi.fn().mockImplementation(() => state),
       next: vi.fn().mockImplementation((nextState: any) => {
         state = nextState
-        for (let observer of observers) {
+        for (const observer of observers) {
           observer()
         }
       }),
@@ -40,7 +40,7 @@ beforeEach(() => {
 
 describe('client', () => {
   it('should return last state', () => {
-    let { result } = renderHook(() => useStore(store))
+    const { result } = renderHook(() => useStore(store))
     expect(result.current).toEqual(1)
   })
   it('should subscribe to store', () => {
@@ -48,12 +48,12 @@ describe('client', () => {
     expect(store.observe).toHaveBeenCalledOnce()
   })
   it('should unsubscribe from store', () => {
-    let { unmount } = renderHook(() => useStore(store))
+    const { unmount } = renderHook(() => useStore(store))
     unmount()
     expect(unsubscribeMock).toHaveBeenCalledOnce()
   })
   it('should handle store updates', () => {
-    let { result, rerender } = renderHook(() => useStore(store))
+    const { result, rerender } = renderHook(() => useStore(store))
     expect(result.current).toEqual(1)
     act(() => {
       store.next(2)
@@ -65,11 +65,11 @@ describe('client', () => {
 
 describe('server', () => {
   it('uses last as default getServerSnapshot', () => {
-    let { result } = renderHookServer(() => useStore(store))
+    const { result } = renderHookServer(() => useStore(store))
     expect(result.current).toBe(1)
   })
   it('returns serverState', () => {
-    let { result } = renderHookServer(() => useStore(store, { serverState: 2 }))
+    const { result } = renderHookServer(() => useStore(store, { serverState: 2 }))
     expect(result.current).toBe(2)
   })
   it('does not subscribe', () => {
@@ -77,7 +77,7 @@ describe('server', () => {
     expect(store.observe).not.toHaveBeenCalled()
   })
   it('does not unsubscribe', () => {
-    let { unmount } = renderHookServer(() =>
+    const { unmount } = renderHookServer(() =>
       useStore(store, { serverState: 2 }),
     )
     unmount()
@@ -88,7 +88,7 @@ describe('server', () => {
     expect(store.last).not.toHaveBeenCalled()
   })
   it('does not handle store updates', () => {
-    let { result } = renderHookServer(() => useStore(store, { serverState: 1 }))
+    const { result } = renderHookServer(() => useStore(store, { serverState: 1 }))
     expect(result.current).toEqual(1)
     actServer(() => {
       store.next(2)

@@ -110,17 +110,17 @@ export const createMapStore: YobtaMapStoreFactory = <
   plainState: PlainState,
   ...plugins: any[]
 ) => {
-  let initialState: YobtaMapState<PlainState> = new Map(
+  const initialState: YobtaMapState<PlainState> = new Map(
     Object.entries(plainState),
   )
-  let { next, last, observe, on } = createStore<
+  const { next, last, observe, on } = createStore<
     YobtaMapState<PlainState>,
     [YobtaMapChanges<PlainState>, ...Overloads]
   >(initialState, ...plugins)
   return {
     assign(patch, ...overloads: Overloads) {
-      let state = new Map(last())
-      let changes = diffMap(
+      const state = new Map(last())
+      const changes = diffMap(
         new Map(Object.entries(patch)),
         state,
       ) as unknown as YobtaMapAssigned<PlainState>
@@ -135,9 +135,9 @@ export const createMapStore: YobtaMapStoreFactory = <
     last,
     observe,
     omit(keys: OptionalKey<PlainState>[], ...overloads: Overloads) {
-      let state = new Map(last())
-      let changes = keys.reduce((acc, key) => {
-        let result = state.delete(key)
+      const state = new Map(last())
+      const changes = keys.reduce((acc, key) => {
+        const result = state.delete(key)
         if (result) acc.add(key)
         return acc
       }, new Set()) as unknown as YobtaOmittedKeysSet<YobtaAnyPlainObject>

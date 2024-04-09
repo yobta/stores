@@ -27,7 +27,7 @@ it('creates a store with the correct initial state', () => {
 })
 
 it('registers listeners when they are added using `store.observe`', () => {
-  let listener = vi.fn()
+  const listener = vi.fn()
   store.observe(listener)
   store.assign({ foo: 'baz' })
   expect(listener).toHaveBeenCalledWith(
@@ -37,7 +37,7 @@ it('registers listeners when they are added using `store.observe`', () => {
 })
 
 it("updates the store's state and calls registered listeners with the correct arguments", () => {
-  let listener = vi.fn()
+  const listener = vi.fn()
   store.observe(listener)
   store.assign({ foo: 'baz' })
   expect(store.last()).toEqual({
@@ -58,7 +58,7 @@ it('returns the correct state when `last` is called', () => {
 })
 
 it('registers an observer function and calls it with the correct arguments when the state is updated', () => {
-  let observer = vi.fn()
+  const observer = vi.fn()
   store.observe(observer)
   store.assign({ foo: 'baz' })
   expect(observer).toHaveBeenCalledWith(
@@ -68,7 +68,7 @@ it('registers an observer function and calls it with the correct arguments when 
 })
 
 it("removes the specified keys from the store's state and calls registered listeners with the correct arguments", () => {
-  let listener = vi.fn()
+  const listener = vi.fn()
   store.observe(listener)
   store.omit(['foo'])
   expect(store.last()).toEqual({
@@ -78,17 +78,17 @@ it("removes the specified keys from the store's state and calls registered liste
 })
 
 it('returns the correct changes when `assign` is called', () => {
-  let changes = store.assign({ foo: 'baz' })
+  const changes = store.assign({ foo: 'baz' })
   expect(changes).toEqual({ foo: 'baz' })
 })
 
 it('returns the correct changes when `omit` is called', () => {
-  let changes = store.omit(['foo'])
+  const changes = store.omit(['foo'])
   expect(changes).toEqual(['foo'])
 })
 
 it('calls registered listeners with the correct overloads when `assign` is called', () => {
-  let listener = vi.fn()
+  const listener = vi.fn()
   store.observe(listener)
   store.assign({ foo: 'baz' }, 'overload1', 'overload2')
   expect(listener).toHaveBeenCalledWith(
@@ -100,7 +100,7 @@ it('calls registered listeners with the correct overloads when `assign` is calle
 })
 
 it('calls registered observers with the correct overloads when the state is updated', () => {
-  let observer = vi.fn()
+  const observer = vi.fn()
   store.observe(observer)
   store.assign({ foo: 'baz' }, 'overload1', 'overload2')
   expect(observer).toHaveBeenCalledWith(
@@ -112,7 +112,7 @@ it('calls registered observers with the correct overloads when the state is upda
 })
 
 it('calls registered listeners with the correct overloads when `omit` is called', () => {
-  let listener = vi.fn()
+  const listener = vi.fn()
   store.observe(listener)
   store.omit(['foo'], 'overload1', 'overload2')
   expect(listener).toHaveBeenCalledWith(
@@ -124,25 +124,25 @@ it('calls registered listeners with the correct overloads when `omit` is called'
 })
 
 it('does not call registered observers when `assign` is called with no changes', () => {
-  let observer = vi.fn()
+  const observer = vi.fn()
   store.observe(observer)
   store.assign({ foo: 'foo' })
   expect(observer).not.toHaveBeenCalled()
 })
 
 it('does not call registered listeners when `omit` is called with no changes', () => {
-  let listener = vi.fn()
+  const listener = vi.fn()
   store.observe(listener)
   store.omit(['baz'])
   expect(listener).not.toHaveBeenCalled()
 })
 
 it('returns an empty object when `assign` is called with no changes', () => {
-  let changes = store.assign({ foo: 'foo' })
+  const changes = store.assign({ foo: 'foo' })
   expect(changes).toEqual({})
 })
 
 it('returns an empty array when `omit` is called with no changes', () => {
-  let changes = store.omit(['baz'])
+  const changes = store.omit(['baz'])
   expect(changes).toEqual([])
 })

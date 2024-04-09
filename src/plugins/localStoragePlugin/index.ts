@@ -44,18 +44,18 @@ interface LocalStorageFactory {
 export const localStoragePlugin: LocalStorageFactory =
   ({ channel, codec = jsonCodec }) =>
   ({ addMiddleware, next, last }) => {
-    let onMessage: StorageListener = ({ key, newValue }) => {
+    const onMessage: StorageListener = ({ key, newValue }) => {
       if (key === channel) {
-        let [message, ...overloads] = codec.decode(newValue, last)
+        const [message, ...overloads] = codec.decode(newValue, last)
         next(message, ...(overloads as any))
       }
     }
-    let write = (item: any, ...overloads: any[]): void => {
-      let encodedMessage = codec.encode(item, ...overloads)
+    const write = (item: any, ...overloads: any[]): void => {
+      const encodedMessage = codec.encode(item, ...overloads)
       localStorage.setItem(channel, encodedMessage)
     }
     addMiddleware(YOBTA_READY, state => {
-      let item = localStorage.getItem(channel)
+      const item = localStorage.getItem(channel)
       window.addEventListener('storage', onMessage)
       return codec.decode(item, () => state)[0]
     })

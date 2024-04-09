@@ -19,12 +19,12 @@ export interface YobtaMapCodec extends YobtaGenericCodec<YobtaJsonMap> {
  */
 export const mapCodec: YobtaMapCodec = {
   encode(item, ...overloads) {
-    let entries = item.size ? [...item.entries()] : []
+    const entries = item.size ? [...item.entries()] : []
     return JSON.stringify([entries, ...overloads])
   },
   decode<Result extends YobtaJsonMap>(item: string, fallback: () => Result) {
     try {
-      let [entries, ...overloads] = JSON.parse(item)
+      const [entries, ...overloads] = JSON.parse(item)
       return [new Map(entries) as Result, ...overloads]
     } catch (_) {
       return [fallback()]

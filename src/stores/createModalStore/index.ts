@@ -25,12 +25,12 @@ export const createModalStore = <Item, Overloads extends any[]>(
 ): YobtaModalStore<Item | undefined, Overloads> => {
   let stack = new Set(initialState)
 
-  let value = (): Item | undefined => {
-    let [item] = stack
+  const value = (): Item | undefined => {
+    const [item] = stack
     return item
   }
 
-  let { next, ...store } = createStore(value(), ...plugins)
+  const { next, ...store } = createStore(value(), ...plugins)
 
   return {
     ...store,
@@ -40,7 +40,7 @@ export const createModalStore = <Item, Overloads extends any[]>(
       next(item, ...overloads)
     },
     remove(item: Item, ...overloads: Overloads) {
-      let result = stack.delete(item)
+      const result = stack.delete(item)
       if (result) {
         next(value(), ...overloads)
       }

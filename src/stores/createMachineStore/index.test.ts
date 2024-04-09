@@ -2,7 +2,7 @@ import { YOBTA_IDLE, YOBTA_READY } from '../createStore/index.js'
 import { createMachineStore } from './index.js'
 
 it('creates store', () => {
-  let store = createMachineStore({
+  const store = createMachineStore({
     one: ['two'],
     two: ['one'],
   })('one')
@@ -15,7 +15,7 @@ it('creates store', () => {
 })
 
 it('has default state', () => {
-  let store = createMachineStore({
+  const store = createMachineStore({
     one: ['two'],
     two: ['one'],
   })('one')
@@ -23,7 +23,7 @@ it('has default state', () => {
 })
 
 it('sets next state', () => {
-  let store = createMachineStore({
+  const store = createMachineStore({
     one: ['two'],
     two: ['one'],
   })('one')
@@ -32,12 +32,12 @@ it('sets next state', () => {
 })
 
 it('sends overloads to ubservers', () => {
-  let observer = vi.fn()
-  let store = createMachineStore({
+  const observer = vi.fn()
+  const store = createMachineStore({
     one: ['two'],
     two: ['one'],
   })('one')
-  let unsubscribe = store.observe(observer)
+  const unsubscribe = store.observe(observer)
   store.next('two', 'overload1', 'overload2')
   expect(observer).toHaveBeenCalledTimes(1)
   expect(observer).toHaveBeenCalledWith('two', 'overload1', 'overload2')
@@ -45,8 +45,8 @@ it('sends overloads to ubservers', () => {
 })
 
 it('sends overloads to middleware', () => {
-  let middleware = vi.fn()
-  let store = createMachineStore({
+  const middleware = vi.fn()
+  const store = createMachineStore({
     one: ['two'],
     two: ['one'],
   })<[string, number]>('one', ({ addMiddleware }) => {
@@ -61,7 +61,7 @@ it('sends overloads to middleware', () => {
 })
 
 it('ignores unexpected next state', () => {
-  let store = createMachineStore({
+  const store = createMachineStore({
     one: ['two'],
     two: ['one'],
   })('one')
@@ -70,12 +70,12 @@ it('ignores unexpected next state', () => {
 })
 
 it('observes changes', () => {
-  let store = createMachineStore({
+  const store = createMachineStore({
     one: ['two'],
     two: ['one'],
   })('one')
-  let observer = vi.fn()
-  let unobserve = store.observe(observer)
+  const observer = vi.fn()
+  const unobserve = store.observe(observer)
   store.next('two')
   expect(observer).toHaveBeenCalledTimes(1)
   expect(observer).toHaveBeenCalledWith('two')
@@ -85,14 +85,14 @@ it('observes changes', () => {
 })
 
 it('subscribes to ready event', () => {
-  let store = createMachineStore({
+  const store = createMachineStore({
     one: ['two'],
     two: ['one'],
   })('one')
-  let handler = vi.fn()
-  let unsubscribe = store.on(YOBTA_READY, handler)
+  const handler = vi.fn()
+  const unsubscribe = store.on(YOBTA_READY, handler)
   expect(handler).toHaveBeenCalledTimes(0)
-  let unobserve = store.observe(() => {})
+  const unobserve = store.observe(() => {})
   expect(handler).toHaveBeenCalledTimes(1)
   expect(handler).toHaveBeenCalledWith('one')
   unsubscribe()
@@ -100,13 +100,13 @@ it('subscribes to ready event', () => {
 })
 
 it('subscribes to idle event', () => {
-  let store = createMachineStore({
+  const store = createMachineStore({
     one: ['two'],
     two: ['one'],
   })('one')
-  let handler = vi.fn()
-  let unsubscribe = store.on(YOBTA_IDLE, handler)
-  let unobserve = store.observe(() => {})
+  const handler = vi.fn()
+  const unsubscribe = store.on(YOBTA_IDLE, handler)
+  const unobserve = store.observe(() => {})
   expect(handler).toHaveBeenCalledTimes(0)
   unobserve()
   expect(handler).toHaveBeenCalledTimes(1)

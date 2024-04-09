@@ -6,12 +6,12 @@ import { createHookFromStore } from './index.js'
 const store = createStore(1)
 
 it('returns a function', () => {
-  let hook = createHookFromStore(store)
+  const hook = createHookFromStore(store)
   expect(hook).toEqual(expect.any(Function))
 })
 
 it('renders hook and returns state', () => {
-  let hook = createHookFromStore(store)
-  let { result } = renderHook(hook)
+  const hook = createHookFromStore(store)
+  const { result } = renderHook(hook)
   expect(result.current).toEqual(1)
 })

@@ -8,6 +8,9 @@ dev:
 lint:
 	npm run lint
 
+lint-fix:
+	npm run lint:fix
+
 size-limit: build
 	npm run size-limit
 

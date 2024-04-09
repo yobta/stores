@@ -3,17 +3,17 @@ import { jsonCodec } from './index.js'
 const last = vi.fn()
 
 it('encodes', () => {
-  let value = { a: 'b' }
+  const value = { a: 'b' }
   expect(jsonCodec.encode(value)).toBe(JSON.stringify([value]))
 })
 it('decodes', () => {
-  let value = jsonCodec.decode('1', last)
+  const value = jsonCodec.decode('1', last)
 
   expect(value).toBe(1)
   expect(last).not.toBeCalled()
 })
 it('falls back', () => {
-  let value = jsonCodec.decode(undefined, () => {
+  const value = jsonCodec.decode(undefined, () => {
     last()
     return 'yobta'
   })
@@ -21,7 +21,7 @@ it('falls back', () => {
   expect(value).toEqual(['yobta'])
 })
 it('falls back when null', () => {
-  let value = jsonCodec.decode(null, () => {
+  const value = jsonCodec.decode(null, () => {
     last()
     return 'yobta'
   })

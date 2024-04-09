@@ -18,7 +18,7 @@ it('returns a store object', () => {
 })
 
 it('initial state is undefined', () => {
-  let s = createModalStore()
+  const s = createModalStore()
   expect(s.last()).toBeUndefined()
   expect(s.size()).toBe(0)
 })
@@ -41,14 +41,14 @@ it('is readds item', () => {
 })
 
 it('updates observers when adds', () => {
-  let observer = vi.fn()
+  const observer = vi.fn()
   stack.observe(observer)
   stack.add('item3')
   expect(observer).toHaveBeenCalledWith('item3')
 })
 
 it('sends overloads to observers when adds', () => {
-  let observer = vi.fn()
+  const observer = vi.fn()
   stack.observe(observer)
   stack.add('item3', 'overload1', 'overload2')
   expect(observer).toHaveBeenCalledWith('item3', 'overload1', 'overload2')
@@ -77,22 +77,22 @@ it('removes nothing if item does not exist, returns false', () => {
 })
 
 it('updates observers when removes', () => {
-  let observer = vi.fn()
+  const observer = vi.fn()
   stack.observe(observer)
   stack.remove('item2')
   expect(observer).toHaveBeenCalledWith('item1')
 })
 
 it('not updates when removing items that no exist', () => {
-  let s = createModalStore()
-  let observer = vi.fn()
+  const s = createModalStore()
+  const observer = vi.fn()
   s.observe(observer)
   s.remove('item3')
   expect(observer).not.toHaveBeenCalled()
 })
 
 it('sends overloads to observers when removes', () => {
-  let observer = vi.fn()
+  const observer = vi.fn()
   stack.observe(observer)
   stack.remove('item1', 'overload1', 'overload2')
   expect(observer).toHaveBeenCalledWith('item2', 'overload1', 'overload2')

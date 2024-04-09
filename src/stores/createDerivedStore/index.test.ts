@@ -2,8 +2,8 @@ import { createDerivedStore } from './index.js'
 import { createStore } from '../createStore/index.js'
 
 test('return type', () => {
-  let store = createStore(1)
-  let derived = createDerivedStore(state => state + 1, store)
+  const store = createStore(1)
+  const derived = createDerivedStore(state => state + 1, store)
   expect(derived).toMatchObject({
     last: expect.any(Function),
     observe: expect.any(Function),
@@ -12,25 +12,25 @@ test('return type', () => {
 })
 
 test('initial state', () => {
-  let store = createStore(1)
-  let derived = createDerivedStore(state => state + 1, store)
+  const store = createStore(1)
+  const derived = createDerivedStore(state => state + 1, store)
   expect(derived.last()).toBe(2)
 
   store.next(2)
   expect(derived.last()).toBe(2)
 
-  let stop = derived.observe(() => {})
+  const stop = derived.observe(() => {})
   expect(derived.last()).toBe(3)
   stop()
 })
 
 test('edge', () => {
-  let store = createStore(1)
-  let derived = createDerivedStore(state => state + 1, store)
-  let storeObserver = vi.fn()
-  let derivedObserver = vi.fn()
-  let unsubscribeStore = store.observe(storeObserver)
-  let unsubscribederived = derived.observe(derivedObserver)
+  const store = createStore(1)
+  const derived = createDerivedStore(state => state + 1, store)
+  const storeObserver = vi.fn()
+  const derivedObserver = vi.fn()
+  const unsubscribeStore = store.observe(storeObserver)
+  const unsubscribederived = derived.observe(derivedObserver)
   expect(storeObserver).toBeCalledTimes(0)
   expect(derivedObserver).toBeCalledTimes(0)
   store.next(2)
@@ -45,19 +45,19 @@ test('edge', () => {
 })
 
 test('triangle', () => {
-  let store = createStore(1)
-  let derived1 = createDerivedStore(state => state + 1, store)
-  let derived2 = createDerivedStore<number>(
+  const store = createStore(1)
+  const derived1 = createDerivedStore(state => state + 1, store)
+  const derived2 = createDerivedStore<number>(
     (s1: number, s2: number) => s1 + s2,
     derived1,
     store,
   )
-  let storeObserver = vi.fn()
-  let derived1Observer = vi.fn()
-  let derived2Observer = vi.fn()
-  let unsubscribeStore = store.observe(storeObserver)
-  let unsubscribederived1 = derived1.observe(derived1Observer)
-  let unsubscribederived2 = derived2.observe(derived2Observer)
+  const storeObserver = vi.fn()
+  const derived1Observer = vi.fn()
+  const derived2Observer = vi.fn()
+  const unsubscribeStore = store.observe(storeObserver)
+  const unsubscribederived1 = derived1.observe(derived1Observer)
+  const unsubscribederived2 = derived2.observe(derived2Observer)
   expect(storeObserver).toBeCalledTimes(0)
   expect(derived1Observer).toBeCalledTimes(0)
   expect(derived2Observer).toBeCalledTimes(0)
@@ -77,22 +77,22 @@ test('triangle', () => {
 })
 
 test('diamond', () => {
-  let store = createStore(1)
-  let derived1 = createDerivedStore(state => state + 1, store)
-  let derived2 = createDerivedStore(state => state + 1, store)
-  let derived3 = createDerivedStore<number>(
+  const store = createStore(1)
+  const derived1 = createDerivedStore(state => state + 1, store)
+  const derived2 = createDerivedStore(state => state + 1, store)
+  const derived3 = createDerivedStore<number>(
     (s1: number, s2: number) => s1 + s2,
     derived1,
     derived2,
   )
-  let storeObserver = vi.fn()
-  let derived1Observer = vi.fn()
-  let derived2Observer = vi.fn()
-  let derived3Observer = vi.fn()
-  let unsubscribeStore = store.observe(storeObserver)
-  let unsubscribederived1 = derived1.observe(derived1Observer)
-  let unsubscribederived2 = derived2.observe(derived2Observer)
-  let unsubscribederived3 = derived3.observe(derived3Observer)
+  const storeObserver = vi.fn()
+  const derived1Observer = vi.fn()
+  const derived2Observer = vi.fn()
+  const derived3Observer = vi.fn()
+  const unsubscribeStore = store.observe(storeObserver)
+  const unsubscribederived1 = derived1.observe(derived1Observer)
+  const unsubscribederived2 = derived2.observe(derived2Observer)
+  const unsubscribederived3 = derived3.observe(derived3Observer)
   expect(storeObserver).toBeCalledTimes(0)
   expect(derived1Observer).toBeCalledTimes(0)
   expect(derived2Observer).toBeCalledTimes(0)
@@ -123,21 +123,21 @@ const replacer =
     v.replace(...args)
 
 test('prevents diamond dependency problem 1', () => {
-  let mock = vi.fn()
-  let store = createStore(0)
-  let a = createDerivedStore(v => `a${v}`, store)
-  let b = createDerivedStore(replacer('a', 'b'), a)
-  let c = createDerivedStore(replacer('a', 'c'), a)
-  let d = createDerivedStore(replacer('a', 'd'), a)
+  const mock = vi.fn()
+  const store = createStore(0)
+  const a = createDerivedStore(v => `a${v}`, store)
+  const b = createDerivedStore(replacer('a', 'b'), a)
+  const c = createDerivedStore(replacer('a', 'c'), a)
+  const d = createDerivedStore(replacer('a', 'd'), a)
 
-  let combined = createDerivedStore(
+  const combined = createDerivedStore(
     ($b, $c, $d) => `${$b}-${$c}-${$d}`,
     b,
     c,
     d,
   )
 
-  let unsubscribe = combined.observe(mock)
+  const unsubscribe = combined.observe(mock)
   expect(combined.last()).toBe('b0-c0-d0')
 
   store.next(1)
@@ -155,17 +155,17 @@ test('prevents diamond dependency problem 1', () => {
 })
 
 test('prevents diamond dependency problem 2', () => {
-  let store = createStore(0)
-  let mock = vi.fn()
+  const store = createStore(0)
+  const mock = vi.fn()
 
-  let a = createDerivedStore(v => `a${v}`, store)
-  let b = createDerivedStore(replacer('a', 'b'), a)
-  let c = createDerivedStore(replacer('b', 'c'), b)
-  let d = createDerivedStore(replacer('c', 'd'), c)
-  let e = createDerivedStore(replacer('d', 'e'), d)
+  const a = createDerivedStore(v => `a${v}`, store)
+  const b = createDerivedStore(replacer('a', 'b'), a)
+  const c = createDerivedStore(replacer('b', 'c'), b)
+  const d = createDerivedStore(replacer('c', 'd'), c)
+  const e = createDerivedStore(replacer('d', 'e'), d)
 
-  let combined = createDerivedStore((...args) => args.join(''), a, e)
-  let unsubscribe = combined.observe(mock)
+  const combined = createDerivedStore((...args) => args.join(''), a, e)
+  const unsubscribe = combined.observe(mock)
 
   expect(combined.last()).toBe('a0e0')
   expect(mock).toBeCalledTimes(0)
@@ -177,15 +177,15 @@ test('prevents diamond dependency problem 2', () => {
 })
 
 test('prevents diamond dependency problem 3', () => {
-  let store = createStore(0)
-  let mock = vi.fn()
+  const store = createStore(0)
+  const mock = vi.fn()
 
-  let a = createDerivedStore($store => `a${$store}`, store)
-  let b = createDerivedStore(replacer('a', 'b'), a)
-  let c = createDerivedStore(replacer('b', 'c'), b)
-  let d = createDerivedStore(replacer('c', 'd'), c)
+  const a = createDerivedStore($store => `a${$store}`, store)
+  const b = createDerivedStore(replacer('a', 'b'), a)
+  const c = createDerivedStore(replacer('b', 'c'), b)
+  const d = createDerivedStore(replacer('c', 'd'), c)
 
-  let combined = createDerivedStore(
+  const combined = createDerivedStore(
     ($a, $b, $c, $d) => `${$a}${$b}${$c}${$d}`,
     a,
     b,
@@ -193,7 +193,7 @@ test('prevents diamond dependency problem 3', () => {
     d,
   )
 
-  let unsubscribe = combined.observe(mock)
+  const unsubscribe = combined.observe(mock)
 
   expect(combined.last()).toBe('a0b0c0d0')
 
@@ -204,33 +204,33 @@ test('prevents diamond dependency problem 3', () => {
 })
 
 test('prevents diamond dependency problem 4 (complex)', () => {
-  let store1 = createStore<number>(0)
-  let store2 = createStore<number>(0)
+  const store1 = createStore<number>(0)
+  const store2 = createStore<number>(0)
 
-  let mock1 = vi.fn()
-  let mock2 = vi.fn()
+  const mock1 = vi.fn()
+  const mock2 = vi.fn()
 
-  let fn =
+  const fn =
     (name: string) =>
     (...v: (string | number)[]) =>
       `${name}${v.join('')}`
 
-  let a = createDerivedStore(fn('a'), store1)
-  let b = createDerivedStore(fn('b'), store2)
+  const a = createDerivedStore(fn('a'), store1)
+  const b = createDerivedStore(fn('b'), store2)
 
-  let c = createDerivedStore(fn('c'), a, b)
-  let d = createDerivedStore(fn('d'), a)
+  const c = createDerivedStore(fn('c'), a, b)
+  const d = createDerivedStore(fn('d'), a)
 
-  let e = createDerivedStore(fn('e'), c, d)
+  const e = createDerivedStore(fn('e'), c, d)
 
-  let f = createDerivedStore(fn('f'), e)
-  let g = createDerivedStore(fn('g'), f)
+  const f = createDerivedStore(fn('f'), e)
+  const g = createDerivedStore(fn('g'), f)
 
-  let combined1 = createDerivedStore((...args) => args.join(''), e)
-  let combined2 = createDerivedStore((...args) => args.join(''), e, g)
+  const combined1 = createDerivedStore((...args) => args.join(''), e)
+  const combined2 = createDerivedStore((...args) => args.join(''), e, g)
 
-  let unsubscribe1 = combined1.observe(mock1)
-  let unsubscribe2 = combined2.observe(mock2)
+  const unsubscribe1 = combined1.observe(mock1)
+  const unsubscribe2 = combined2.observe(mock2)
 
   expect(combined1.last()).toBe('eca0b0da0')
   expect(combined2.last()).toBe('eca0b0da0gfeca0b0da0')
@@ -252,9 +252,9 @@ test('prevents diamond dependency problem 4 (complex)', () => {
 
 test('prevents diamond dependency problem 5', () => {
   let events = ''
-  let firstName = createStore('John')
-  let lastName = createStore('Doe')
-  let fullName = createDerivedStore(
+  const firstName = createStore('John')
+  const lastName = createStore('Doe')
+  const fullName = createDerivedStore(
     (first, last) => {
       events += 'full '
       return `${first} ${last}`
@@ -262,11 +262,11 @@ test('prevents diamond dependency problem 5', () => {
     firstName,
     lastName,
   )
-  let isFirstShort = createDerivedStore(name => {
+  const isFirstShort = createDerivedStore(name => {
     events += 'short '
     return name.length < 10
   }, firstName)
-  let displayName = createDerivedStore(
+  const displayName = createDerivedStore(
     (first, isShort, full) => {
       events += 'display '
       return isShort ? full : first
@@ -296,17 +296,17 @@ test('prevents diamond dependency problem 5', () => {
 })
 
 test('prevents diamond dependency problem 6', () => {
-  let store1 = createStore<number>(0)
-  let store2 = createStore<number>(0)
-  let mock = vi.fn()
+  const store1 = createStore<number>(0)
+  const store2 = createStore<number>(0)
+  const mock = vi.fn()
 
-  let a = createDerivedStore(v => `a${v}`, store1)
-  let b = createDerivedStore(v => `b${v}`, store2)
-  let c = createDerivedStore(v => v.replace('b', 'c'), b)
+  const a = createDerivedStore(v => `a${v}`, store1)
+  const b = createDerivedStore(v => `b${v}`, store2)
+  const c = createDerivedStore(v => v.replace('b', 'c'), b)
 
-  let combined = createDerivedStore(($a, $c) => `${$a}${$c}`, a, c)
+  const combined = createDerivedStore(($a, $c) => `${$a}${$c}`, a, c)
 
-  let unsubscribe = combined.observe(mock)
+  const unsubscribe = combined.observe(mock)
 
   expect(mock).toBeCalledTimes(0)
   expect(combined.last()).toBe('a0c0')

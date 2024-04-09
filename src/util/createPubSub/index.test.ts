@@ -1,16 +1,16 @@
 import { createPubSub } from './index.js'
 
 it('creates pub/sub', () => {
-  let pubSub = createPubSub()
+  const pubSub = createPubSub()
   expect(pubSub.publish).toBeInstanceOf(Function)
   expect(pubSub.subscribe).toBeInstanceOf(Function)
   expect(pubSub.unsubscribe).toBeInstanceOf(Function)
 })
 
 it('notifies', () => {
-  let spy = vi.fn()
-  let pubSub = createPubSub()
-  let unsubscribe = pubSub.subscribe('topic', spy)
+  const spy = vi.fn()
+  const pubSub = createPubSub()
+  const unsubscribe = pubSub.subscribe('topic', spy)
 
   expect(spy).not.toBeCalled()
 
@@ -28,8 +28,8 @@ it('notifies', () => {
 })
 
 it('unsubscrbes', () => {
-  let spy = vi.fn()
-  let pubSub = createPubSub()
+  const spy = vi.fn()
+  const pubSub = createPubSub()
   pubSub.subscribe('topic', spy)
 
   expect(spy).not.toBeCalled()

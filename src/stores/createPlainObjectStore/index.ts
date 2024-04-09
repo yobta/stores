@@ -83,13 +83,13 @@ export const createPlainObjectStore: YobtaPlainObjectStoreFactory = <
     ChangesWithOverloads<State, Overloads>
   >[]
 ) => {
-  let { next, last, observe, on } = createStore<
+  const { next, last, observe, on } = createStore<
     State,
     ChangesWithOverloads<State, Overloads>
   >(initialState, ...listeners)
   return {
     assign(patch, ...overloads: Overloads) {
-      let diff = diffObject(patch, last())
+      const diff = diffObject(patch, last())
       if (Object.keys(diff).length) {
         next({ ...last(), ...diff }, diff, ...overloads)
       }
@@ -98,9 +98,9 @@ export const createPlainObjectStore: YobtaPlainObjectStoreFactory = <
     last,
     observe,
     omit(keys: OptionalKey<State>[], ...overloads: Overloads) {
-      let state = { ...last() }
-      let changes = keys.filter(key => {
-        let result = key in state
+      const state = { ...last() }
+      const changes = keys.filter(key => {
+        const result = key in state
         if (result) delete state[key]
         return result
       })

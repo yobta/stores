@@ -2,13 +2,13 @@ module.exports = [
   {
     name: 'all',
     path: './lib/index.js',
-    limit: '1872 B',
+    limit: '1870 B',
   },
   {
     name: 'react',
     ignore: ['react'],
     path: './lib/adapters/react/index.js',
-    limit: '310 B',
+    limit: '311 B',
   },
   {
     name: 'createHookFromStore',
@@ -46,19 +46,19 @@ module.exports = [
     name: 'sessionStoragePlugin',
     path: './lib/index.js',
     import: '{ sessionStoragePlugin }',
-    limit: '212 B',
+    limit: '213 B',
   },
   {
     name: 'validationPlugin',
     path: './lib/index.js',
     import: '{ validationPlugin }',
-    limit: '106 B',
+    limit: '107 B',
   },
   {
     name: 'createConnectivityStore',
     path: './lib/index.js',
     import: '{ createConnectivityStore }',
-    limit: '744 B',
+    limit: '745 B',
   },
   {
     name: 'createDerivedStore',
@@ -70,13 +70,13 @@ module.exports = [
     name: 'createMachineStore',
     path: './lib/index.js',
     import: '{ createMachineStore }',
-    limit: '650 B',
+    limit: '651 B',
   },
   {
     name: 'createMapStore',
     path: './lib/index.js',
     import: '{ createMapStore }',
-    limit: '757 B',
+    limit: '758 B',
   },
   {
     name: 'createModalStore',
@@ -88,13 +88,13 @@ module.exports = [
     name: 'createPlainObjectStore',
     path: './lib/index.js',
     import: '{ createPlainObjectStore }',
-    limit: '747 B',
+    limit: '746 B',
   },
   {
     name: 'createStackStore',
     path: './lib/index.js',
     import: '{ createStackStore }',
-    limit: '687 B',
+    limit: '688 B',
   },
   {
     name: 'createStore',
@@ -124,7 +124,7 @@ module.exports = [
     name: 'diffMap',
     path: './lib/index.js',
     import: '{ diffMap }',
-    limit: '70 B',
+    limit: '69 B',
   },
   {
     name: 'diffObject',
@@ -160,7 +160,7 @@ module.exports = [
     name: 'storeEffect',
     path: './lib/index.js',
     import: '{ storeEffect }',
-    limit: '74 B',
+    limit: '75 B',
   },
   {
     name: 'transitionEffect',

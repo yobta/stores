@@ -20,8 +20,8 @@ const broadcastChannelMock = vi.fn(() => ({
 }))
 vi.stubGlobal('BroadcastChannel', broadcastChannelMock)
 
-let encode = vi.fn()
-let decode = vi.fn()
+const encode = vi.fn()
+const decode = vi.fn()
 
 vi.mock('../../util/jsonCodec/index.js', () => ({
   jsonCodec: {

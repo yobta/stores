@@ -36,7 +36,7 @@ export const composeMiddleware: MiddlewareFactory = <
   next,
   plugins,
 }: Props<State, Overloads>) => {
-  let middlewares: Middlewares<State> = {
+  const middlewares: Middlewares<State> = {
     [YOBTA_READY]: [],
     [YOBTA_IDLE]: [],
     [YOBTA_NEXT]: [],

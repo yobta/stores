@@ -23,22 +23,22 @@ export const createStackStore = <Item, Overloads extends any[]>(
   initialState: Item[] = [],
   ...plugins: YobtaStorePlugin<Item | undefined, Overloads>[]
 ): YobtaStackStore<Item | undefined, Overloads> => {
-  let stack = [...initialState]
+  const stack = [...initialState]
 
-  let value = (): Item | undefined => stack[stack.length - 1]
+  const value = (): Item | undefined => stack[stack.length - 1]
 
-  let { next, ...store } = createStore(value(), ...plugins)
+  const { next, ...store } = createStore(value(), ...plugins)
 
   return {
     ...store,
     push(item: Item, ...overloads: Overloads) {
-      let size = stack.push(item)
+      const size = stack.push(item)
       next(value(), ...overloads)
       return size
     },
     pop(...overloads: Overloads) {
-      let lastLength = stack.length
-      let last = stack.pop()
+      const lastLength = stack.length
+      const last = stack.pop()
       if (lastLength !== stack.length) {
         next(value(), ...overloads)
       }

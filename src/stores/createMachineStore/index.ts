@@ -55,14 +55,14 @@ export const createMachineStore: YobtaMachineStoreFactory =
     initialState: keyof States,
     ...plugins: YobtaStorePlugin<keyof States, Overloads>[]
   ) => {
-    let { last, next, observe, on } = createStore<keyof States, Overloads>(
+    const { last, next, observe, on } = createStore<keyof States, Overloads>(
       initialState,
       ...plugins,
     )
     return {
       last,
       next(state: keyof States, ...overloads: Overloads) {
-        let availableTranstions: (keyof States)[] = transitions[last()]
+        const availableTranstions: (keyof States)[] = transitions[last()]
         if (availableTranstions.includes(state)) next(state, ...overloads)
       },
       observe,

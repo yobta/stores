@@ -14,8 +14,8 @@ interface YobtaDiffObject {
  * @documentation {@link https://github.com/yobta/stores/tree/master/src/util/diffObject/index.md}
  */
 export const diffObject: YobtaDiffObject = (inputObject, referenceObject) => {
-  let diff: Partial<typeof inputObject> = {}
-  for (let key in inputObject) {
+  const diff: Partial<typeof inputObject> = {}
+  for (const key in inputObject) {
     if (inputObject[key] !== referenceObject[key as Key]) {
       diff[key] = inputObject[key]
     }

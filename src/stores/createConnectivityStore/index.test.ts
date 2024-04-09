@@ -12,7 +12,7 @@ vi.stubGlobal('window', {
 vi.stubGlobal('navigator', { onLine: true })
 
 it('returns store object', () => {
-  let store = createConnectivityStore()
+  const store = createConnectivityStore()
   expect(store).toEqual({
     last: expect.any(Function),
     observe: expect.any(Function),
@@ -21,21 +21,21 @@ it('returns store object', () => {
 })
 
 it('is null when has no observers', () => {
-  let store = createConnectivityStore()
+  const store = createConnectivityStore()
   expect(store.last()).toBeNull()
 })
 
 it('is true when active and navigator is online', () => {
-  let store = createConnectivityStore()
-  let stop = store.observe(() => {})
+  const store = createConnectivityStore()
+  const stop = store.observe(() => {})
   expect(store.last()).toBe(true)
   stop()
   expect(store.last()).toBeNull()
 })
 
 it('adds/remves window listeners', () => {
-  let store = createConnectivityStore()
-  let stop = store.observe(() => {})
+  const store = createConnectivityStore()
+  const stop = store.observe(() => {})
 
   expect(addEventListener).toHaveBeenCalledTimes(2)
   expect(removeEventListener).toHaveBeenCalledTimes(0)
@@ -51,9 +51,9 @@ it('adds/remves window listeners', () => {
 })
 
 it('adds event listeners to window', () => {
-  let observer = vi.fn()
-  let store = createConnectivityStore()
-  let stop = store.observe(observer)
+  const observer = vi.fn()
+  const store = createConnectivityStore()
+  const stop = store.observe(observer)
 
   addEventListener.mock.calls[0][1]()
   expect(store.last()).toBe(true)

@@ -1,7 +1,7 @@
 import { composeMiddleware } from './middleware.js'
 
 it('should return an object with three middlewares', () => {
-  let middlewares = composeMiddleware({
+  const middlewares = composeMiddleware({
     initialState: {},
     last: () => ({}),
     next: () => {},
@@ -15,7 +15,7 @@ it('should return an object with three middlewares', () => {
 })
 
 it('should return same value when has no plugins', () => {
-  let middlewares = composeMiddleware({
+  const middlewares = composeMiddleware({
     initialState: {},
     last: () => ({}),
     next: () => {},
@@ -27,7 +27,7 @@ it('should return same value when has no plugins', () => {
 })
 
 it('should return plugin value when has one plugin', () => {
-  let middlewares = composeMiddleware({
+  const middlewares = composeMiddleware({
     initialState: 0,
     last: () => 0,
     next: () => {},
@@ -51,7 +51,7 @@ it('should return plugin value when has one plugin', () => {
 })
 
 it('should return first plugin value when has two plugins', () => {
-  let middlewares = composeMiddleware({
+  const middlewares = composeMiddleware({
     initialState: 0,
     last: () => 0,
     next: () => {},
