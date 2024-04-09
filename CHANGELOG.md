@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.2.8
+
+Ideomatic stack store
+New modal store added
+Dev deps updage
+
 ## 0.2.7
 
 Changed serverState handling of the react hook

@@ -1,10 +1,11 @@
+export * from './stores/createConnectivityStore/index.js'
 export * from './stores/createDerivedStore/index.js'
 export * from './stores/createMachineStore/index.js'
 export * from './stores/createMapStore/index.js'
-export * from './stores/createConnectivityStore/index.js'
-export * from './stores/createStore/index.js'
+export * from './stores/createModalStore/index.js'
 export * from './stores/createPlainObjectStore/index.js'
 export * from './stores/createStackStore/index.js'
+export * from './stores/createStore/index.js'
 
 export * from './plugins/broadcastChannelPlugin/index.js'
 export * from './plugins/lazyPlugin/index.js'

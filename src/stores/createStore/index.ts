@@ -37,10 +37,12 @@ export type YobtaStorePlugin<State, Overloads extends any[]> = (props: {
   last(): State
 }) => void
 export type YobtaStateGetter<State> = () => State
+
 export type YobtaStateSetter<State, Overloads extends any[]> = (
   action: State,
   ...overloads: Overloads
 ) => void
+
 export type YobtaStore<State, Overloads extends any[] = any[]> = {
   last: YobtaStateGetter<State>
   next: YobtaStateSetter<State, Overloads>
@@ -53,6 +55,7 @@ export type YobtaStore<State, Overloads extends any[] = any[]> = {
     subscriber: (state: Readonly<State>) => void,
   ): VoidFunction
 }
+
 interface YobtaStoreFactory {
   <State, Overloads extends any[] = any[]>(
     initialState: State,

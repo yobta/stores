@@ -2,7 +2,7 @@ module.exports = [
   {
     name: 'all',
     path: './lib/index.js',
-    limit: '1827 B',
+    limit: '1872 B',
   },
   {
     name: 'react',
@@ -79,6 +79,12 @@ module.exports = [
     limit: '757 B',
   },
   {
+    name: 'createModalStore',
+    path: './lib/index.js',
+    import: '{ createModalStore }',
+    limit: '690 B',
+  },
+  {
     name: 'createPlainObjectStore',
     path: './lib/index.js',
     import: '{ createPlainObjectStore }',
@@ -88,7 +94,7 @@ module.exports = [
     name: 'createStackStore',
     path: './lib/index.js',
     import: '{ createStackStore }',
-    limit: '715 B',
+    limit: '687 B',
   },
   {
     name: 'createStore',

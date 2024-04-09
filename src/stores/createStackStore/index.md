@@ -2,49 +2,44 @@
 
 # Stack Store
 
-The Stack Store is a data structure for storing items in a last-in, first-out (LIFO) order. It provides methods for adding and removing items, observing changes to the stack, and getting the current size of the stack.
+The Stack Store is a data structure for storing items in a last-in, first-out (LIFO) manner. It offers methods to add or remove items, observe changes, and check the current stack size.
 
 ## Importing and Initializing
 
-To use the Stack Store in your project, you can import it using the following syntax:
+To integrate the Stack Store into your project:
 
 ```ts
 import { createStackStore } from '@yobta/stores'
-const myStack = createStackStore<number>([])
 ```
 
 ## Creating a Store
 
-To create a new Stack Store, you must provide an initial state when using the `createStackStore` function:
+Initialize the Stack Store with an initial state:
 
 ```ts
-const initialState = []
-const myStack = createStackStore<number>(initialState)
+const initialState: string[] = []
+const myStack = createStackStore<string>(initialState)
 ```
 
-## Adding New Items
+## Adding Items
 
-To add a new item to the stack, you can use the `add` method:
+Use the `push` method to add items. This method returns the new stack size:
 
 ```ts
-myStack.add(1)
+myStack.push('item1')
 ```
-
-The `add` method returns `true` if the item was successfully added, and `false` if the item already exists in the stack.
 
 ## Removing Items
 
-To remove any item from the stack, you can use the `remove` method:
+Use the `pop` method to remove the last item. It returns the removed item or `undefined` if the stack was empty:
 
 ```ts
-myStack.remove(4)
+const item = myStack.pop()
 ```
-
-The `remove` method returns `true` if the item was successfully removed, and `false` if the item does not exist in the stack.
 
 ## Getting the Last Item
 
-To get the last item added to the stack, you can use the `last` method:
+Retrieve the last item using the `last` method:
 
 ```ts
 const lastItem = myStack.last()
@@ -52,67 +47,56 @@ const lastItem = myStack.last()
 
 ## Observing Changes
 
-To observe changes to the stack, you can use the `observe` method:
+To watch for changes, utilize the `observe` method:
 
 ```ts
-const observer = stack => {
-  console.log(`Stack changed: ${Array.from(stack)}`)
+const observer = (item: string | undefined) => {
+  console.log(`New last item: ${item}`)
 }
 myStack.observe(observer)
 ```
 
-The `observe` method takes an `observer` function as an argument. This function will be called whenever the stack is updated, with the updated stack set as the first argument and any additional overloads passed as additional arguments.
+Observers are notified with the new last item and any overloads provided to the `push` or `pop` methods. This enables more nuanced control and response mechanisms based on stack changes.
 
-You can also unregister the observer by calling the `unobserve` method on the returned function:
+## Size of the Store
+
+You can check the current size of the stack at any time by calling the `size` method:
 
 ```ts
-const unobserve = myStack.observe(observer)
-unobserve()
+const currentSize = myStack.size()
 ```
 
 ## Overloads
 
-The `add` and `remove` methods support overloads, which are additional arguments that can be passed to the methods. These overloads can be used to provide additional context or data when interacting with the stack.
-
-For example, you can use the `add` method with overloads like this:
+Both `push` and `pop` methods accept additional arguments (overloads) that are passed along to observers. This allows for more detailed tracking and reaction to changes in the stack:
 
 ```ts
-myStack.add(4, 'additional_data', { more_data: 123 })
+myStack.push('newItem', 'additionalInfo')
+myStack.pop('contextInfo')
 ```
 
-The overloads will be passed to the observer function as additional arguments:
+Observers will receive these overloads alongside the stack's latest state, providing rich context for each update.
+
+## Example Usage
+
+Here's how you might set up a stack store, add items, remove items, and subscribe to updates:
 
 ```ts
-const observer = (stack, ...overloads) => {
-  console.log(`Stack changed: ${Array.from(stack)}`)
-  console.log(`Overloads: ${overloads}`)
-}
-myStack.observe(observer)
+// Setting up the store
+const myStack = createStackStore<string>(['initialItem'])
+
+// Adding an item
+myStack.push('anotherItem')
+
+// Observing changes
+myStack.observe((item, ...overloads) => {
+  console.log(`The last item is now: ${item}`, `Overloads:`, overloads)
+})
+
+// Removing the last item
+const removedItem = myStack.pop()
+console.log(`Removed item: ${removedItem}`)
+
+// Checking the size of the stack
+console.log(`Current stack size: ${myStack.size()}`)
 ```
-
-The `remove` method also supports overloads in the same way.
-
-## Plugins
-
-The store supports plugins in the same way that other stores do. Refer to the [Plugins](../../plugins/index.md) page for more information.
-
-However, there is an edge case to consider when using plugins that utilize the JSON codec. The stack store is a [Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set) data structure, and therefore requires a set codec.
-
-Here is an example of using the [Local Storage Plugin](../../plugins/localStoragePlugin/index.md), which replicates the store's state to local storage and synchronizes changes between active store instances:
-
-```ts
-import { createStackStore, setCodec } from '@yobta/stores'
-
-const initialState = new Set()
-const store = createStackStore(
-  initialState,
-  localStoragePlugin({
-    channel: 'my-map-store-yobta',
-    codec: setCodec,
-  }),
-)
-```
-
-## Subscribing to Store Events
-
-The Stack store supports the same events as other stores. For more information, see the [Store documentation](../createStore/index.md).
