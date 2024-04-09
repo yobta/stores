@@ -36,13 +36,13 @@ interface SessionStoragePluginFactory {
 export const sessionStoragePlugin: SessionStoragePluginFactory =
   ({ channel, codec = jsonCodec }) =>
   ({ addMiddleware }) => {
-    let write = <State>(state: State): State => {
-      let encodedMessage = codec.encode(state as any)
+    const write = <State>(state: State): State => {
+      const encodedMessage = codec.encode(state as any)
       sessionStorage.setItem(channel, encodedMessage)
       return state
     }
     addMiddleware(YOBTA_READY, state => {
-      let item = sessionStorage.getItem(channel)
+      const item = sessionStorage.getItem(channel)
       return codec.decode(item, () => state)[0]
     })
     addMiddleware(YOBTA_IDLE, write)

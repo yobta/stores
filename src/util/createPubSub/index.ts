@@ -41,11 +41,11 @@ interface PubSubFactory {
  * @documentation {@link https://github.com/yobta/stores/tree/master/src/util/createPubSub/index.md}
  */
 export const createPubSub: PubSubFactory = <Topics extends BaseTopics>() => {
-  let subscribers = {} as Record<keyof Topics, Set<YobtaPubsubSubscriber<any>>>
+  const subscribers = {} as Record<keyof Topics, Set<YobtaPubsubSubscriber<any>>>
   return {
     getSize: topic => subscribers[topic]?.size || 0,
     publish(topic: keyof Topics, ...args: Topics[keyof Topics]) {
-      let current = subscribers[topic]
+      const current = subscribers[topic]
       if (current) {
         current.forEach(notify => {
           notify(...args)
@@ -53,7 +53,7 @@ export const createPubSub: PubSubFactory = <Topics extends BaseTopics>() => {
       }
     },
     subscribe(topic: keyof Topics, subscriber: YobtaPubsubSubscriber<any>) {
-      let current = subscribers[topic] || new Set()
+      const current = subscribers[topic] || new Set()
       current.add(subscriber)
       subscribers[topic] = current
       return () => {

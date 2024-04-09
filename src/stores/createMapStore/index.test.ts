@@ -1,7 +1,7 @@
 import { createMapStore } from './index.js'
 
 it('returns store object', () => {
-  let store = createMapStore({ key: 'yobta' })
+  const store = createMapStore({ key: 'yobta' })
   expect(store).toEqual({
     assign: expect.any(Function),
     last: expect.any(Function),
@@ -12,13 +12,13 @@ it('returns store object', () => {
 })
 
 it('has correct default state', () => {
-  let store = createMapStore({ key: 'yobta' })
+  const store = createMapStore({ key: 'yobta' })
   expect(store.last()).toEqual(new Map([['key', 'yobta']]))
 })
 
 it('assigns values correctly', () => {
-  let store = createMapStore({ key1: 'yobta', key2: 'yobta' })
-  let changes = store.assign({ key2: 'yobta 3' })
+  const store = createMapStore({ key1: 'yobta', key2: 'yobta' })
+  const changes = store.assign({ key2: 'yobta 3' })
   expect(store.last()).toEqual(
     new Map([
       ['key1', 'yobta'],
@@ -29,16 +29,16 @@ it('assigns values correctly', () => {
 })
 
 it('does not mutate state when assigning values', () => {
-  let store = createMapStore({ key: 'yobta' })
-  let initialState = store.last()
+  const store = createMapStore({ key: 'yobta' })
+  const initialState = store.last()
   store.assign({ key: 'yobta 1' })
   expect(store.last()).not.toBe(initialState)
 })
 
 it('emits diff entries and passes additional arguments when assigning values', () => {
-  let store = createMapStore({ key: 'yobta', key2: 'yobta' })
-  let changes = vi.fn()
-  let unobserve = store.observe(changes)
+  const store = createMapStore({ key: 'yobta', key2: 'yobta' })
+  const changes = vi.fn()
+  const unobserve = store.observe(changes)
   store.assign({ key: 'yobta 1', key2: 'yobta' }, 1, 2, 3)
   expect(changes).toBeCalledWith(
     new Map([
@@ -54,29 +54,29 @@ it('emits diff entries and passes additional arguments when assigning values', (
 })
 
 it('omits values correctly', () => {
-  let store = createMapStore<{ key1: string; key2?: string }>({
+  const store = createMapStore<{ key1: string; key2?: string }>({
     key1: 'yobta',
     key2: 'yobta',
   })
-  let changes = store.omit(['key2'])
+  const changes = store.omit(['key2'])
   expect(store.last()).toEqual(new Map([['key1', 'yobta']]))
   expect(changes).toEqual(new Set(['key2']))
 })
 
 it('does not mutate state when omitting values', () => {
-  let store = createMapStore<{ key?: string }>({ key: 'yobta' })
-  let initialState = store.last()
+  const store = createMapStore<{ key?: string }>({ key: 'yobta' })
+  const initialState = store.last()
   store.omit(['key'])
   expect(store.last()).not.toBe(initialState)
 })
 
 it('emits diff entries and passes additional arguments when omitting values', () => {
-  let store = createMapStore<{ key?: string; key2?: string }>({
+  const store = createMapStore<{ key?: string; key2?: string }>({
     key: 'yobta',
     key2: 'yobta',
   })
-  let changes = vi.fn()
-  let unobserve = store.observe(changes)
+  const changes = vi.fn()
+  const unobserve = store.observe(changes)
   store.omit(['key'], 1, 2, 3)
   expect(changes).toBeCalledWith(
     new Map([['key2', 'yobta']]),

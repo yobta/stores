@@ -40,11 +40,11 @@ export const broadcastChannelPlugin: BroadcastChannelFactory =
   ({ addMiddleware, next, last }) => {
     let bc: BroadcastChannel | null
     let shouldMute: boolean
-    let open = (): BroadcastChannel => {
+    const open = (): BroadcastChannel => {
       if (!bc) bc = new BroadcastChannel(channel)
       return bc
     }
-    let close: VoidFunction = () => {
+    const close: VoidFunction = () => {
       if (bc) {
         bc.close()
         bc = null
@@ -52,7 +52,7 @@ export const broadcastChannelPlugin: BroadcastChannelFactory =
     }
     addMiddleware(YOBTA_READY, state => {
       open().onmessage = ({ data }) => {
-        let [message, ...overloads] = codec.decode(data, last)
+        const [message, ...overloads] = codec.decode(data, last)
         shouldMute = true
         next(message, ...(overloads as any))
       }
@@ -63,11 +63,11 @@ export const broadcastChannelPlugin: BroadcastChannelFactory =
       return state
     })
     addMiddleware(YOBTA_NEXT, (state, ...overloads) => {
-      let shouldClose = !bc
+      const shouldClose = !bc
       if (shouldMute) {
         shouldMute = false
       } else {
-        let encodedMessage = codec.encode(state as any, ...overloads)
+        const encodedMessage = codec.encode(state as any, ...overloads)
         open().postMessage(encodedMessage)
         if (shouldClose) close()
       }

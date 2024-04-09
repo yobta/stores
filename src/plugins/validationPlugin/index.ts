@@ -21,7 +21,7 @@ interface ValidationPluginFactory {
 export const validationPlugin: ValidationPluginFactory =
   validate =>
   ({ addMiddleware, initialState }) => {
-    let validateWithFallBack = (state: any): typeof initialState => {
+    const validateWithFallBack = (state: any): typeof initialState => {
       try {
         return validate(state)
       } catch (_) {

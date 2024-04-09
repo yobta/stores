@@ -43,13 +43,13 @@ export const createObservable: YobtaObservableFactory = <
   Item extends any,
   Overloads extends any[] = any[],
 >() => {
-  let heap = new Set<YobtaHeapItem<Item, Overloads>>()
+  const heap = new Set<YobtaHeapItem<Item, Overloads>>()
   return {
     get size() {
       return heap.size
     },
     next(item: Item, ...overloads: Overloads) {
-      let sortMap = new Map<YobtaObserver<Item, Overloads>, number>()
+      const sortMap = new Map<YobtaObserver<Item, Overloads>, number>()
       heap.forEach(chunk => {
         chunk.forEach((cb, i) => sortMap.set(cb, i))
       })

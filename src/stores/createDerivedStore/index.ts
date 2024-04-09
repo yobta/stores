@@ -35,21 +35,21 @@ interface Yobtaderived {
  * @documentation {@link https://github.com/yobta/stores/tree/master/src/stores/createDerivedStore/index.md}
  */
 export const createDerivedStore: Yobtaderived = (acc, ...stores) => {
-  let getState = (): any =>
+  const getState = (): any =>
     acc(...(stores.map(({ last }) => last()) as States<typeof stores>))
-  let { last, on, next, observe } = createStore<any, never>(
+  const { last, on, next, observe } = createStore<any, never>(
     getState(),
     ({ addMiddleware }) => {
       addMiddleware(YOBTA_READY, getState)
     },
   )
-  let update = (): void => {
+  const update = (): void => {
     next(getState())
   }
   return {
     last,
     observe(observer: YobtaObserver<any, never>, ...callbacks) {
-      let unsubcribe = [
+      const unsubcribe = [
         ...stores.map(store => store.observe(() => {}, update, ...callbacks)),
         observe(observer),
       ]

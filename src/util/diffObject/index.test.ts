@@ -1,61 +1,61 @@
 import { diffObject } from './index.js'
 
 it('returns correct diff', () => {
-  let inputObject = {
+  const inputObject = {
     key1: 'value1',
     key2: 'value2',
     key3: 'value3',
   }
-  let referenceObject = {
+  const referenceObject = {
     key1: 'value1',
     key2: 'differentValue2',
     key4: 'value4',
   }
-  let expectedDiffObject = {
+  const expectedDiffObject = {
     key2: 'value2',
     key3: 'value3',
   }
-  let diff = diffObject(inputObject, referenceObject)
+  const diff = diffObject(inputObject, referenceObject)
   expect(diff).toEqual(expectedDiffObject)
 })
 
 it('handles empty objects correctly', () => {
-  let inputObject = {}
-  let referenceObject = {}
-  let expectedDiffObject = {}
-  let diff = diffObject(inputObject, referenceObject)
+  const inputObject = {}
+  const referenceObject = {}
+  const expectedDiffObject = {}
+  const diff = diffObject(inputObject, referenceObject)
   expect(diff).toEqual(expectedDiffObject)
 })
 
 it('handles empty reference object correctly', () => {
-  let inputObject = {
+  const inputObject = {
     key1: 'value1',
     key2: 'value2',
   }
-  let referenceObject = {}
-  let expectedDiffObject = {
+  const referenceObject = {}
+  const expectedDiffObject = {
     key1: 'value1',
     key2: 'value2',
   }
-  let diff = diffObject(inputObject, referenceObject)
+  const diff = diffObject(inputObject, referenceObject)
   expect(diff).toEqual(expectedDiffObject)
 })
 
 it('handles different types of keys and values correctly', () => {
-  let inputObject = {
+  const inputObject = {
     1: 'value1',
     true: 'value2',
     key3: false,
   }
-  let referenceObject = {
+  const referenceObject = {
     1: 'value1',
     true: 'differentValue2',
     key3: true,
   }
-  let expectedDiffObject = {
+  const expectedDiffObject = {
     true: 'value2',
     key3: false,
   }
-  let diff = diffObject(inputObject, referenceObject)
+  const diff = diffObject(inputObject, referenceObject)
   expect(diff).toEqual(expectedDiffObject)
 })

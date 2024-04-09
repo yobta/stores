@@ -15,7 +15,7 @@ const mockStore = {
 const mockEffect = vi.fn()
 
 it('returns a function', () => {
-  let effect = transitionEffect(mockStore, 1 as number, mockEffect)
+  const effect = transitionEffect(mockStore, 1 as number, mockEffect)
   expect(effect).toEqual(expect.any(Function))
 })
 
@@ -37,7 +37,7 @@ it('does not call effect when state is not changed', () => {
 })
 
 it('unsubscribes from store', () => {
-  let unsubscribe = transitionEffect(mockStore, 1 as number, mockEffect)
+  const unsubscribe = transitionEffect(mockStore, 1 as number, mockEffect)
   unsubscribe()
   expect(offMock).toHaveBeenCalled()
 })

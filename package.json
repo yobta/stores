@@ -8,6 +8,7 @@
   "scripts": {
     "build": "tsc --build tsconfig.build.json",
     "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
     "size-limit": "size-limit",
     "test": "vitest src --coverage --run",
     "test:watch": "vitest src --coverage",
@@ -103,7 +104,9 @@
       "symbol-description": "off",
       "consistent-return": "off",
       "jest/no-deprecated-functions": "off",
-      "camelcase": "off"
+      "camelcase": "off",
+      "prefer-let/prefer-let": "off",
+      "prefer-const": "error"
     },
     "globals": {
       "jsdom": false

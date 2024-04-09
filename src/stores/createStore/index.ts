@@ -37,10 +37,12 @@ export type YobtaStorePlugin<State, Overloads extends any[]> = (props: {
   last(): State
 }) => void
 export type YobtaStateGetter<State> = () => State
+
 export type YobtaStateSetter<State, Overloads extends any[]> = (
   action: State,
   ...overloads: Overloads
 ) => void
+
 export type YobtaStore<State, Overloads extends any[] = any[]> = {
   last: YobtaStateGetter<State>
   next: YobtaStateSetter<State, Overloads>
@@ -53,6 +55,7 @@ export type YobtaStore<State, Overloads extends any[] = any[]> = {
     subscriber: (state: Readonly<State>) => void,
   ): VoidFunction
 }
+
 interface YobtaStoreFactory {
   <State, Overloads extends any[] = any[]>(
     initialState: State,
@@ -92,28 +95,28 @@ export const createStore: YobtaStoreFactory = <
   ...plugins: YobtaStorePlugin<State, Overloads>[]
 ) => {
   let state: State = initialState
-  let { publish: p, subscribe: on } = createPubSub<Topics<State, Overloads>>()
-  let dispatcher = createObservable<State, Overloads>()
-  let next: YobtaStateSetter<State, Overloads> = (
+  const { publish: p, subscribe: on } = createPubSub<Topics<State, Overloads>>()
+  const dispatcher = createObservable<State, Overloads>()
+  const next: YobtaStateSetter<State, Overloads> = (
     nextState: State,
     ...overloads
   ): void => {
     state = transition(YOBTA_NEXT, nextState, ...overloads)
     dispatcher.next(state, ...overloads)
   }
-  let last: YobtaStateGetter<State> = () => state
-  let middleware = composeMiddleware<State, Overloads>({
+  const last: YobtaStateGetter<State> = () => state
+  const middleware = composeMiddleware<State, Overloads>({
     initialState,
     last,
     next,
     plugins,
   })
-  let transition = (
+  const transition = (
     topic: YobtaStoreEvent,
     updatedState: State,
     ...overloads: any
   ): State => {
-    let nextState = middleware[topic](updatedState, ...overloads)
+    const nextState = middleware[topic](updatedState, ...overloads)
     p(YOBTA_BEFORE, nextState, ...overloads)
     return nextState
   }
@@ -128,7 +131,7 @@ export const createStore: YobtaStoreFactory = <
         state = transition(YOBTA_READY, state)
         p(YOBTA_READY, state)
       }
-      let remove = dispatcher.observe(observer, ...callbacks)
+      const remove = dispatcher.observe(observer, ...callbacks)
       return () => {
         remove()
         if (dispatcher.size === 0) {

@@ -14,7 +14,7 @@ it('alls addMiddleware with idle and a function when lazyPlugin is called', () =
 it('resets the state to the initial value when the idle middleware is called', () => {
   lazyPlugin({ addMiddleware, initialState, next, last })
 
-  let idle = addMiddleware.mock.calls[0][1]
+  const idle = addMiddleware.mock.calls[0][1]
 
   expect(idle(2)).toEqual(1)
 })

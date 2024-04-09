@@ -15,7 +15,7 @@ interface YobtaStoreEffect {
 
 export const storeEffect: YobtaStoreEffect = (store, effect) => {
   let offIdle: VoidFunction | undefined
-  let offReady = store.on(YOBTA_READY, state => {
+  const offReady = store.on(YOBTA_READY, state => {
     offIdle = store.on(YOBTA_IDLE, effect(state))
   })
   return () => {

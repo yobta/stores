@@ -6,12 +6,12 @@ import {
 import { jsonCodec, YobtaGenericCodec } from '../../util/jsonCodec/index.js'
 import { localStoragePlugin } from './index.js'
 
-let defaultItem = JSON.stringify(['stored yobta'])
+const defaultItem = JSON.stringify(['stored yobta'])
 let item: string | null = null
 
-let getItem = vi.fn()
+const getItem = vi.fn()
 
-let lsMock = {
+const lsMock = {
   getItem: (key: string) => {
     getItem(key)
     return item
@@ -21,7 +21,7 @@ let lsMock = {
 
 vi.stubGlobal('localStorage', lsMock)
 
-let windowMock = {
+const windowMock = {
   addEventListener: vi.fn(),
   removeEventListener: vi.fn(),
 }
@@ -35,14 +35,14 @@ const params = {
   initialState: 'yobta',
 }
 
-let encode = vi.fn()
-let decode = vi.fn()
-let fallbackMock = vi.fn()
+const encode = vi.fn()
+const decode = vi.fn()
+const fallbackMock = vi.fn()
 
 vi.mock('../../util/jsonCodec/index.js', () => ({
   jsonCodec: {
     encode(state: any, ...overloads: any[]) {
-      let args = [state, ...overloads]
+      const args = [state, ...overloads]
       encode(...args)
       return JSON.stringify(args)
     },
@@ -89,7 +89,7 @@ it('adds listeners on YOBTA_READY event', () => {
 
 it('decodes stored value on YOBTA_READY event', () => {
   localStoragePlugin({ channel: 'test', codec: jsonCodec })(params)
-  let state = params.addMiddleware.mock.calls[0][1]('ready')
+  const state = params.addMiddleware.mock.calls[0][1]('ready')
 
   expect(decode).toBeCalledTimes(1)
   expect(decode).toHaveBeenCalledWith(defaultItem, expect.any(Function))
@@ -99,7 +99,7 @@ it('decodes stored value on YOBTA_READY event', () => {
 it('returns initial state on YOBTA_READY event when no stored value', () => {
   item = null
   localStoragePlugin({ channel: 'test', codec: jsonCodec })(params)
-  let state = params.addMiddleware.mock.calls[0][1]('ready')
+  const state = params.addMiddleware.mock.calls[0][1]('ready')
 
   expect(state).toBe('ready')
   expect(decode).toHaveBeenCalledOnce()
@@ -108,7 +108,7 @@ it('returns initial state on YOBTA_READY event when no stored value', () => {
 
 it('emoves listeners on YOBTA_IDLE event', () => {
   localStoragePlugin({ channel: 'test', codec: jsonCodec })(params)
-  let state = params.addMiddleware.mock.calls[1][1]('idle')
+  const state = params.addMiddleware.mock.calls[1][1]('idle')
 
   expect(encode).toHaveBeenCalledWith('idle')
   expect(lsMock.setItem).toHaveBeenCalledWith('test', JSON.stringify(['idle']))
@@ -121,7 +121,7 @@ it('emoves listeners on YOBTA_IDLE event', () => {
 
 it('encodes and stores state on YOBTA_NEXT event', () => {
   localStoragePlugin({ channel: 'test', codec: jsonCodec })(params)
-  let state = params.addMiddleware.mock.calls[2][1]('next', 'overload')
+  const state = params.addMiddleware.mock.calls[2][1]('next', 'overload')
 
   expect(encode).toHaveBeenCalledWith('next', 'overload')
   expect(lsMock.setItem).toHaveBeenCalledWith(

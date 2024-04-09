@@ -5,9 +5,9 @@ import {
 } from '../../stores/createStore/index.js'
 import { validationPlugin } from './index.js'
 
-let mock = vi.fn()
+const mock = vi.fn()
 
-let validate = (state: any): any => {
+const validate = (state: any): any => {
   mock(state)
   return state
 }

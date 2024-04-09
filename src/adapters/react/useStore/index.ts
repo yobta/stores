@@ -25,7 +25,7 @@ export const useStore: YobtaReactStoreHook = (
   { serverState } = {},
   ...overloads
 ) => {
-  let getServerState = useMemo(
+  const getServerState = useMemo(
     () => () => serverState === undefined ? store.last() : serverState,
     [serverState],
   )
