@@ -22,3 +22,5 @@ tsconfig.build.json
 .tool-versions
 .github
 .vscode
+.size-limit.cjs
+pnpm-workspace.yaml
