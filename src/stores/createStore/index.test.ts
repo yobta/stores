@@ -48,6 +48,7 @@ beforeEach(() => {
 
 it('returnes a store object', () => {
   const store = createStore(1)
+
   expect(store).toEqual({
     last: expect.any(Function),
     next: expect.any(Function),

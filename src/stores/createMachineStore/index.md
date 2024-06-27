@@ -25,7 +25,7 @@ const machine = createMachine('IDLE')
 To set the state of the state machine store, you can use the `next` function:
 
 ```ts
-machine.next('LOADING')
+machine.next.LOADING()
 ```
 
 ## Reading State
@@ -53,7 +53,7 @@ In addition to the state, you can also pass additional arguments to the `next` f
 
 ```ts
 const machine = createMachineStore(transitions)('IDLE')
-machine.next('LOADING', 'some additional argument')
+machine.next.LOADING('some additional argument')
 ```
 
 ## Using With Typescript
@@ -63,7 +63,7 @@ Usually the store is able to infer the state from the transitions, but you may w
 ```ts
 type Overloads = [{ attempts: number }]
 const machine = createMachineStore(transitions)<Overloads>('IDLE')
-machine.next('LOADING', { attempt: 2 })
+machine.next.LOADING({ attempt: 2 })
 ```
 
 ## Side Effects

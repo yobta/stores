@@ -8,7 +8,10 @@ it('creates store', () => {
   })('one')
   expect(store).toEqual({
     last: expect.any(Function),
-    next: expect.any(Function),
+    next: {
+      one: expect.any(Function),
+      two: expect.any(Function),
+    },
     observe: expect.any(Function),
     on: expect.any(Function),
   })
@@ -27,7 +30,7 @@ it('sets next state', () => {
     one: ['two'],
     two: ['one'],
   })('one')
-  store.next('two')
+  store.next.two()
   expect(store.last()).toEqual('two')
 })
 
@@ -38,7 +41,7 @@ it('sends overloads to ubservers', () => {
     two: ['one'],
   })('one')
   const unsubscribe = store.observe(observer)
-  store.next('two', 'overload1', 'overload2')
+  store.next.two('overload1', 'overload2')
   expect(observer).toHaveBeenCalledTimes(1)
   expect(observer).toHaveBeenCalledWith('two', 'overload1', 'overload2')
   unsubscribe()
@@ -55,18 +58,9 @@ it('sends overloads to middleware', () => {
       return state
     })
   })
-  store.next('two', 'overload1', 2)
+  store.next.two('overload1', 2)
   expect(middleware).toHaveBeenCalledTimes(1)
   expect(middleware).toHaveBeenCalledWith('two', 'overload1', 2)
-})
-
-it('ignores unexpected next state', () => {
-  const store = createMachineStore({
-    one: ['two'],
-    two: ['one'],
-  })('one')
-  store.next('three' as any)
-  expect(store.last()).toEqual('one')
 })
 
 it('observes changes', () => {
@@ -76,11 +70,11 @@ it('observes changes', () => {
   })('one')
   const observer = vi.fn()
   const unobserve = store.observe(observer)
-  store.next('two')
+  store.next.two()
   expect(observer).toHaveBeenCalledTimes(1)
   expect(observer).toHaveBeenCalledWith('two')
   unobserve()
-  store.next('one')
+  store.next.one()
   expect(observer).toHaveBeenCalledTimes(1)
 })
 

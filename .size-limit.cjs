@@ -2,7 +2,7 @@ module.exports = [
   {
     name: 'all',
     path: './lib/index.js',
-    limit: '1865 B',
+    limit: '1886 B',
   },
   {
     name: 'react',
@@ -70,7 +70,7 @@ module.exports = [
     name: 'createMachineStore',
     path: './lib/index.js',
     import: '{ createMachineStore }',
-    limit: '653 B',
+    limit: '681 B',
   },
   {
     name: 'createMapStore',
