@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.3.2
+
+- Added TypeScript utility `ExpandYobta` to improve IntelliSense hints.
+
 ## 0.3.1
 
 Breaking changes:

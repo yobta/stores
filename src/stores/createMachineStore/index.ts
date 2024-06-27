@@ -5,6 +5,7 @@ import {
   YobtaIdleEvent,
   YobtaTransitionEvent,
 } from '../../index.js'
+import { ExpandYobta } from '../../util/ExpandYobta/ExpandYobta.js'
 
 // #region Types
 type TransitionMap<States> = {
@@ -14,9 +15,7 @@ type TransitionMap<States> = {
 export type YobtaMachineStoreTransitions<
   States,
   Overloads extends any[] = any[],
-> = {
-  [K in keyof States]: (...overloads: Overloads) => void
-}
+> = ExpandYobta<Record<keyof States, (...overloads: Overloads) => void>>
 
 export type YobtaMachineStore<
   States extends TransitionMap<States>,

@@ -6,6 +6,7 @@ it('creates store', () => {
     one: ['two'],
     two: ['one'],
   })('one')
+
   expect(store).toEqual({
     last: expect.any(Function),
     next: {
