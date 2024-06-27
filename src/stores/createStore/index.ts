@@ -67,6 +67,7 @@ type Topics<State, Overloads extends any[]> = {
   [YOBTA_IDLE]: [Readonly<State>]
   [YOBTA_READY]: [Readonly<State>]
 }
+
 export type YobtaAnyStore<State = any> = {
   last(): State
   observe(

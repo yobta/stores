@@ -2,12 +2,17 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## 0.2.10
+## 0.3.0
 
-Improved plugin generics
+Breaking changes:
+
+- Added a new type YobtaMachineStoreTransitions for defining transition functions.
+- Replaced the single next method with a map of transition functions.
+- Removed the redundant single next method.
 
 ## 0.2.9
 
+Improved plugin generics
 Ignored pnpm-workspace.yaml
 
 ## 0.2.8

@@ -1,7 +1,6 @@
 import {
   createStore,
   YobtaStorePlugin,
-  YobtaStateSetter,
   YobtaReadyEvent,
   YobtaIdleEvent,
   YobtaTransitionEvent,
@@ -12,12 +11,18 @@ type TransitionMap<States> = {
   [K in keyof States]: (keyof Omit<States, K>)[]
 }
 
+export type YobtaMachineStoreTransitions<
+  States,
+  Overloads extends any[] = any[],
+> = {
+  [K in keyof States]: (...overloads: Overloads) => void
+}
+
 export type YobtaMachineStore<
   States extends TransitionMap<States>,
   Overloads extends any[] = any[],
 > = {
   last(): keyof States
-  next: YobtaStateSetter<keyof States, Overloads>
   observe(
     observer: (state: keyof States, ...overloads: Overloads) => void,
   ): VoidFunction
@@ -25,6 +30,7 @@ export type YobtaMachineStore<
     topic: YobtaReadyEvent | YobtaIdleEvent | YobtaTransitionEvent,
     subscriber: (state: keyof States) => void,
   ): VoidFunction
+  next: YobtaMachineStoreTransitions<States, Overloads>
 }
 
 interface YobtaMachineStoreFactory {
@@ -59,13 +65,22 @@ export const createMachineStore: YobtaMachineStoreFactory =
       initialState,
       ...plugins,
     )
+
     return {
       last,
-      next(state: keyof States, ...overloads: Overloads) {
-        const availableTranstions: (keyof States)[] = transitions[last()]
-        if (availableTranstions.includes(state)) next(state, ...overloads)
-      },
       observe,
       on,
+      next: Object.keys(transitions).reduce(
+        (acc, key) => ({
+          ...acc,
+          [key]: (...overloads: Overloads) => {
+            const availableTransitions: (keyof States)[] = transitions[last()]
+            if (availableTransitions.includes(key as keyof States)) {
+              next(key as keyof States, ...overloads)
+            }
+          },
+        }),
+        {} as YobtaMachineStoreTransitions<States, Overloads>,
+      ),
     }
   }
