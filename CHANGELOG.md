@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.2.10
+
+Improved plugin generics
+
 ## 0.2.9
 
 Ignored pnpm-workspace.yaml

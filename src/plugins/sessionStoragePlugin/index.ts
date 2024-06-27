@@ -12,7 +12,7 @@ import {
 } from '../../stores/createStore/index.js'
 
 interface SessionStoragePluginFactory {
-  <State, Codec extends YobtaGenericCodec<State>>(
+  <State, Codec extends YobtaGenericCodec<State> = YobtaGenericCodec<State>>(
     props: State extends YobtaJsonValue
       ? { channel: string; codec?: YobtaSimpleCodec }
       : {

@@ -14,7 +14,7 @@ import {
 interface BroadcastChannelFactory {
   <
     State,
-    Codec extends YobtaGenericCodec<State>,
+    Codec extends YobtaGenericCodec<State> = YobtaGenericCodec<State>,
     Overloads extends any[] = any[],
   >(
     props: State extends YobtaJsonValue
